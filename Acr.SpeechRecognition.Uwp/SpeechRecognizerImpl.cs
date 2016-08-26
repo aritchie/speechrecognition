@@ -13,3 +13,10 @@ namespace Acr.SpeechRecognition
         }
     }
 }
+/*
+bool permissionGained = await AudioCapturePermissions.RequestMicrophonePermission();
+if (!permissionGained)
+{
+ //ask user to modify settings
+} 
+     */

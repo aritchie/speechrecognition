@@ -2,6 +2,9 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Samples.MainPage">
-    <Button x:Name="btnListen" Text="Listen" Clicked="btnList_OnClicked" />
-    <Label x:Name="lblValue" VerticalOptions="Center" HorizontalOptions="Center" />
+    <StackLayout>
+        <Button Text="Listen" Command="{Binding Start}" IsEnabled="{Binding IsAnswerVisible}" />
+        <Label Text="Hello, please tell me your name" />
+        <Label Text="{Binding Answer}" IsVisible="{Binding IsAnswerVisible}" />
+    </StackLayout>
 </ContentPage>

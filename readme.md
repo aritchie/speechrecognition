@@ -12,3 +12,12 @@
     
 
 ## HOW TO USE
+
+Android
+
+UWP
+<Capabilities>
+ <Capability Name="internetClient" />
+ <DeviceCapability Name="microphone" />
+ /Capabilities>
+ 
