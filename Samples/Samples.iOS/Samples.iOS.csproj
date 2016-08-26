@@ -142,9 +142,9 @@
       <Project>{89fa7495-508b-450a-ae56-094c410222d4}</Project>
       <Name>Acr.SpeechRecognition.Interfaces</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Acr.SpeechRecognizer.iOS\Acr.SpeechRecognizer.iOS.csproj">
-      <Project>{f60fb4dd-b627-4ac1-a816-465f6e16d7e9}</Project>
-      <Name>Acr.SpeechRecognizer.iOS</Name>
+    <ProjectReference Include="..\..\Acr.SpeechRecognition.iOS\Acr.SpeechRecognition.iOS.csproj">
+      <Project>{c7c77e17-36e7-410c-8afe-00d30d132e4c}</Project>
+      <Name>Acr.SpeechRecognition.iOS</Name>
       <IsAppExtension>false</IsAppExtension>
       <IsWatchApp>false</IsWatchApp>
     </ProjectReference>

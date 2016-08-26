@@ -1,4 +1,5 @@
 ﻿using System;
+using Acr.SpeechRecognition;
 using Xamarin.Forms;
 
 
@@ -17,7 +18,7 @@ namespace Samples
             btnListen.IsEnabled = false;
             try
             {
-                var result = await SpeechRecognizer.Listen();
+                var result = await SpeechRecognizer.Instance.Listen();
                 this.lblValue.Text = result;
                 this.lblValue.TextColor = Color.Green;
             }
