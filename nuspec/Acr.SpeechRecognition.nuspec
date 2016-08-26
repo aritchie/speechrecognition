@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+    <metadata>
+        <id>Acr.SpeechRecognition</id>
+        <version>1.0.0</version>
+        <title>ACR Speech Recognition Plugin for Xamarin and Windows</title>
+        <summary>Speech recognition plugin for iOS, Android, and Windows</summary>
+        <description>
+Supported Platforms
+- iOS 10+
+- Android API 23+
+- Universal Windows Platform (Win10/UWP)
+- Portable Class Libraries (Profile 259)
+        </description>
+        <authors>Allan Ritchie</authors>
+        <owners>Allan Ritchie</owners>
+        <licenseUrl>https://github.com/aritchie/speechrecognition/LICENSE.md</licenseUrl>
+        <projectUrl>https://github.com/aritchie/speechrecognition</projectUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <tags>windows xamarin xam.pcl speech recognition</tags>
+        <releaseNotes>
+1.0.0
+Initial Release
+        </releaseNotes>
+    </metadata>
+    <files>
+        <!-- PCL -->
+        <file src="..\src\Acr.SpeechRecognition\bin\Release\Acr.SpeechRecognition.*" target="lib\portable-win+net45+wp8+win8+wpa81" />
+
+        <!-- android -->
+        <file src="..\src\Acr.SpeechRecognition.Android\bin\Release\Acr.SpeechRecognition.*" target="lib\MonoAndroid10" />
+
+        <!-- ios -->
+        <file src="..\src\Acr.SpeechRecognition.iOS\bin\iPhone\Release\Acr.SpeechRecognition.*" target="lib\Xamarin.iOS10" />
+
+        <!-- uwp -->
+        <file src="..\src\Acr.UserDialogs.Uwp\bin\Release\Acr.SpeechRecognition.*" target="lib\uap10.0" />
+    </files>
+</package>
