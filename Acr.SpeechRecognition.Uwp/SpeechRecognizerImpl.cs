@@ -1,22 +1,20 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using WinSpeechRecognizer = Windows.Media.SpeechRecognition.SpeechRecognizer;
 
 
 namespace Acr.SpeechRecognition
 {
     public class SpeechRecognizerImpl : ISpeechRecognizer
     {
-        public Task<string> Listen(CancellationToken? cancelToken = null)
+        readonly WinSpeechRecognizer speech = new WinSpeechRecognizer();
+
+
+        public async Task<string> Listen(CancellationToken? cancelToken = null)
         {
-            throw new NotImplementedException();
+            var result = await this.speech.RecognizeAsync();
+            return result.Text;
         }
     }
 }
-/*
-bool permissionGained = await AudioCapturePermissions.RequestMicrophonePermission();
-if (!permissionGained)
-{
- //ask user to modify settings
-} 
-     */

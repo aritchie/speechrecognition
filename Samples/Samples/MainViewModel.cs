@@ -4,11 +4,13 @@ using System.Threading.Tasks;
 using Acr.SpeechRecognition;
 using Plugin.Permissions.Abstractions;
 using Plugin.TextToSpeech.Abstractions;
+using PropertyChanged;
 using Xamarin.Forms;
 
 
 namespace Samples
 {
+    [ImplementPropertyChanged]
     public class MainViewModel
     {
         public MainViewModel(IPermissions permissions, ITextToSpeech tts, ISpeechRecognizer speech)
