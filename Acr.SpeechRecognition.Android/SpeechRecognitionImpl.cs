@@ -14,19 +14,32 @@ namespace Acr.SpeechRecognition
 {
     public class SpeechRecognizerImpl : Java.Lang.Object, ISpeechRecognizer, IRecognitionListener
     {
+        TaskCompletionSource<string> tcs;
+
+
         public Task<string> Listen(CancellationToken? cancelToken = null)
         {
+            cancelToken?.Register(() =>
+            {
+                try
+                {
+                    this.tcs?.TrySetCanceled();
+                }
+                catch
+                {
+                }
+            });
             var speechRecognizer = Android.Speech.SpeechRecognizer.CreateSpeechRecognizer(Application.Context);
 
             var intent = new Intent(RecognizerIntent.ActionRecognizeSpeech);
-            //intent.PutExtra(RecognizerIntent.ExtraCallingPackage, PackageName);
+            intent.PutExtra(RecognizerIntent.ExtraCallingPackage, Application.Context.PackageName);
             //intent.PutExtra(RecognizerIntent.ExtraPrompt, GetString(Resource.String.VoiceCommandsDesc));
-            //intent.PutExtra(RecognizerIntent.ExtraLanguageModel, this.Resources.Configuration.Locale.Language);
+            intent.PutExtra(RecognizerIntent.ExtraLanguageModel, Application.Context.Resources.Configuration.Locale.Language);
             //intent.PutExtra(RecognizerIntent.ExtraMaxResults, 5);
             speechRecognizer.SetRecognitionListener(this);
             speechRecognizer.StartListening(intent);
 
-            return null;
+            return this.tcs.Task;
         }
 
 
@@ -43,7 +56,6 @@ namespace Acr.SpeechRecognition
 
         public void OnEndOfSpeech()
         {
-            // COMPLETE TASK HERE
         }
 
 
@@ -68,8 +80,9 @@ namespace Acr.SpeechRecognition
 
         public void OnResults(Bundle results)
         {
-            // TODO: complete here?
-            //var matches = results.GetStringArrayList(SpeechRecognizer.ResultsRecognition);
+            var matches = results.GetStringArrayList(Android.Speech.SpeechRecognizer.ResultsRecognition);
+            if (matches != null)
+                this.tcs?.TrySetResult(String.Join(" ", matches));
         }
 
 

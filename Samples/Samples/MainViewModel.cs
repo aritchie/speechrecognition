@@ -25,11 +25,11 @@ namespace Samples
                 var status = await permissions.RequestPermissionsAsync(Permission.Microphone);
                 if (status[Permission.Microphone] != PermissionStatus.Granted)
                 {
-                    this.SetTextAndSpeak("Hey Dummy!  Ya you!  You didn't enable permissions for the microphone");
+                    await this.SetTextAndSpeak("Hey Dummy!  Ya you!  You didn't enable permissions for the microphone", 4000);
                     return;
                 }
-                var lol = false;
-                this.SetTextAndSpeak("Hello, please tell me your name?");
+                var lol = 0;
+                await this.SetTextAndSpeak("Hello, please tell me your name?", 3000);
 
                 this.IsListening = true;
                 var answer = await speech.Listen();
@@ -37,32 +37,50 @@ namespace Samples
 
                 switch (answer.ToLower())
                 {
+                    case "alan":
                     case "allan":
-                        this.SetTextAndSpeak("Hello Master. I am here to serve you.  Please let me speak with Chris.");
+                        await this.SetTextAndSpeak("Hello Master. I am here to serve you.  Please let me speak with Chris.", 4000);
                         break;
 
                     case "jason":
-                        this.SetTextAndSpeak("Jason.  Allan really wants to know who botched the BLE MGS service");
+                        await this.SetTextAndSpeak("Jason. Hopefully you had your morning coffee before this", 4000);
                         break;
 
                     case "james":
-                        this.SetTextAndSpeak("James. You look like you need a beer and you need to acknowledge that this is seriously cool shit");
+                        await this.SetTextAndSpeak("James. You look like you need a beer and you need to acknowledge that this is seriously cool shit", 5000);
+                        break;
+
+                    case "osama":
+                        await this.SetTextAndSpeak("Osama.  You are a pimp", 3000);
+                        break;
+
+                    case "darren":
+                        await this.SetTextAndSpeak("Darren.  Burrito or sandwitch today?", 3000);
                         break;
 
                     case "chris":
-                        this.SetTextAndSpeak("MOTHER FUCKER.  THIS IS OPEN SOURCE MISTER COMPANY MAN");
-                        lol = true;
+                        await this.SetTextAndSpeak("MOTHER FUCKER.  THIS IS OPEN SOURCE MISTER COMPANY MAN", 4000);
+                        lol = 3;
+                        break;
+
+                    case "afshin":
+                    case "anthony":
+                        await this.SetTextAndSpeak("JAW KESH", 1000);
+                        break;
+
+                    case "on duty":
+                        await this.SetTextAndSpeak("You said duty", 2000);
+                        lol = 1;
                         break;
 
                     default:
-                        this.SetTextAndSpeak($"Hello {answer}");
+                        await this.SetTextAndSpeak($"Hello {answer}", 2000);
                         break;
                 }
 
-                if (lol)
+                if (lol > 0)
                 {
-                    await Task.Delay(2000);
-                    for (var i = 0; i < 3; i++)
+                    for (var i = 0; i < lol; i++)
                     {
                         tts.Speak("HA HA HA HA HA HA");
                         await Task.Delay(2000);
@@ -72,10 +90,11 @@ namespace Samples
         }
 
 
-        void SetTextAndSpeak(string text)
+        async Task SetTextAndSpeak(string text, int wait)
         {
             this.Text = text;
             this.tts.Speak(text);
+            await Task.Delay(wait);
         }
 
 
