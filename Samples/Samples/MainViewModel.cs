@@ -13,47 +13,52 @@ namespace Samples
     [ImplementPropertyChanged]
     public class MainViewModel
     {
+        readonly ITextToSpeech tts;
+
+
         public MainViewModel(IPermissions permissions, ITextToSpeech tts, ISpeechRecognizer speech)
         {
+            this.tts = tts;
+
             this.Start = new Command(async () =>
             {
                 var status = await permissions.RequestPermissionsAsync(Permission.Microphone);
                 if (status[Permission.Microphone] != PermissionStatus.Granted)
                 {
-                    this.Answer = "Hey Dummy!  Ya you!  You didn't enable permissions for the microphone";
-                    tts.Speak(this.Answer);
+                    this.SetTextAndSpeak("Hey Dummy!  Ya you!  You didn't enable permissions for the microphone");
                     return;
                 }
                 var lol = false;
-                this.IsAnswerVisible = false;
-                tts.Speak("Hello, please tell me your name?");
+                this.SetTextAndSpeak("Hello, please tell me your name?");
+
+                this.IsListening = true;
                 var answer = await speech.Listen();
+                this.IsListening = false;
 
                 switch (answer.ToLower())
                 {
                     case "allan":
-                        this.Answer = "Hello Master. I am here to serve you.  Please let me speak with Chris.";
+                        this.SetTextAndSpeak("Hello Master. I am here to serve you.  Please let me speak with Chris.");
                         break;
 
                     case "jason":
-                        this.Answer = "Jason.  Allan really wants to know who botched the BLE MGS service";
+                        this.SetTextAndSpeak("Jason.  Allan really wants to know who botched the BLE MGS service");
                         break;
 
                     case "james":
-                        this.Answer = "James. You look like you need a beer and you need to acknowledge that this is seriously cool shit";
+                        this.SetTextAndSpeak("James. You look like you need a beer and you need to acknowledge that this is seriously cool shit");
                         break;
 
                     case "chris":
-                        this.Answer = "MOTHER FUCKER.  THIS IS OPEN SOURCE MISTER COMPANY MAN";
+                        this.SetTextAndSpeak("MOTHER FUCKER.  THIS IS OPEN SOURCE MISTER COMPANY MAN");
                         lol = true;
                         break;
 
                     default:
-                        this.Answer = $"Hello {answer}";
+                        this.SetTextAndSpeak($"Hello {answer}");
                         break;
                 }
 
-                tts.Speak(this.Answer);
                 if (lol)
                 {
                     await Task.Delay(2000);
@@ -63,13 +68,19 @@ namespace Samples
                         await Task.Delay(2000);
                     }
                 }
-                this.IsAnswerVisible = true;
             });
         }
 
 
+        void SetTextAndSpeak(string text)
+        {
+            this.Text = text;
+            this.tts.Speak(text);
+        }
+
+
         public ICommand Start { get; }
-        public bool IsAnswerVisible { get; set; }
-        public string Answer { get; set; }
+        public string Text { get; set; }
+        public bool IsListening { get; set; }
     }
 }

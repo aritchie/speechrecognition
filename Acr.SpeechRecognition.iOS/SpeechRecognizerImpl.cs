@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using AVFoundation;
 using Foundation;
+using Speech;
 
 
 namespace Acr.SpeechRecognition
@@ -20,7 +21,7 @@ namespace Acr.SpeechRecognition
             var tcs = new TaskCompletionSource<string>();
             cancelToken?.Register(() =>
             {
-                currentSpeechTask.Cancel();
+                currentSpeechTask?.Cancel();
                 tcs.SetCanceled();
             });
 
@@ -51,8 +52,5 @@ namespace Acr.SpeechRecognition
         if (status != SFSpeechRecognizerAuthorizationStatus.Authorized)
             return;
 
-
-
-        InvokeOnMainThread(() => Dictate.Enabled = true);
     });
 */

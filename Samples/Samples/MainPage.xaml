@@ -4,7 +4,7 @@
              x:Class="Samples.MainPage">
     <StackLayout>
         <Button Text="Listen" Command="{Binding Start}" IsEnabled="{Binding IsAnswerVisible}" />
-        <Label Text="Hello, please tell me your name" />
-        <Label Text="{Binding Answer}" IsVisible="{Binding IsAnswerVisible}" />
+        <Label Text="{Binding Text}" />
+        <Label Text="LISTENING...." IsVisible="{Binding IsListening}" />
     </StackLayout>
 </ContentPage>
