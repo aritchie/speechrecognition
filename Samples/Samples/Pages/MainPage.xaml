@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<TabbedPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:Samples.Pages;assembly=Samples"
+             x:Class="Samples.Pages.MainPage"
+            Title="Voice Recognition">
+    <TabbedPage.Children>
+        <NavigationPage Title="Dictation">
+            <x:Arguments>
+                <local:DictationPage />
+            </x:Arguments>
+        </NavigationPage>
+        <NavigationPage Title="Say Hi">
+            <x:Arguments>
+                <local:ChatPage />
+            </x:Arguments>
+        </NavigationPage>
+    </TabbedPage.Children>
+</TabbedPage>

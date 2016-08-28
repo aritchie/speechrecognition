@@ -22,6 +22,9 @@ Supported Platforms
 1.0.0
 Initial Release
         </releaseNotes>
+        <dependencies>
+            <dependency id="rx-main" version="[2.2.5, 3)" />
+        </dependencies>
     </metadata>
     <files>
         <!-- PCL -->

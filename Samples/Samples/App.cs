@@ -1,4 +1,5 @@
 ﻿using System;
+using Samples.Pages;
 using Xamarin.Forms;
 
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reactive.Linq;
 using System.Windows.Input;
 using System.Threading.Tasks;
 using Acr.SpeechRecognition;
@@ -8,15 +9,15 @@ using PropertyChanged;
 using Xamarin.Forms;
 
 
-namespace Samples
+namespace Samples.ViewModels
 {
     [ImplementPropertyChanged]
-    public class MainViewModel
+    public class ChatViewModel
     {
         readonly ITextToSpeech tts;
 
 
-        public MainViewModel(IPermissions permissions, ITextToSpeech tts, ISpeechRecognizer speech)
+        public ChatViewModel(IPermissions permissions, ITextToSpeech tts, ISpeechRecognizer speech)
         {
             this.tts = tts;
 
@@ -29,10 +30,10 @@ namespace Samples
                     return;
                 }
                 var lol = 0;
-                await this.SetTextAndSpeak("Hello, please tell me your name?", 3000);
+                await this.SetTextAndSpeak("Hello, please tell me your name?", 2500);
 
                 this.IsListening = true;
-                var answer = await speech.Listen();
+                var answer = await speech.Listen().Take(1);
                 this.IsListening = false;
 
                 switch (answer.ToLower())
@@ -40,6 +41,11 @@ namespace Samples
                     case "alan":
                     case "allan":
                         await this.SetTextAndSpeak("Hello Master. I am here to serve you.  Please let me speak with Chris.", 4000);
+                        break;
+
+                    case "bob":
+                        await this.SetTextAndSpeak("Rock the F on Bob. Giggity giggity goo", 4000);
+                        lol = 2;
                         break;
 
                     case "jason":

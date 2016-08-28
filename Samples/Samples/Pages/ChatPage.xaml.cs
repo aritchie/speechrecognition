@@ -2,17 +2,18 @@
 using Acr.SpeechRecognition;
 using Plugin.Permissions;
 using Plugin.TextToSpeech;
+using Samples.ViewModels;
 using Xamarin.Forms;
 
 
-namespace Samples
+namespace Samples.Pages
 {
-    public partial class MainPage : ContentPage
+    public partial class ChatPage : ContentPage
     {
-        public MainPage()
+        public ChatPage()
         {
             InitializeComponent();
-            this.BindingContext = new MainViewModel(
+            this.BindingContext = new ChatViewModel(
                 CrossPermissions.Current,
                 CrossTextToSpeech.Current,
                 SpeechRecognizer.Instance

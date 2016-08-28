@@ -1,6 +1,5 @@
 ﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
+using System.Reactive.Linq;
 using AVFoundation;
 using Foundation;
 using Speech;
@@ -10,38 +9,41 @@ namespace Acr.SpeechRecognition
 {
     public class SpeechRecognizerImpl : ISpeechRecognizer
     {
-        readonly AVAudioEngine audioEngine = new AVAudioEngine();
-        readonly SFSpeechRecognizer speechRecognizer = new SFSpeechRecognizer();
-
-
-        public Task<string> Listen(CancellationToken? cancelToken = null)
+        public IObservable<string> Listen()
         {
-            var speechRequest = new SFSpeechAudioBufferRecognitionRequest();
-            SFSpeechRecognitionTask currentSpeechTask = null;
-            var tcs = new TaskCompletionSource<string>();
-            cancelToken?.Register(() =>
+            return Observable.Create<string>(ob =>
             {
-                currentSpeechTask?.Cancel();
-                tcs.SetCanceled();
-            });
+                var speechRecognizer = new SFSpeechRecognizer();
+                var speechRequest = new SFSpeechAudioBufferRecognitionRequest();
+                var audioEngine = new AVAudioEngine();
 
-            this.audioEngine.InputNode.InstallTapOnBus(
-                bus: 0,
-                bufferSize: 1024,
-                format: this.audioEngine.InputNode.GetBusOutputFormat(0),
-                tapBlock: (buffer, when) => speechRequest.Append(buffer)
-            );
-            this.audioEngine.Prepare();
+                audioEngine.InputNode.InstallTapOnBus(
+                    bus: 0,
+                    bufferSize: 1024,
+                    format: audioEngine.InputNode.GetBusOutputFormat(0),
+                    tapBlock: (buffer, when) => speechRequest.Append(buffer)
+                );
 
-            NSError error;
-            this.audioEngine.StartAndReturnError(out error);
-            currentSpeechTask = this.speechRecognizer.GetRecognitionTask(speechRequest, (result, err) =>
-            {
-                tcs.SetResult(result.BestTranscription.FormattedString);
-                this.audioEngine.Stop();
-                speechRequest.EndAudio();
+                NSError error = null;
+                audioEngine.StartAndReturnError(out error);
+                var task = speechRecognizer.GetRecognitionTask(speechRequest, (result, err) =>
+                {
+                    ob.OnNext(result.BestTranscription.FormattedString);
+                    if (result.Final)
+                        ob.OnCompleted();
+                });
+
+                return () =>
+                {
+                    task.Cancel();
+                    task.Dispose();
+                    audioEngine.Stop();
+                    audioEngine.Dispose();
+                    speechRequest.EndAudio();
+                    speechRequest.Dispose();
+                    speechRecognizer.Dispose();
+                };
             });
-            return tcs.Task;
         }
     }
 }
