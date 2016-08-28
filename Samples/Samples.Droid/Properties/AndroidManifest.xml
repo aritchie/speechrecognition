@@ -2,5 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" android:installLocation="auto" package="com.acrapps.voicerecog" android:versionCode="1" android:versionName="1.0">
 	<uses-sdk android:minSdkVersion="23" />
 	<uses-permission android:name="android.permission.INTERNET" />
+	<uses-permission android:name="android.permission.RECORD_AUDIO" />
 	<application android:label="ACR Voice Recognition" android:icon="@drawable/icon"></application>
 </manifest>

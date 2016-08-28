@@ -22,6 +22,10 @@
 	</array>
 	<key>MinimumOSVersion</key>
 	<string>9.3</string>
+   <key>NSSpeechRecognitionUsageDescription</key>  
+    <string>Say something useful here</string>  
+    <key>NSMicrophoneUsageDescription</key>  
+    <string>Say something useful here</string> 	
 	<key>CFBundleDisplayName</key>
 	<string>ACR Voice Recognition Sample</string>
 	<key>CFBundleIdentifier</key>

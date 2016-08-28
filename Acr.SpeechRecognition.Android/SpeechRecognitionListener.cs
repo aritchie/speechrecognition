@@ -1,6 +1,7 @@
 using System;
 using Android.OS;
 using Android.Speech;
+using Debug = System.Diagnostics.Debug;
 
 
 namespace Acr.SpeechRecognition
@@ -12,6 +13,7 @@ namespace Acr.SpeechRecognition
 
         public void OnBeginningOfSpeech()
         {
+            Debug.WriteLine("Beginning of Speech");
         }
 
 
@@ -22,11 +24,13 @@ namespace Acr.SpeechRecognition
 
         public void OnEndOfSpeech()
         {
+            Debug.WriteLine("End of Speech");
         }
 
 
         public void OnError(SpeechRecognizerError error)
         {
+            Debug.WriteLine("Error: " + error);
         }
 
 
@@ -42,11 +46,13 @@ namespace Acr.SpeechRecognition
 
         public void OnReadyForSpeech(Bundle @params)
         {
+            Debug.WriteLine("Ready for Speech");
         }
 
 
         public void OnResults(Bundle results)
         {
+            Debug.WriteLine("Speech Results");
             var matches = results.GetStringArrayList(Android.Speech.SpeechRecognizer.ResultsRecognition);
             if (matches != null)
             {
