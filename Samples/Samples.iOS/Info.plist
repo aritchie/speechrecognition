@@ -21,11 +21,11 @@
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>MinimumOSVersion</key>
-	<string>9.3</string>
-   <key>NSSpeechRecognitionUsageDescription</key>  
-    <string>Say something useful here</string>  
-    <key>NSMicrophoneUsageDescription</key>  
-    <string>Say something useful here</string> 	
+	<string>10.0</string>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>Say something useful here</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Say something useful here</string>
 	<key>CFBundleDisplayName</key>
 	<string>ACR Voice Recognition Sample</string>
 	<key>CFBundleIdentifier</key>
@@ -53,5 +53,7 @@
 	<string>1.0</string>
 	<key>UIMainStoryboardFile~ipad</key>
 	<string>LaunchScreen</string>
+	<key>CFBundleName</key>
+	<string>ACR Voice Recognition Sample</string>
 </dict>
 </plist>

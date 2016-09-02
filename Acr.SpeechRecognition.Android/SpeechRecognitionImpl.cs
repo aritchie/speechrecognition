@@ -22,11 +22,10 @@ namespace Acr.SpeechRecognition
 
                 var intent = new Intent(RecognizerIntent.ActionRecognizeSpeech);
                 intent.PutExtra(RecognizerIntent.ExtraCallingPackage, Application.Context.PackageName);
-                //intent.PutExtra(RecognizerIntent.ExtraPrompt, GetString(Resource.String.VoiceCommandsDesc));
                 intent.PutExtra(RecognizerIntent.ExtraLanguageModel, Application.Context.Resources.Configuration.Locale.Language);
+                //intent.PutExtra(RecognizerIntent.ExtraPrompt, GetString(Resource.String.VoiceCommandsDesc));
                 //intent.PutExtra(RecognizerIntent.ExtraMaxResults, 5);
                 speechRecognizer.StartListening(intent);
-
                 return () =>
                 {
                     listener.SpeechDetected -= handler;
@@ -37,7 +36,3 @@ namespace Acr.SpeechRecognition
         }
     }
 }
-/*
- string rec = Android.Content.PM.PackageManager.FeatureMicrophone;
-if (rec != "android.hardware.microphone")
-     */

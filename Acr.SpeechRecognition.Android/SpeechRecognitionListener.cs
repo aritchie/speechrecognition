@@ -55,10 +55,8 @@ namespace Acr.SpeechRecognition
             Debug.WriteLine("Speech Results");
             var matches = results.GetStringArrayList(Android.Speech.SpeechRecognizer.ResultsRecognition);
             if (matches != null)
-            {
-                var result = String.Join(" ", matches);
-                this.SpeechDetected?.Invoke(this, result);
-            }
+                foreach (var match in matches)
+                    this.SpeechDetected?.Invoke(this, match);
         }
 
 

@@ -9,21 +9,26 @@ namespace Acr.SpeechRecognition
 {
     public class SpeechRecognizerImpl : ISpeechRecognizer
     {
-        public IObservable<string> Listen()
+        public IObservable<string> Listen(bool showUI)
         {
             return Observable.Create<string>(async ob =>
             {
                 var speech = new WinSpeechRecognizer();
                 await speech.CompileConstraintsAsync();
 
-                //var grammar = new SpeechRecognitionTopicConstraint(SpeechRecognitionScenario.Dictation, "webSearch");
-                //this.speech.UIOptions.AudiblePrompt = "Say what you want to search for...";
-                //this.speech.UIOptions.ExampleText = @"Ex. &#39;weather for London&#39;";
-                //this.speech.Constraints.Add(webSearchGrammar);
-
-                var handler = new TypedEventHandler<SpeechContinuousRecognitionSession, SpeechContinuousRecognitionResultGeneratedEventArgs>(
-                    (sender, args) => ob.OnNext(args.Result.Text)
-                );
+                //if (showUI) 
+                //{
+                //    var grammar = new SpeechRecognitionTopicConstraint(SpeechRecognitionScenario.Dictation, "webSearch");
+                //    speech.UIOptions.AudiblePrompt = "Say what you want to search for...";
+                //    speech.UIOptions.ExampleText = @"Ex. &#39;weather for London&#39;";
+                //    speech.Constraints.Add(webSearchGrammar);
+                //}
+                var handler = new TypedEventHandler<SpeechContinuousRecognitionSession, SpeechContinuousRecognitionResultGeneratedEventArgs>((sender, args) => 
+                { 
+                    var splits = args.Result.Text.Split(' ');
+                    foreach (var split in splits)
+                        ob.OnNext(split); 
+                });
 
                 speech.ContinuousRecognitionSession.ResultGenerated += handler;
                 //speech.ContinuousRecognitionSession.AutoStopSilenceTimeout = TimeSpan.FromDays(1)
