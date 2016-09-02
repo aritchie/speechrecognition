@@ -21,10 +21,16 @@ namespace Acr.SpeechRecognition
                 speechRecognizer.SetRecognitionListener(listener);
 
                 var intent = new Intent(RecognizerIntent.ActionRecognizeSpeech);
+                //intent.PutExtra(RecognizerIntent.ExtraLanguageModel, RecognizerIntent.LanguageModelFreeForm);
                 intent.PutExtra(RecognizerIntent.ExtraCallingPackage, Application.Context.PackageName);
                 intent.PutExtra(RecognizerIntent.ExtraLanguageModel, Application.Context.Resources.Configuration.Locale.Language);
+                //intent.PutExtra(RecognizerIntent.ExtraLanguage, Java.Util.Locale.Default);
                 //intent.PutExtra(RecognizerIntent.ExtraPrompt, GetString(Resource.String.VoiceCommandsDesc));
-                //intent.PutExtra(RecognizerIntent.ExtraMaxResults, 5);
+                //intent.PutExtra(RecognizerIntent.ExtraSpeechInputCompleteSilenceLengthMillis, 1500);
+                //intent.PutExtra(RecognizerIntent.ExtraSpeechInputPossiblyCompleteSilenceLengthMillis, 1500);
+                //intent.PutExtra(RecognizerIntent.ExtraSpeechInputMinimumLengthMillis, 15000);
+                intent.PutExtra(RecognizerIntent.ExtraMaxResults, 1);
+
                 speechRecognizer.StartListening(intent);
                 return () =>
                 {
@@ -34,5 +40,8 @@ namespace Acr.SpeechRecognition
                 };
             });
         }
+
+
+        public bool IsSupported => Android.OS.Build.VERSION.SdkInt >= 23;
     }
 }

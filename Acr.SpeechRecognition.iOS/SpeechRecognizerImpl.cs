@@ -3,6 +3,7 @@ using System.Reactive.Linq;
 using AVFoundation;
 using Foundation;
 using Speech;
+using UIKit;
 
 
 namespace Acr.SpeechRecognition
@@ -45,6 +46,9 @@ namespace Acr.SpeechRecognition
                 };
             });
         }
+
+
+        public bool IsSupported => UIDevice.CurrentDevice.CheckSystemVersion(10, 0);
     }
 }
 /*

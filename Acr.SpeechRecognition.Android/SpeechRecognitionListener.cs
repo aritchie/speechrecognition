@@ -19,6 +19,7 @@ namespace Acr.SpeechRecognition
 
         public void OnBufferReceived(byte[] buffer)
         {
+            Debug.WriteLine("Buffer Received");
         }
 
 
@@ -36,11 +37,13 @@ namespace Acr.SpeechRecognition
 
         public void OnEvent(int eventType, Bundle @params)
         {
+            Debug.WriteLine("OnEvent: " + eventType);
         }
 
 
         public void OnPartialResults(Bundle partialResults)
         {
+            Debug.WriteLine("OnPartialResults");
         }
 
 

@@ -16,18 +16,19 @@ namespace Acr.SpeechRecognition
                 var speech = new WinSpeechRecognizer();
                 await speech.CompileConstraintsAsync();
 
-                //if (showUI) 
+                //if (showUI)
                 //{
                 //    var grammar = new SpeechRecognitionTopicConstraint(SpeechRecognitionScenario.Dictation, "webSearch");
                 //    speech.UIOptions.AudiblePrompt = "Say what you want to search for...";
                 //    speech.UIOptions.ExampleText = @"Ex. &#39;weather for London&#39;";
                 //    speech.Constraints.Add(webSearchGrammar);
                 //}
-                var handler = new TypedEventHandler<SpeechContinuousRecognitionSession, SpeechContinuousRecognitionResultGeneratedEventArgs>((sender, args) => 
-                { 
-                    var splits = args.Result.Text.Split(' ');
-                    foreach (var split in splits)
-                        ob.OnNext(split); 
+                var handler = new TypedEventHandler<SpeechContinuousRecognitionSession, SpeechContinuousRecognitionResultGeneratedEventArgs>((sender, args) =>
+                {
+                    ob.OnNext(args.Result.Text);
+                    //var splits = args.Result.Text.Split(' ');
+                    //foreach (var split in splits)
+                    //    ob.OnNext(split);
                 });
 
                 speech.ContinuousRecognitionSession.ResultGenerated += handler;
@@ -46,5 +47,8 @@ namespace Acr.SpeechRecognition
             //result.PhraseDuration
             //result.Status == SpeechRecognitionResultStatus.Unknown
         }
+
+
+        public bool IsSupported => true;
     }
 }
