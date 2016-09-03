@@ -42,6 +42,7 @@ namespace Acr.SpeechRecognition
         }
 
 
-        public bool IsSupported => Android.OS.Build.VERSION.SdkInt >= 23;
+        //public bool IsSupported => Android.OS.Build.VERSION.SdkInt >= 23;
+        public bool IsSupported => true;
     }
 }

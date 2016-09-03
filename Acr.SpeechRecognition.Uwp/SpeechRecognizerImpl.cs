@@ -9,7 +9,7 @@ namespace Acr.SpeechRecognition
 {
     public class SpeechRecognizerImpl : ISpeechRecognizer
     {
-        public IObservable<string> Listen(bool showUI)
+        public IObservable<string> Listen()
         {
             return Observable.Create<string>(async ob =>
             {
