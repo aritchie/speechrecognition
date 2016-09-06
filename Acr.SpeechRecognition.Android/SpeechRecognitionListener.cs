@@ -60,6 +60,17 @@ namespace Acr.SpeechRecognition
             if (matches != null)
                 foreach (var match in matches)
                     this.SpeechDetected?.Invoke(this, match);
+
+                    //            {
+        //if ((results != null)
+        //        && results.containsKey(SpeechRecognizer.RESULTS_RECOGNITION))
+        //{
+        //    List<String> heard =
+        //            results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
+        //    float[] scores =
+        //            results.getFloatArray(SpeechRecognizer.CONFIDENCE_SCORES);
+        //    receiveWhatWasHeard(heard, scores);
+        //}
         }
 
 

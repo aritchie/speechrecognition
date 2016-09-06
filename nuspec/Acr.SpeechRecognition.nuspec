@@ -14,6 +14,7 @@ Supported Platforms
         </description>
         <authors>Allan Ritchie</authors>
         <owners>Allan Ritchie</owners>
+        <iconUrl>https://github.com/aritchie/speechrecognition/icon.png</iconUrl>
         <licenseUrl>https://github.com/aritchie/speechrecognition/LICENSE.md</licenseUrl>
         <projectUrl>https://github.com/aritchie/speechrecognition</projectUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>

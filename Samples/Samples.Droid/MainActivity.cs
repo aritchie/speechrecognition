@@ -20,6 +20,7 @@ namespace Samples.Droid
         {
             base.OnCreate(bundle);
             Forms.Init(this, bundle);
+            Acr.SpeechRecognition.SpeechRecognizerImpl.GetTopActivity = () => (Activity) Forms.Context;
             this.LoadApplication(new App());
         }
 

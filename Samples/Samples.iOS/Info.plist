@@ -29,7 +29,7 @@
 	<key>CFBundleDisplayName</key>
 	<string>ACR Voice Recognition Sample</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.acrapps.voicerecog</string>
+	<string>com.acrapps.speechrecog</string>
 	<key>CFBundleVersion</key>
 	<string>1.0</string>
 	<key>CFBundleIconFiles</key>
