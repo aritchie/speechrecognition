@@ -1,6 +1,5 @@
 ﻿using System;
 using Acr.SpeechRecognition;
-using Plugin.Permissions;
 using Plugin.TextToSpeech;
 using Samples.ViewModels;
 using Xamarin.Forms;
@@ -14,7 +13,6 @@ namespace Samples.Pages
         {
             InitializeComponent();
             this.BindingContext = new ChatViewModel(
-                CrossPermissions.Current,
                 CrossTextToSpeech.Current,
                 SpeechRecognizer.Instance
             );

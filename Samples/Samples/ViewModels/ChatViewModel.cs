@@ -3,7 +3,6 @@ using System.Reactive.Linq;
 using System.Windows.Input;
 using System.Threading.Tasks;
 using Acr.SpeechRecognition;
-using Plugin.Permissions.Abstractions;
 using Plugin.TextToSpeech.Abstractions;
 using PropertyChanged;
 using Xamarin.Forms;
@@ -17,14 +16,20 @@ namespace Samples.ViewModels
         readonly ITextToSpeech tts;
 
 
-        public ChatViewModel(IPermissions permissions, ITextToSpeech tts, ISpeechRecognizer speech)
+        public ChatViewModel(ITextToSpeech tts, ISpeechRecognizer speech)
         {
             this.tts = tts;
 
             this.Start = new Command(async () =>
             {
-                var status = await permissions.RequestPermissionsAsync(Permission.Microphone);
-                if (status[Permission.Microphone] != PermissionStatus.Granted)
+                if (!speech.IsSupported)
+                {
+                    await this.SetTextAndSpeak("Your current device/OS is not supported", 0);
+                    return;
+                }
+                    
+                var granted = await speech.RequestPermission();
+                if (!granted)
                 {
                     await this.SetTextAndSpeak("Hey Dummy!  Ya you!  You didn't enable permissions for the microphone", 4000);
                     return;
@@ -35,63 +40,7 @@ namespace Samples.ViewModels
                 this.IsListening = true;
                 var answer = await speech.Listen().Take(1);
                 this.IsListening = false;
-
-                switch (answer.ToLower())
-                {
-                    case "alan":
-                    case "allan":
-                        await this.SetTextAndSpeak("Hello Master. I am here to serve you.  Please let me speak with Chris.", 4000);
-                        break;
-
-                    case "bob":
-                        await this.SetTextAndSpeak("Rock the F on Bob. Giggity giggity goo", 4000);
-                        lol = 2;
-                        break;
-
-                    case "jason":
-                        await this.SetTextAndSpeak("Jason. Hopefully you had your morning coffee before this", 4000);
-                        break;
-
-                    case "james":
-                        await this.SetTextAndSpeak("James. You look like you need a beer and you need to acknowledge that this is seriously cool shit", 5000);
-                        break;
-
-                    case "osama":
-                        await this.SetTextAndSpeak("Osama.  You are a pimp", 3000);
-                        break;
-
-                    case "darren":
-                        await this.SetTextAndSpeak("Darren.  Burrito or sandwitch today?", 3000);
-                        break;
-
-                    case "chris":
-                        await this.SetTextAndSpeak("MOTHER FUCKER.  THIS IS OPEN SOURCE MISTER COMPANY MAN", 4000);
-                        lol = 3;
-                        break;
-
-                    case "afshin":
-                    case "anthony":
-                        await this.SetTextAndSpeak("JAW KESH", 1000);
-                        break;
-
-                    case "on duty":
-                        await this.SetTextAndSpeak("You said duty", 2000);
-                        lol = 1;
-                        break;
-
-                    default:
-                        await this.SetTextAndSpeak($"Hello {answer}", 2000);
-                        break;
-                }
-
-                if (lol > 0)
-                {
-                    for (var i = 0; i < lol; i++)
-                    {
-                        tts.Speak("HA HA HA HA HA HA");
-                        await Task.Delay(2000);
-                    }
-                }
+                await this.SetTextAndSpeak($"Hello {answer}", 2000);
             });
         }
 

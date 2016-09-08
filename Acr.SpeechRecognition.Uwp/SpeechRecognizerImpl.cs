@@ -9,6 +9,12 @@ namespace Acr.SpeechRecognition
 {
     public class SpeechRecognizerImpl : ISpeechRecognizer
     {
+        public Task<bool> RequestPermission()
+        {
+            return Task.FromResult(true);
+        }
+
+        
         public IObservable<string> Listen()
         {
             return Observable.Create<string>(async ob =>

@@ -9,7 +9,7 @@ using Xamarin.Forms.Platform.Android;
 namespace Samples.Droid
 {
     [Activity(
-        Label = "Voice Recognition Sample",
+        Label = "Speech Recognition Sample",
         Icon = "@drawable/icon",
         MainLauncher = true,
         ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation
@@ -20,7 +20,7 @@ namespace Samples.Droid
         {
             base.OnCreate(bundle);
             Forms.Init(this, bundle);
-            Acr.SpeechRecognition.SpeechRecognizerImpl.GetTopActivity = () => (Activity) Forms.Context;
+            //Acr.SpeechRecognition.SpeechRecognizerImpl.GetTopActivity = () => (Activity) Forms.Context;
             this.LoadApplication(new App());
         }
 

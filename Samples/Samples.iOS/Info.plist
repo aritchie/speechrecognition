@@ -27,7 +27,7 @@
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Say something useful here</string>
 	<key>CFBundleDisplayName</key>
-	<string>ACR Voice Recognition Sample</string>
+	<string>Speech Recognition</string>
 	<key>CFBundleIdentifier</key>
 	<string>com.acrapps.speechrecog</string>
 	<key>CFBundleVersion</key>
@@ -54,6 +54,8 @@
 	<key>UIMainStoryboardFile~ipad</key>
 	<string>LaunchScreen</string>
 	<key>CFBundleName</key>
-	<string>ACR Voice Recognition Sample</string>
+	<string>Speech Recognition</string>
+	<key>CFBundleExecutable</key>
+	<string></string>
 </dict>
 </plist>
