@@ -35,15 +35,15 @@ Initial Release
     </metadata>
     <files>
         <!-- PCL -->
-        <file src="..\src\Acr.SpeechRecognition\bin\Release\Acr.SpeechRecognition.*" target="lib\portable-win+net45+wp8+win8+wpa81" />
+        <file src="..\Acr.SpeechRecognition\bin\Release\Acr.SpeechRecognition.*" target="lib\portable-win+net45+wp8+win8+wpa81" />
 
         <!-- android -->
-        <file src="..\src\Acr.SpeechRecognition.Android\bin\Release\Acr.SpeechRecognition.*" target="lib\MonoAndroid10" />
+        <file src="..\Acr.SpeechRecognition.Android\bin\Release\Acr.SpeechRecognition.*" target="lib\MonoAndroid10" />
 
         <!-- ios -->
-        <file src="..\src\Acr.SpeechRecognition.iOS\bin\iPhone\Release\Acr.SpeechRecognition.*" target="lib\Xamarin.iOS10" />
+        <file src="..\Acr.SpeechRecognition.iOS\bin\Release\Acr.SpeechRecognition.*" target="lib\Xamarin.iOS10" />
 
         <!-- uwp -->
-        <file src="..\src\Acr.UserDialogs.Uwp\bin\Release\Acr.SpeechRecognition.*" target="lib\uap10.0" />
+        <file src="..\Acr.SpeechRecognition.Uwp\bin\Release\Acr.SpeechRecognition.*" target="lib\uap10.0" />
     </files>
 </package>

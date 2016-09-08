@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reactive.Linq;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Media.SpeechRecognition;
 using WinSpeechRecognizer = Windows.Media.SpeechRecognition.SpeechRecognizer;
@@ -14,7 +15,7 @@ namespace Acr.SpeechRecognition
             return Task.FromResult(true);
         }
 
-        
+
         public IObservable<string> Listen()
         {
             return Observable.Create<string>(async ob =>
