@@ -8,12 +8,17 @@ namespace Acr.SpeechRecognition
 {
     public class SpeechRecognitionListener : Java.Lang.Object, IRecognitionListener
     {
-        public event EventHandler<string> SpeechDetected;
+        public Action StartOfSpeech { get; set; }
+        public Action EndOfSpeech { get; set; }
+        public Action<SpeechRecognizerError> Error { get; set; }
+        public Action<string> SpeechDetected { get; set; }
+        public Action<float> RmsChanged { get; set; }
 
-
+        
         public void OnBeginningOfSpeech()
         {
             Debug.WriteLine("Beginning of Speech");
+            this.StartOfSpeech?.Invoke();
         }
 
 
@@ -26,12 +31,14 @@ namespace Acr.SpeechRecognition
         public void OnEndOfSpeech()
         {
             Debug.WriteLine("End of Speech");
+            this.EndOfSpeech?.Invoke();
         }
 
 
         public void OnError(SpeechRecognizerError error)
         {
             Debug.WriteLine("Error: " + error);
+            this.Error?.Invoke(error);
         }
 
 
@@ -44,6 +51,7 @@ namespace Acr.SpeechRecognition
         public void OnPartialResults(Bundle partialResults)
         {
             Debug.WriteLine("OnPartialResults");
+            this.SendResults(partialResults);
         }
 
 
@@ -56,26 +64,30 @@ namespace Acr.SpeechRecognition
         public void OnResults(Bundle results)
         {
             Debug.WriteLine("Speech Results");
-            var matches = results.GetStringArrayList(Android.Speech.SpeechRecognizer.ResultsRecognition);
-            if (matches != null)
-                foreach (var match in matches)
-                    this.SpeechDetected?.Invoke(this, match);
-
-                    //            {
-        //if ((results != null)
-        //        && results.containsKey(SpeechRecognizer.RESULTS_RECOGNITION))
-        //{
-        //    List<String> heard =
-        //            results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
-        //    float[] scores =
-        //            results.getFloatArray(SpeechRecognizer.CONFIDENCE_SCORES);
-        //    receiveWhatWasHeard(heard, scores);
-        //}
+            this.SendResults(results);
         }
 
 
         public void OnRmsChanged(float rmsdB)
         {
+            Debug.WriteLine("RMS Changed: " + rmsdB);
+            this.RmsChanged?.Invoke(rmsdB);
+        }
+
+
+        void SendResults(Bundle bundle)
+        {
+            var matches = bundle.GetStringArrayList(Android.Speech.SpeechRecognizer.ResultsRecognition);
+            if (matches == null)
+            {
+                Debug.WriteLine("Matches value is null in bundle");
+            }
+            else
+            {
+                Debug.WriteLine("Matches found: " + matches.Count);
+                foreach (var match in matches)
+                    this.SpeechDetected?.Invoke(match); 
+            }
         }
     }
 }
