@@ -37,6 +37,14 @@ UWP
 
 ## HOW TO USE
 
+### Request Permission
+
+    var granted = await SpeechRecognizer.Instance.RequestPermission();
+    if (granted) 
+    {
+        // go!
+    }
+
 ### Easy Use
 
 	SpeechRecognizer.Instance.Listen().Subscribe(x => 
