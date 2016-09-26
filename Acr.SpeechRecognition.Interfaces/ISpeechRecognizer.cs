@@ -5,8 +5,9 @@ namespace Acr.SpeechRecognition
 {
     public interface ISpeechRecognizer
     {
-        Task<bool> RequestPermission();
-        IObservable<string> Listen();
         bool IsSupported { get; }
+        Task<bool> RequestPermission();
+        IObservable<string> Dictate();
+        IObservable<string> ReceiveCommand();
     }
 }

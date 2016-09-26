@@ -16,21 +16,21 @@ namespace Acr.SpeechRecognition
             var state = SFSpeechRecognizer.AuthorizationStatus;
             if (state != SFSpeechRecognizerAuthorizationStatus.NotDetermined)
                 return Task.FromResult(state == SFSpeechRecognizerAuthorizationStatus.Authorized);
-            
+
             var tcs = new TaskCompletionSource<bool>();
             SFSpeechRecognizer.RequestAuthorization(status =>
             {
                 var result = status == SFSpeechRecognizerAuthorizationStatus.Authorized;
-                tcs.TrySetResult(result);                                            
+                tcs.TrySetResult(result);
             });
             return tcs.Task;
         }
 
 
         IObservable<string> listenOb;
-        public IObservable<string> Listen()
+        public IObservable<string> Dictate()
         {
-            
+
             this.listenOb = this.listenOb ?? Observable.Create<string>(ob =>
             {
                 SFSpeechRecognitionTask task = null;
@@ -38,7 +38,7 @@ namespace Acr.SpeechRecognition
 
                 var audioEngine = new AVAudioEngine();
                 var speechRecognizer = new SFSpeechRecognizer();
-                var speechRequest = new SFSpeechAudioBufferRecognitionRequest 
+                var speechRequest = new SFSpeechAudioBufferRecognitionRequest
                 {
                     ShouldReportPartialResults = true,
                     TaskHint = SFSpeechRecognitionTaskHint.Dictation
@@ -55,7 +55,7 @@ namespace Acr.SpeechRecognition
                 {
                     ob.OnError(new Exception(error.LocalizedDescription));
                 }
-                else 
+                else
                 {
                     task = speechRecognizer.GetRecognitionTask(speechRequest, (result, err) =>
                     {
@@ -93,5 +93,59 @@ namespace Acr.SpeechRecognition
 
 
         public bool IsSupported => UIDevice.CurrentDevice.CheckSystemVersion(10, 0);
+
+
+        IObservable<string> Listen(Action<IObserver<string>, SFSpeechRecognitionResult> onResult)
+        {
+            return Observable.Create<string>(ob =>
+            {
+
+                SFSpeechRecognitionTask task = null;
+                NSError error = null;
+
+                var audioEngine = new AVAudioEngine();
+                var speechRecognizer = new SFSpeechRecognizer();
+                var speechRequest = new SFSpeechAudioBufferRecognitionRequest
+                {
+                    ShouldReportPartialResults = true,
+                    TaskHint = SFSpeechRecognitionTaskHint.Dictation
+                };
+
+                audioEngine.InputNode.InstallTapOnBus(
+                    bus: 0,
+                    bufferSize: 1024,
+                    format: audioEngine.InputNode.GetBusOutputFormat(0),
+                    tapBlock: (buffer, when) => speechRequest.Append(buffer)
+                );
+                audioEngine.StartAndReturnError(out error);
+                if (error != null)
+                {
+                    ob.OnError(new Exception(error.LocalizedDescription));
+                }
+                else
+                {
+                    task = speechRecognizer.GetRecognitionTask(speechRequest, (result, err) =>
+                    {
+                        if (err != null)
+                        {
+                            ob.OnError(new Exception(err.LocalizedDescription));
+                            return;
+                        }
+                        onResult(ob, result);
+                    });
+                }
+
+                return () =>
+                {
+                    task?.Cancel();
+                    task?.Dispose();
+                    audioEngine.Stop();
+                    audioEngine.Dispose();
+                    speechRequest.EndAudio();
+                    speechRequest.Dispose();
+                    speechRecognizer.Dispose();
+                };
+            });
+        }
     }
 }
