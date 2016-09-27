@@ -34,11 +34,10 @@ namespace Samples.ViewModels
                     await this.SetTextAndSpeak("Hey Dummy!  Ya you!  You didn't enable permissions for the microphone", 4000);
                     return;
                 }
-                var lol = 0;
                 await this.SetTextAndSpeak("Hello, please tell me your name?", 2500);
 
                 this.IsListening = true;
-                var answer = await speech.Listen().Take(1);
+                var answer = await speech.Command(1);
                 this.IsListening = false;
                 await this.SetTextAndSpeak($"Hello {answer}", 2000);
             });

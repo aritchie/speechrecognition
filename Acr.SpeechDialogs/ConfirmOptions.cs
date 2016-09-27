@@ -1,10 +1,11 @@
 ﻿using System;
 namespace Acr.SpeechDialogs
 {
-    public class ConfirmOptions
+    public enum ConfirmOptions
     {
-        public ConfirmOptions()
-        {
-        }
+        YesNo,
+        YesNoMaybe,
+        OkCancel,
+        AcceptReject
     }
 }

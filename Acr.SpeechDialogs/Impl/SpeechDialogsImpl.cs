@@ -1,27 +1,63 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
-
+using System.Collections.Generic;
+using Acr.SpeechRecognition;
+using Plugin.TextToSpeech.Abstractions;
+using System.Reactive.Linq;
+using System.Linq;
 
 namespace Acr.SpeechDialogs.Impl
 {
     public class SpeechDialogsImpl : ISpeechDialogs
     {
-        public void Actions(IDictionary<string, Action> actions)
+        readonly ISpeechRecognizer speech;
+        readonly ITextToSpeech tts;
+
+
+        public SpeechDialogsImpl(ISpeechRecognizer sr, ITextToSpeech tts)
         {
-            throw new NotImplementedException();
+            this.speech = sr;
+            this.tts = tts;
         }
 
 
-        public Task<bool> Confirm(string question)
+        public void Actions(ActionsConfig config)
         {
-            throw new NotImplementedException();
+            this.tts.Speak(config.Question);
+
+            if (config.SpeakAnswers) 
+            {
+                foreach (var key in config.Actions.Keys)
+                {
+                    this.tts.Speak(key, true);
+                }
+            }
+
+            this.speech
+                .Dictate()
+                .Where(x => x.Equals(x, StringComparison.CurrentCultureIgnoreCase))
+                .Take(1)
+                .Subscribe(x => config.Actions[x]?.Invoke());
         }
 
 
-        public Task<string> Prompt(string question)
+        public async Task<bool> Confirm(string question, ConfirmOptions options)
         {
-            throw new NotImplementedException();
+            this.tts.Speak(question, false);
+            var result = await this.speech
+                .Dictate()
+                .Where(x => x == "yes" || x == "no")
+                .Take(1);
+            
+            return result == "yes";
+        }
+
+
+        public async Task<string> Prompt(string question)
+        {
+            this.tts.Speak(question);
+            var result = await this.speech.Command();
+            return result;
         }
     }
 }

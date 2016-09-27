@@ -8,6 +8,6 @@ namespace Acr.SpeechRecognition
         bool IsSupported { get; }
         Task<bool> RequestPermission();
         IObservable<string> Dictate();
-        IObservable<string> ReceiveCommand();
+        IObservable<string> Command(int maxWords = 5);
     }
 }

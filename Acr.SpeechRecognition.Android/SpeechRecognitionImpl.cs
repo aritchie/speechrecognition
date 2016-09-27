@@ -1,9 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Android.App;
 using Android.Content;
-using Android.OS;
 using Android.Speech;
 using Plugin.Permissions;
 using Plugin.Permissions.Abstractions;
@@ -29,22 +29,43 @@ namespace Acr.SpeechRecognition
         }
 
 
-        IObservable<string> listenOb;
-        public IObservable<string> Listen()
+        public IObservable<string> Dictate()
         {
-            this.listenOb = this.listenOb ?? Observable.Create<string>(ob =>
+            return this.CreateListener(null, (sr, words, ob) => 
+            {
+                sr.StopListening();
+                sr.StartListening(this.CreateSpeechIntent(null));
+
+                foreach (var word in words)
+                    ob.OnNext(word);                
+            });
+        }
+
+
+        public IObservable<string> Command(int maxWords) 
+        {
+            return this.CreateListener(maxWords, (sr, words, ob) => 
+            {
+                var cmd = String.Join(" ", words);
+                ob.OnNext(cmd);
+                ob.OnCompleted();
+            });            
+        }
+
+
+        public bool IsSupported => Android.Speech.SpeechRecognizer.IsRecognitionAvailable(Application.Context);
+
+
+        IObservable<string> CreateListener(int? maxWords, Action<Android.Speech.SpeechRecognizer, IList<string>, IObserver<string>> action)
+        {
+            return Observable.Create<string>(ob =>
             {
                 var speechRecognizer = Android.Speech.SpeechRecognizer.CreateSpeechRecognizer(Application.Context);
                 var listener = new SpeechRecognitionListener();
 
-                listener.SpeechDetected = ob.OnNext;
-                listener.Error = _ => 
-                {
-                    speechRecognizer.StopListening();
-                    speechRecognizer.StartListening(this.CreateSpeechIntent());
-                };
+                listener.SpeechDetected = words => action(speechRecognizer, words, ob);
                 speechRecognizer.SetRecognitionListener(listener);
-                speechRecognizer.StartListening(this.CreateSpeechIntent());
+                speechRecognizer.StartListening(this.CreateSpeechIntent(maxWords));
 
                 return () =>
                 {
@@ -52,18 +73,11 @@ namespace Acr.SpeechRecognition
                     speechRecognizer.StopListening();
                     speechRecognizer.Dispose();
                 };
-            })
-            .Publish()
-            .RefCount();
-
-            return this.listenOb;
+            });
         }
 
 
-        public bool IsSupported => Android.Speech.SpeechRecognizer.IsRecognitionAvailable(Application.Context);
-
-
-        Intent CreateSpeechIntent()
+        Intent CreateSpeechIntent(int? maxWords)
         {
             var intent = new Intent(RecognizerIntent.ActionRecognizeSpeech);
             intent.PutExtra(RecognizerIntent.ExtraLanguagePreference, "en");
@@ -71,7 +85,9 @@ namespace Acr.SpeechRecognition
             intent.PutExtra(RecognizerIntent.ExtraLanguageModel, RecognizerIntent.LanguageModelFreeForm);
             intent.PutExtra(RecognizerIntent.ExtraCallingPackage, Application.Context.PackageName);
             intent.PutExtra(RecognizerIntent.ExtraPartialResults, true);
-
+            if (maxWords != null)
+                intent.PutExtra(RecognizerIntent.ExtraMaxResults, maxWords.Value);
+            
             return intent;
         }
     }

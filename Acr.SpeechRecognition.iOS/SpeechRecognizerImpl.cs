@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reactive.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using AVFoundation;
 using Foundation;
@@ -27,68 +28,32 @@ namespace Acr.SpeechRecognition
         }
 
 
-        IObservable<string> listenOb;
         public IObservable<string> Dictate()
         {
-
-            this.listenOb = this.listenOb ?? Observable.Create<string>(ob =>
+            return this.Listen((ob, sr) => 
             {
-                SFSpeechRecognitionTask task = null;
-                NSError error = null;
+                var words = sr.BestTranscription.FormattedString.Split(' ');
+                foreach (var word in words)
+                    ob.OnNext(word);                
+            });
+        }
 
-                var audioEngine = new AVAudioEngine();
-                var speechRecognizer = new SFSpeechRecognizer();
-                var speechRequest = new SFSpeechAudioBufferRecognitionRequest
-                {
-                    ShouldReportPartialResults = true,
-                    TaskHint = SFSpeechRecognitionTaskHint.Dictation
-                };
 
-                audioEngine.InputNode.InstallTapOnBus(
-                    bus: 0,
-                    bufferSize: 1024,
-                    format: audioEngine.InputNode.GetBusOutputFormat(0),
-                    tapBlock: (buffer, when) => speechRequest.Append(buffer)
-                );
-                audioEngine.StartAndReturnError(out error);
-                if (error != null)
+        public IObservable<string> Command(int maxWords)
+        {
+            var count = 0;
+            return this.Listen((ob, sr) => 
+            {
+                var words = sr.BestTranscription.FormattedString.Split(' ');
+                foreach (var word in words) 
                 {
-                    ob.OnError(new Exception(error.LocalizedDescription));
+                    ob.OnNext(word);
+                    count++;
+
+                    if (sr.Final || count == maxWords)
+                        ob.OnCompleted();
                 }
-                else
-                {
-                    task = speechRecognizer.GetRecognitionTask(speechRequest, (result, err) =>
-                    {
-                        if (err != null)
-                        {
-                            ob.OnError(new Exception(err.LocalizedDescription));
-                            return;
-                        }
-                        var words = result.BestTranscription.FormattedString.Split(' ');
-                        foreach (var word in words)
-                            ob.OnNext(word);
-
-                        // I want this to be endless so user can dictate or listen for one word and cancel
-                        //if (result.Final)
-                        //    ob.OnCompleted();
-
-                    });
-                }
-                return () =>
-                {
-                    task?.Cancel();
-                    task?.Dispose();
-                    audioEngine.Stop();
-                    audioEngine.Dispose();
-                    speechRequest.EndAudio();
-                    speechRequest.Dispose();
-                    speechRecognizer.Dispose();
-                };
-            })
-            .Publish()
-            .RefCount();
-
-            return this.listenOb;
+            }).Take(maxWords);
         }
 
 
