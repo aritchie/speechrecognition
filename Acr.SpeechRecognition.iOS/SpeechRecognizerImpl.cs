@@ -3,6 +3,8 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using AVFoundation;
 using Foundation;
+using Plugin.Permissions;
+using Plugin.Permissions.Abstractions;
 using Speech;
 using UIKit;
 
@@ -11,26 +13,25 @@ namespace Acr.SpeechRecognition
 {
     public class SpeechRecognizerImpl : ISpeechRecognizer
     {
-        public Task<bool> RequestPermission()
-        {
-            var state = SFSpeechRecognizer.AuthorizationStatus;
-            if (state != SFSpeechRecognizerAuthorizationStatus.NotDetermined)
-                return Task.FromResult(state == SFSpeechRecognizerAuthorizationStatus.Authorized);
+        readonly IPermissions permissions;
 
-            var tcs = new TaskCompletionSource<bool>();
-            SFSpeechRecognizer.RequestAuthorization(status =>
-            {
-                var result = status == SFSpeechRecognizerAuthorizationStatus.Authorized;
-                tcs.TrySetResult(result);
-            });
-            return tcs.Task;
+
+        public SpeechRecognizerImpl(IPermissions permissions = null)
+        {
+            this.permissions = permissions ?? CrossPermissions.Current;
+        }
+
+
+        public async Task<bool> RequestPermission()
+        {
+            var result = await this.permissions.RequestPermissionsAsync(Permission.Speech);
+            return result[Permission.Speech] == PermissionStatus.Granted;
         }
 
 
         IObservable<string> listenOb;
-        public IObservable<string> Dictate()
+        public IObservable<string> Listen()
         {
-
             this.listenOb = this.listenOb ?? Observable.Create<string>(ob =>
             {
                 SFSpeechRecognitionTask task = null;

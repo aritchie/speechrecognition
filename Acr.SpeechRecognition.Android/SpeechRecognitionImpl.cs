@@ -3,7 +3,6 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Android.App;
 using Android.Content;
-using Android.OS;
 using Android.Speech;
 using Plugin.Permissions;
 using Plugin.Permissions.Abstractions;
@@ -24,8 +23,8 @@ namespace Acr.SpeechRecognition
 
         public async Task<bool> RequestPermission()
         {
-            var results = await this.permissions.RequestPermissionsAsync(Permission.Microphone);
-            return results[Permission.Microphone] == PermissionStatus.Granted;
+            var result = await this.permissions.RequestPermissionsAsync(Permission.Speech);
+            return result[Permission.Speech] == PermissionStatus.Granted;
         }
 
 
@@ -38,7 +37,7 @@ namespace Acr.SpeechRecognition
                 var listener = new SpeechRecognitionListener();
 
                 listener.SpeechDetected = ob.OnNext;
-                listener.Error = _ => 
+                listener.Error = _ =>
                 {
                     speechRecognizer.StopListening();
                     speechRecognizer.StartListening(this.CreateSpeechIntent());
