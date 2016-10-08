@@ -33,7 +33,7 @@ namespace Samples.ViewModels
                 {
                     this.ListenText = "Stop Dictation";
                     token = speech
-                        .Listen()
+                        .Dictate()
                         //.Catch<string, Exception>(ex => Observable.Return(ex.ToString()))
                         .Subscribe(x => this.Text += " " + x);
                 }

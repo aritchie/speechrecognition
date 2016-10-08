@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 
 
@@ -14,9 +13,17 @@ namespace Acr.SpeechDialogs
 
 
         public string Question { get; }
-        public bool SpeakQuestion { get; set; }
-        public bool SpeakAvailableAnswers { get; set; }
+        public bool SpeakAnswers { get; set; }
+        //public bool RepeatOnBadCommand { get; set; }
+        //public int RepeatOnBadAttempts { get; set; }
 
-        IDictionary<string, Action> Actions { get; set; } = new Dictionary<string, Action>();
+        public IDictionary<string, Action> Actions { get; set; } = new Dictionary<string, Action>();
+
+
+        public ActionsConfig Add(string phrase, Action action)
+        {
+            this.Actions.Add(phrase, action);
+            return this;
+        }
     }
 }
