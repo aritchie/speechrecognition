@@ -1,6 +1,7 @@
 ﻿{
   "dependencies": {
     "Microsoft.NETCore.UniversalWindowsPlatform": "5.2.2",
+    "Plugin.Permissions": "1.2.0-beta9",
     "Rx-Main": "2.2.5"
   },
   "frameworks": {

@@ -13,12 +13,18 @@ namespace Samples.ViewModels
         public DictationViewModel(ISpeechRecognizer speech)
         {
             IDisposable token = null;
+            speech
+                .WhenListeningStatusChanged()
+                .Subscribe(x => this.ListenText = x
+                    ? "Stop Listening"
+                    : "Start Dictation"
+                );
 
             this.ToggleListen = new Command(async () =>
             {
-                if (!speech.IsSupported)
+                if (speech.Status != SpeechRecognizerStatus.Available)
                 {
-                    this.ListenText = "Your current device/OS is not supported";
+                    this.ListenText = "Problem with speech recognition engine - " + speech.Status;
                     return;
                 }
 
@@ -30,7 +36,6 @@ namespace Samples.ViewModels
                 }
                 if (token == null)
                 {
-                    this.ListenText = "Stop Dictation";
                     token = speech
                         .Listen()
                         //.Catch<string, Exception>(ex => Observable.Return(ex.ToString()))
@@ -38,7 +43,6 @@ namespace Samples.ViewModels
                 }
                 else
                 {
-                    this.ListenText = "Start Dictation";
                     token.Dispose();
                     token = null;
                 }

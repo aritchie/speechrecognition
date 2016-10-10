@@ -1,22 +1,21 @@
 ﻿using System;
 using System.Reactive.Linq;
-using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Media.SpeechRecognition;
+using Plugin.Permissions.Abstractions;
 using WinSpeechRecognizer = Windows.Media.SpeechRecognition.SpeechRecognizer;
 
 
 namespace Acr.SpeechRecognition
 {
-    public class SpeechRecognizerImpl : ISpeechRecognizer
+    public class SpeechRecognizerImpl : AbstractSpeechRecognizer
     {
-        public Task<bool> RequestPermission()
+        public SpeechRecognizerImpl(IPermissions permissions = null) : base(permissions)
         {
-            return Task.FromResult(true);
         }
 
 
-        public IObservable<string> Listen(bool completeOnEndOfSpeech)
+        public override IObservable<string> Listen(bool completeOnEndOfSpeech)
         {
             return completeOnEndOfSpeech
                 ? this.QuickPhrase()
@@ -24,7 +23,7 @@ namespace Acr.SpeechRecognition
         }
 
 
-        public bool IsSupported => true;
+        protected override bool IsSupported => true;
 
 
         IObservable<string> QuickPhrase()
@@ -33,13 +32,18 @@ namespace Acr.SpeechRecognition
             {
                 var speech = new WinSpeechRecognizer();
                 await speech.CompileConstraintsAsync();
+                this.ListenSubject.OnNext(true);
                 var result = await speech.RecognizeAsync();
                 var words = result.Text.Split(' ');
                 foreach (var word in words)
                     ob.OnNext(word);
 
                 ob.OnCompleted();
-                return speech;
+                return () =>
+                {
+                    this.ListenSubject.OnNext(false);
+                    speech.Dispose();
+                };
             });
         }
 
@@ -67,12 +71,14 @@ namespace Acr.SpeechRecognition
                 speech.ContinuousRecognitionSession.ResultGenerated += handler;
                 //speech.ContinuousRecognitionSession.AutoStopSilenceTimeout = TimeSpan.FromDays(1)
                 await speech.ContinuousRecognitionSession.StartAsync(SpeechContinuousRecognitionMode.Default);
+                this.ListenSubject.OnNext(true);
 
                 return async () =>
                 {
                     await speech.ContinuousRecognitionSession.StopAsync();
                     speech.ContinuousRecognitionSession.ResultGenerated -= handler;
                     speech.Dispose();
+                    this.ListenSubject.OnNext(false);
                 };
             });
         }

@@ -4,8 +4,10 @@
         <id>Acr.SpeechRecognition</id>
         <version>1.0.0-beta1</version>
         <title>ACR Speech Recognition Plugin for Xamarin and Windows</title>
-        <summary>Speech recognition plugin for iOS, Android, and Windows</summary>
+        <summary>Speech Recognition Plugin for iOS, Android, and Windows</summary>
         <description>
+Speech Recognition that allows for continuous dictation, phrases, or quick confirmations.
+
 Supported Platforms
 - iOS 10+
 - Android
@@ -24,13 +26,8 @@ Supported Platforms
 Initial Release
         </releaseNotes>
         <dependencies>
-        	<group>
-        		<dependency id="rx-main" version="[2.2.5, 3)" />
-        	</group>
-        	<group targetFramework="MonoAndroid10">
-        		<dependency id="rx-main" version="[2.2.5, 3)" />
-        		<dependency id="Plugin.Permissions" version="[1.1.7, 2)" />
-        	</group>
+        	<dependency id="rx-main" version="[2.2.5, 3)" />
+        	<dependency id="Plugin.Permissions" version="[1.2, 2)" />
         </dependencies>
     </metadata>
     <files>

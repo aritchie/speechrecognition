@@ -67,6 +67,11 @@ UWP
 	var token = SpeechRecognizer.Instance.Listen().Subscribe(...);
 	token.Dispose(); // call this whenever you're done and it will clean up after itself!
 
+### When can I talk?
+
+    SpeechRecognizer.Instance.WhenListenStatusChanged().Subscribe(isListening => { you can talk if this is true });
+
+
 ## Speech Dialogs Addin
 
 _Speech dialogs is an additional nuget you can install via nuget to add easy question based prompts.  It will prompt the user with questions using Text-to-Speech and you can reply with a selection of answers_
@@ -94,11 +99,23 @@ _Speech dialogs is an additional nuget you can install via nuget to add easy que
         .SetShowActionSheet(true) // this will decide if you also want to include the UI dialog
         .SetSpeakChoices(true)    // this will read the choices out that you make available
     )
-
+    
 ## FAQ
 
 Q. Why use reactive extensions and not async?
+
 A. Speech is very event stream oriented which fits well with RX
 
+
 Q. Should I use SpeechRecognizer.Instance?
+
 A. Hell NO!  DI that sucker using the Instance
+
+
+## Roadmap
+
+* Multilingual
+* Confidence Scoring
+* Mac Support
+* Start and end of speech eventing
+* RMS detection

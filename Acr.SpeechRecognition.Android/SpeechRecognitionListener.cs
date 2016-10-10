@@ -11,11 +11,12 @@ namespace Acr.SpeechRecognition
     {
         public Action StartOfSpeech { get; set; }
         public Action EndOfSpeech { get; set; }
+        public Action ReadyForSpeech { get; set; }
         public Action<SpeechRecognizerError> Error { get; set; }
         public Action<IList<string>> SpeechDetected { get; set; }
         public Action<float> RmsChanged { get; set; }
 
-        
+
         public void OnBeginningOfSpeech()
         {
             Debug.WriteLine("Beginning of Speech");
@@ -59,6 +60,7 @@ namespace Acr.SpeechRecognition
         public void OnReadyForSpeech(Bundle @params)
         {
             Debug.WriteLine("Ready for Speech");
+            this.ReadyForSpeech?.Invoke();
         }
 
 
@@ -86,7 +88,7 @@ namespace Acr.SpeechRecognition
             else
             {
                 Debug.WriteLine("Matches found: " + matches.Count);
-                this.SpeechDetected?.Invoke(matches); 
+                this.SpeechDetected?.Invoke(matches);
             }
         }
     }

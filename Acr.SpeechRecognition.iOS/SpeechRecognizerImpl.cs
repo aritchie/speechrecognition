@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Reactive.Linq;
-using System.Threading.Tasks;
 using AVFoundation;
 using Foundation;
-using Plugin.Permissions;
 using Plugin.Permissions.Abstractions;
 using Speech;
 using UIKit;
@@ -11,25 +9,14 @@ using UIKit;
 
 namespace Acr.SpeechRecognition
 {
-    public class SpeechRecognizerImpl : ISpeechRecognizer
+    public class SpeechRecognizerImpl : AbstractSpeechRecognizer
     {
-        readonly IPermissions permissions;
-
-
-        public SpeechRecognizerImpl(IPermissions permissions = null)
+        public SpeechRecognizerImpl(IPermissions permissions = null) : base(permissions)
         {
-            this.permissions = permissions ?? CrossPermissions.Current;
         }
 
 
-        public async Task<bool> RequestPermission()
-        {
-            var result = await this.permissions.RequestPermissionsAsync(Permission.Speech);
-            return result[Permission.Speech] == PermissionStatus.Granted;
-        }
-
-
-        public IObservable<string> Listen(bool completeOnEndOfSpeech)
+        public override IObservable<string> Listen(bool completeOnEndOfSpeech)
         {
             return Observable.Create<string>(ob =>
             {
@@ -59,6 +46,7 @@ namespace Acr.SpeechRecognition
                 }
                 else
                 {
+                    this.ListenSubject.OnNext(true);
                     task = speechRecognizer.GetRecognitionTask(speechRequest, (result, err) =>
                     {
                         if (err != null)
@@ -86,11 +74,12 @@ namespace Acr.SpeechRecognition
                     speechRequest.EndAudio();
                     speechRequest.Dispose();
                     speechRecognizer.Dispose();
+                    this.ListenSubject.OnNext(false);
                 };
             });
         }
 
 
-        public bool IsSupported => UIDevice.CurrentDevice.CheckSystemVersion(10, 0);
+        protected override bool IsSupported => UIDevice.CurrentDevice.CheckSystemVersion(10, 0);
     }
 }

@@ -1,40 +1,28 @@
 using System;
 using System.Reactive.Linq;
-using System.Threading.Tasks;
 using Android.App;
 using Android.Content;
 using Android.Speech;
-using Plugin.Permissions;
 using Plugin.Permissions.Abstractions;
 
 
 namespace Acr.SpeechRecognition
 {
-    public class SpeechRecognizerImpl : ISpeechRecognizer
+    public class SpeechRecognizerImpl : AbstractSpeechRecognizer
     {
-        readonly IPermissions permissions;
-
-
-        public SpeechRecognizerImpl(IPermissions permissions = null)
+        public SpeechRecognizerImpl(IPermissions permissions = null) : base(permissions)
         {
-            this.permissions = permissions ?? CrossPermissions.Current;
         }
 
 
-        public async Task<bool> RequestPermission()
-        {
-            var result = await this.permissions.RequestPermissionsAsync(Permission.Speech);
-            return result[Permission.Speech] == PermissionStatus.Granted;
-        }
-
-
-        public IObservable<string> Listen(bool completeOnEndOfSpeech)
+        public override IObservable<string> Listen(bool completeOnEndOfSpeech)
         {
             return Observable.Create<string>(ob =>
             {
                 var speechRecognizer = Android.Speech.SpeechRecognizer.CreateSpeechRecognizer(Application.Context);
                 var listener = new SpeechRecognitionListener
                 {
+                    ReadyForSpeech = () => this.ListenSubject.OnNext(true),
                     SpeechDetected = words =>
                     {
                         foreach (var word in words)
@@ -60,12 +48,13 @@ namespace Acr.SpeechRecognition
                     listener.Error = null;
                     speechRecognizer.StopListening();
                     speechRecognizer.Dispose();
+                    this.ListenSubject.OnNext(false);
                 };
             });
         }
 
 
-        public bool IsSupported => Android.Speech.SpeechRecognizer.IsRecognitionAvailable(Application.Context);
+        protected override bool IsSupported => Android.Speech.SpeechRecognizer.IsRecognitionAvailable(Application.Context);
 
 
         Intent CreateSpeechIntent()
