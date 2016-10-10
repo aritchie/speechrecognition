@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+    <metadata>
+        <id>Acr.SpeechDialogs</id>
+        <version>1.0.0-beta1</version>
+        <title>ACR Speech Dialogs Plugin for Xamarin and Windows</title>
+        <summary>Speech Dialogs Plugin for iOS, Android, and Windows</summary>
+        <description>
+Ask questions using text-to-speech and receive singular based confirmation answers
+
+Supported Platforms
+- iOS 10+
+- Android
+- Universal Windows Platform (Win10/UWP)
+- Portable Class Libraries (Profile 259)
+        </description>
+        <authors>Allan Ritchie</authors>
+        <owners>Allan Ritchie</owners>
+        <iconUrl>https://github.com/aritchie/speechrecognition/icon.png</iconUrl>
+        <licenseUrl>https://github.com/aritchie/speechrecognition/LICENSE.md</licenseUrl>
+        <projectUrl>https://github.com/aritchie/speechrecognition</projectUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <tags>windows xamarin xam.pcl speech recognition</tags>
+        <releaseNotes>
+1.0.0
+Initial Release
+        </releaseNotes>
+        <dependencies>
+        	<dependency id="Acr.SpeechRecognition" version="[1, 2)" />
+            <dependency id="Acr.UserDialgs" version="[6.2.3, 7)" />
+            <dependency id="Xam.Plugins.TextToSpeech" version="[3, 4)" />
+        </dependencies>
+    </metadata>
+    <files>
+        <!-- PCL -->
+        <file src="..\Acr.SpeechDialogs\bin\Release\Acr.SpeechDialogs.*" target="lib\portable-win+net45+wp8+win8+wpa81" />
+
+        <!-- android -->
+        <file src="..\Acr.SpeechDialogs.Android\bin\Release\Acr.SpeechDialogs.*" target="lib\MonoAndroid10" />
+
+        <!-- ios -->
+        <file src="..\Acr.SpeechDialogs.iOS\bin\Release\Acr.SpeechDialogs.*" target="lib\Xamarin.iOS10" />
+
+        <!-- uwp -->
+        <file src="..\Acr.SpeechDialogs.Uwp\bin\Release\Acr.SpeechDialogs.*" target="lib\uap10.0" />
+    </files>
+</package>

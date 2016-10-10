@@ -2,7 +2,8 @@
 
 _Easy to use cross platform speech recognition (speech to text) plugin for Xamarin & UWP_
 
-_September 8, 2016 - you will need the current Xamarin Beta with XCode 8 GM Seed to work with this on iOS_
+[![NuGet](https://img.shields.io/nuget/v/Acr.SpeechRecognizer.svg?maxAge=2592000)](https://www.nuget.org/packages/Acr.SpeechRecognizer/)
+[![NuGet](https://img.shields.io/nuget/v/Acr.SpeechDialogs.svg?maxAge=2592000)](https://www.nuget.org/packages/Acr.SpeechDialogs/)
 
 
 ## PLATFORMS
@@ -52,22 +53,47 @@ UWP
 		// you will get each individual word the user speaks here
 	});
 
-### Command Based
 
-	SpeechRecognizer
-		.Instance
-		.Listen()
-		.Take(1)
-		.Where(x => x.Equals("yes") || x.Equals("no"))
-		.Subscribe(answer => 
-		{
-			// do something
-		});
+### Listen for a phrase (good for a web search)
+
+    SpeechRecognizer
+        .Instance
+        .Listen(true) // passing true will complete this observable when the end of speech is detected
+        .Subscribe(phrase => {})
+
 
 ### Stop the thing!
 
 	var token = SpeechRecognizer.Instance.Listen().Subscribe(...);
 	token.Dispose(); // call this whenever you're done and it will clean up after itself!
+
+## Speech Dialogs Addin
+
+_Speech dialogs is an additional nuget you can install via nuget to add easy question based prompts.  It will prompt the user with questions using Text-to-Speech and you can reply with a selection of answers_
+
+
+### Confirm
+
+    var answer = await SpeechDialogs.Instance.Confirm("Are you sure you want to do this?", "yes", "no");
+
+### Prompt (great for searches)
+
+    var prompt = await SpeechDialogs.Instance.Prompt("How was your day?");
+
+### Actions
+
+    SpeechDialogs.Instance.Actions(new ActionsConfig("Choose your destiny!") 
+        .Choice("Fatalitiy", () => 
+        { 
+            // do something here
+        })
+        .Choice("Friendship", () => 
+        {
+        
+        })
+        .SetShowActionSheet(true) // this will decide if you also want to include the UI dialog
+        .SetSpeakChoices(true)    // this will read the choices out that you make available
+    )
 
 ## FAQ
 

@@ -28,15 +28,25 @@ namespace Acr.SpeechRecognition
         }
 
 
-        IObservable<string> listenOb;
-        public IObservable<string> Listen()
+        public IObservable<string> Listen(bool completeOnEndOfSpeech)
         {
-            this.listenOb = this.listenOb ?? Observable.Create<string>(ob =>
+            return Observable.Create<string>(ob =>
             {
                 var speechRecognizer = Android.Speech.SpeechRecognizer.CreateSpeechRecognizer(Application.Context);
-                var listener = new SpeechRecognitionListener();
+                var listener = new SpeechRecognitionListener
+                {
+                    SpeechDetected = words =>
+                    {
+                        foreach (var word in words)
+                            ob.OnNext(word);
+                    },
+                    EndOfSpeech = () =>
+                    {
+                        if (completeOnEndOfSpeech)
+                            ob.OnCompleted();
+                    }
+                };
 
-                listener.SpeechDetected = ob.OnNext;
                 listener.Error = _ =>
                 {
                     speechRecognizer.StopListening();
@@ -51,11 +61,7 @@ namespace Acr.SpeechRecognition
                     speechRecognizer.StopListening();
                     speechRecognizer.Dispose();
                 };
-            })
-            .Publish()
-            .RefCount();
-
-            return this.listenOb;
+            });
         }
 
 
@@ -65,7 +71,7 @@ namespace Acr.SpeechRecognition
         Intent CreateSpeechIntent()
         {
             var intent = new Intent(RecognizerIntent.ActionRecognizeSpeech);
-            intent.PutExtra(RecognizerIntent.ExtraLanguagePreference, "en");
+            intent.PutExtra(RecognizerIntent.ExtraLanguagePreference, Java.Util.Locale.Default);
             intent.PutExtra(RecognizerIntent.ExtraLanguage, Java.Util.Locale.Default);
             intent.PutExtra(RecognizerIntent.ExtraLanguageModel, RecognizerIntent.LanguageModelFreeForm);
             intent.PutExtra(RecognizerIntent.ExtraCallingPackage, Application.Context.PackageName);

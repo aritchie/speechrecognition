@@ -10,7 +10,7 @@ namespace Samples.Pages
     {
         public DictationPage()
         {
-            InitializeComponent();
+            this.InitializeComponent();
             this.BindingContext = new DictationViewModel(SpeechRecognizer.Instance);
         }
     }

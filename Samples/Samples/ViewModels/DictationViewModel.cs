@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Windows.Input;
-using System.Reactive.Linq;
 using Acr.SpeechRecognition;
 using PropertyChanged;
 using Xamarin.Forms;
@@ -33,7 +32,7 @@ namespace Samples.ViewModels
                 {
                     this.ListenText = "Stop Dictation";
                     token = speech
-                        .Dictate()
+                        .Listen()
                         //.Catch<string, Exception>(ex => Observable.Return(ex.ToString()))
                         .Subscribe(x => this.Text += " " + x);
                 }

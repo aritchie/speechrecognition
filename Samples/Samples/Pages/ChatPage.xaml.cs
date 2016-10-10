@@ -1,4 +1,5 @@
 ﻿using System;
+using Acr.SpeechDialogs;
 using Acr.SpeechRecognition;
 using Plugin.TextToSpeech;
 using Samples.ViewModels;
@@ -11,10 +12,11 @@ namespace Samples.Pages
     {
         public ChatPage()
         {
-            InitializeComponent();
+            this.InitializeComponent();
             this.BindingContext = new ChatViewModel(
                 CrossTextToSpeech.Current,
-                SpeechRecognizer.Instance
+                SpeechRecognizer.Instance,
+                SpeechDialogs.Instance
             );
         }
     }

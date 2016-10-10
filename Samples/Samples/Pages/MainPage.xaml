@@ -15,5 +15,10 @@
                 <local:ChatPage />
             </x:Arguments>
         </NavigationPage>
+        <NavigationPage Title="Dialogs">
+            <x:Arguments>
+                <local:ChatPage />
+            </x:Arguments>
+        </NavigationPage>
     </TabbedPage.Children>
 </TabbedPage>

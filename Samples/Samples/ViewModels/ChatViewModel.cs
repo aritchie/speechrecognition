@@ -2,6 +2,7 @@
 using System.Reactive.Linq;
 using System.Windows.Input;
 using System.Threading.Tasks;
+using Acr.SpeechDialogs;
 using Acr.SpeechRecognition;
 using Plugin.TextToSpeech.Abstractions;
 using PropertyChanged;
@@ -16,7 +17,7 @@ namespace Samples.ViewModels
         readonly ITextToSpeech tts;
 
 
-        public ChatViewModel(ITextToSpeech tts, ISpeechRecognizer speech)
+        public ChatViewModel(ITextToSpeech tts, ISpeechRecognizer speech, ISpeechDialogs dialogs)
         {
             this.tts = tts;
 
@@ -24,31 +25,21 @@ namespace Samples.ViewModels
             {
                 if (!speech.IsSupported)
                 {
-                    await this.SetTextAndSpeak("Your current device/OS is not supported", 0);
+                    await tts.Speak("Your current device/OS is not supported", 0);
                     return;
                 }
-                    
+
                 var granted = await speech.RequestPermission();
                 if (!granted)
                 {
-                    await this.SetTextAndSpeak("Hey Dummy!  Ya you!  You didn't enable permissions for the microphone", 4000);
+                    await tts.Speak("Hey Dummy!  Ya you!  You didn't enable permissions for the microphone", 4000);
                     return;
                 }
-                await this.SetTextAndSpeak("Hello, please tell me your name?", 2500);
-
                 this.IsListening = true;
-                var answer = await speech.Command(1);
+                var answer = await dialogs.Prompt("Hello, please tell me your name?");
                 this.IsListening = false;
-                await this.SetTextAndSpeak($"Hello {answer}", 2000);
+                await tts.Speak($"Hello {answer}");
             });
-        }
-
-
-        async Task SetTextAndSpeak(string text, int wait)
-        {
-            this.Text = text;
-            this.tts.Speak(text);
-            await Task.Delay(wait);
         }
 
 
