@@ -27,7 +27,7 @@ Initial Release
         </releaseNotes>
         <dependencies>
         	<dependency id="Acr.SpeechRecognition" version="[1, 2)" />
-            <dependency id="Acr.UserDialgs" version="[6.2.3, 7)" />
+            <dependency id="Acr.UserDialogs" version="[6.2.3, 7)" />
             <dependency id="Xam.Plugins.TextToSpeech" version="[3, 4)" />
         </dependencies>
     </metadata>
