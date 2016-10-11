@@ -33,7 +33,7 @@ namespace Acr.SpeechRecognition
         {
             get
             {
-                if (!this.IsSupport)
+                if (!this.IsSupported)
                     return SpeechRecognizerStatus.NotSupported;
 
                 var status = this.permissions.CheckPermissionStatusAsync(Permission.Speech).Result;
