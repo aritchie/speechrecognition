@@ -17,7 +17,7 @@
         </NavigationPage>
         <NavigationPage Title="Dialogs">
             <x:Arguments>
-                <local:ChatPage />
+                <local:DialogsPage />
             </x:Arguments>
         </NavigationPage>
     </TabbedPage.Children>

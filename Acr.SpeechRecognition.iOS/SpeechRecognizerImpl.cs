@@ -54,15 +54,12 @@ namespace Acr.SpeechRecognition
                             ob.OnError(new Exception(err.LocalizedDescription));
                             return;
                         }
-                        if (result.Final)
-                        {
-                            var words = result.BestTranscription.FormattedString.Split(' ');
-                            foreach (var word in words)
-                                ob.OnNext(word);
+                        var words = result.BestTranscription.FormattedString.Split(' ');
+                        foreach (var word in words)
+                            ob.OnNext(word);
 
-                            if (completeOnEndOfSpeech)
-                                ob.OnCompleted();
-                        }
+                        if (result.Final && completeOnEndOfSpeech)
+                            ob.OnCompleted();
                     });
                 }
                 return () =>

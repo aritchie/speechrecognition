@@ -3,7 +3,7 @@
     "Acr.UserDialogs": "6.2.3",
     "Microsoft.NETCore.UniversalWindowsPlatform": "5.2.2",
     "Plugin.Permissions": "1.2.0-beta9",
-    "Xam.Plugins.TextToSpeech": "2.0.0",
+    "Xam.Plugins.TextToSpeech": "3.0.0.30-beta",
     "Xamarin.Forms": "2.3.2.127"
   },
   "frameworks": {

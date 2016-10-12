@@ -51,36 +51,37 @@ namespace Acr.SpeechDialogs.Impl
             }
 
             // TODO: register for speech before TTS?  TTS may trigger this!
-            this.speech
-                .Listen()
-                .Where(x => config.Choices.Keys.Any(y => y.Equals(x, StringComparison.CurrentCultureIgnoreCase)))
-                .Take(1)
-                .Subscribe(x =>
-                {
-                    dialog?.Dispose();
-                    cancelSrc.Cancel();
-                    config.Choices[x]?.Invoke();
-                });
 
 
-            await this.tts.Speak(config.Question, cancelSrc.Token);
+
+            await this.tts.Speak(config.Question, cancelToken: cancelSrc.Token);
             if (config.SpeakChoices)
             {
                 foreach (var key in config.Choices.Keys)
                 {
                     if (!cancelSrc.IsCancellationRequested)
-                        await this.tts.Speak(key, cancelSrc.Token);
+                        await this.tts.Speak(key, cancelToken: cancelSrc.Token);
                 }
             }
+            var result = await this.speech
+                .Listen()
+                .Where(x => config.Choices.Keys.Any(y => y.Equals(x, StringComparison.CurrentCultureIgnoreCase)))
+                .Take(1)
+                .ToTask(cancelSrc.Token);
+
+            dialog?.Dispose();
+            cancelSrc.Cancel();
+            config.Choices[result]?.Invoke();
         }
 
 
         public async Task<bool> Confirm(string question, string positive, string negative, bool showDialog, CancellationToken? cancelToken)
         {
             var tcs = new TaskCompletionSource<bool>();
+            var cancelSrc = new CancellationTokenSource();
+
             IDisposable dialog = null;
             IDisposable speech = null;
-            this.tts.Speak(question);
 
             if (showDialog)
             {
@@ -93,10 +94,12 @@ namespace Acr.SpeechDialogs.Impl
                     {
                         tcs.TrySetResult(dr);
                         speech.Dispose();
+                        cancelSrc.Cancel();
                     }
                 });
             }
 
+            await this.tts.Speak(question, cancelToken: cancelSrc.Token);
             speech = this.speech
                 .Listen()
                 .Where(x =>
@@ -124,7 +127,7 @@ namespace Acr.SpeechDialogs.Impl
 
         public async Task<string> Prompt(string question, CancellationToken? cancelToken)
         {
-            this.tts.Speak(question);
+            await this.tts.Speak(question);
             var result = await this.speech.Listen(true).ToTask(cancelToken ?? CancellationToken.None);
             return result;
         }
