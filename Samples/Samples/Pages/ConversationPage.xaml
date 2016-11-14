@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Samples.Pages.ConversationPage"
+             Title="Conversation">
+    <StackLayout>
+        <Button Text="Start Conversation" Command="{Binding Start}" />
+        <ListView ItemsSource="{Binding Items}">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <ViewCell.View>
+                            <StackLayout>
+                                <Label
+                                    Text="{Binding Text}"
+                                    IsVisible="{Binding FromComputer}"
+                                    HorizontalTextAlignment="Start"
+                                />
+                                <Label Text="{Binding Text}" HorizontalTextAlignment="End">
+                                    <Label.Triggers>
+                                        <DataTrigger TargetType="Label" Binding="{Binding FromComputer}" Value="true">
+                                            <Setter Property="IsVisible" Value="true" />
+                                        </DataTrigger>
+                                    </Label.Triggers>
+                                </Label>
+                            </StackLayout>
+                        </ViewCell.View>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </StackLayout>
+</ContentPage>

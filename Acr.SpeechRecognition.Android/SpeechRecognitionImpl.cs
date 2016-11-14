@@ -15,46 +15,60 @@ namespace Acr.SpeechRecognition
         }
 
 
-        public override IObservable<string> Listen(bool completeOnEndOfSpeech)
-        {
-            return Observable.Create<string>(ob =>
-            {
-                var speechRecognizer = Android.Speech.SpeechRecognizer.CreateSpeechRecognizer(Application.Context);
-                var listener = new SpeechRecognitionListener
-                {
-                    ReadyForSpeech = () => this.ListenSubject.OnNext(true),
-                    SpeechDetected = words =>
-                    {
-                        foreach (var word in words)
-                            ob.OnNext(word);
-                    },
-                    EndOfSpeech = () =>
-                    {
-                        if (completeOnEndOfSpeech)
-                            ob.OnCompleted();
-                    }
-                };
+        //public override IObservable<string> Listen(bool completeOnEndOfSpeech)
+        //{
+        //    return Observable.Create<string>(ob =>
+        //    {
+        //        var speechRecognizer = Android.Speech.SpeechRecognizer.CreateSpeechRecognizer(Application.Context);
+        //        var listener = new SpeechRecognitionListener
+        //        {
+        //            ReadyForSpeech = () => this.ListenSubject.OnNext(true),
+        //            SpeechDetected = words =>
+        //            {
+        //                foreach (var word in words)
+        //                    ob.OnNext(word);
+        //            },
+        //            EndOfSpeech = () =>
+        //            {
+        //                if (completeOnEndOfSpeech)
+        //                    ob.OnCompleted();
+        //            }
+        //        };
 
-                listener.Error = _ =>
-                {
-                    speechRecognizer.StopListening();
-                    speechRecognizer.StartListening(this.CreateSpeechIntent());
-                };
-                speechRecognizer.SetRecognitionListener(listener);
-                speechRecognizer.StartListening(this.CreateSpeechIntent());
+        //        listener.Error = _ =>
+        //        {
+        //            speechRecognizer.StopListening();
+        //            speechRecognizer.StartListening(this.CreateSpeechIntent());
+        //        };
+        //        speechRecognizer.SetRecognitionListener(listener);
+        //        speechRecognizer.StartListening(this.CreateSpeechIntent());
 
-                return () =>
-                {
-                    listener.Error = null;
-                    speechRecognizer.StopListening();
-                    speechRecognizer.Dispose();
-                    this.ListenSubject.OnNext(false);
-                };
-            });
-        }
+        //        return () =>
+        //        {
+        //            listener.Error = null;
+        //            speechRecognizer.StopListening();
+        //            speechRecognizer.Dispose();
+        //            this.ListenSubject.OnNext(false);
+        //        };
+        //    });
+        //}
 
 
         protected override bool IsSupported => Android.Speech.SpeechRecognizer.IsRecognitionAvailable(Application.Context);
+        public override IObservable<string> ListenUntilPause()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override IObservable<string> ContinuousDictation()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override IObservable<string> ListenForFirstKeyword(params string[] keywords)
+        {
+            throw new NotImplementedException();
+        }
 
 
         Intent CreateSpeechIntent()

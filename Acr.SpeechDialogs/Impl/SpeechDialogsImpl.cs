@@ -1,12 +1,12 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Linq;
+using System.Reactive.Linq;
+using System.Reactive.Threading.Tasks;
+using Acr.UserDialogs;
 using Acr.SpeechRecognition;
 using Plugin.TextToSpeech.Abstractions;
-using System.Reactive.Linq;
-using System.Linq;
-using System.Reactive.Threading.Tasks;
-using System.Threading;
-using Acr.UserDialogs;
 
 
 namespace Acr.SpeechDialogs.Impl
@@ -63,11 +63,7 @@ namespace Acr.SpeechDialogs.Impl
                         await this.tts.Speak(key, cancelToken: cancelSrc.Token);
                 }
             }
-            var result = await this.speech
-                .Listen()
-                .Where(x => config.Choices.Keys.Any(y => y.Equals(x, StringComparison.CurrentCultureIgnoreCase)))
-                .Take(1)
-                .ToTask(cancelSrc.Token);
+            var result = await this.speech.ListenForFirstKeyword(config.Choices.Keys.ToArray()).RunAsync(cancelSrc.Token);
 
             dialog?.Dispose();
             cancelSrc.Cancel();
@@ -101,12 +97,7 @@ namespace Acr.SpeechDialogs.Impl
 
             await this.tts.Speak(question, cancelToken: cancelSrc.Token);
             speech = this.speech
-                .Listen()
-                .Where(x =>
-                    x.Equals(positive, StringComparison.CurrentCultureIgnoreCase) ||
-                    x.Equals(negative, StringComparison.CurrentCultureIgnoreCase)
-                )
-                .Take(1)
+                .ListenForFirstKeyword(positive, negative)
                 .Subscribe(text =>
                 {
                     var r = text.Equals(positive, StringComparison.CurrentCultureIgnoreCase);
@@ -128,7 +119,7 @@ namespace Acr.SpeechDialogs.Impl
         public async Task<string> Prompt(string question, CancellationToken? cancelToken)
         {
             await this.tts.Speak(question);
-            var result = await this.speech.Listen(true).ToTask(cancelToken ?? CancellationToken.None);
+            var result = await this.speech.ListenUntilPause().ToTask(cancelToken ?? CancellationToken.None);
             return result;
         }
     }

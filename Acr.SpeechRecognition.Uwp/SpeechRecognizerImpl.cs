@@ -15,18 +15,36 @@ namespace Acr.SpeechRecognition
         }
 
 
-        public override IObservable<string> Listen(bool completeOnEndOfSpeech)
+        protected override bool IsSupported => true;
+        public override IObservable<string> ListenUntilPause()
         {
-            return completeOnEndOfSpeech
-                ? this.QuickPhrase()
-                : this.ContinuousListen();
+            return Observable.Create<string>(async ob =>
+            {
+                var speech = new WinSpeechRecognizer();
+                await speech.CompileConstraintsAsync();
+                this.ListenSubject.OnNext(true);
+
+                var handler = new TypedEventHandler<SpeechContinuousRecognitionSession, SpeechContinuousRecognitionResultGeneratedEventArgs>((sender, args) =>
+                {
+                    var words = args.Result.Text.Split(' ');
+                    foreach (var word in words)
+                        ob.OnNext(word);
+                });
+                speech.ContinuousRecognitionSession.ResultGenerated += handler;
+                await speech.ContinuousRecognitionSession.StartAsync();
+
+                return () =>
+                {
+                    speech.ContinuousRecognitionSession.StopAsync();
+                    speech.ContinuousRecognitionSession.ResultGenerated -= handler;
+                    this.ListenSubject.OnNext(false);
+                    speech.Dispose();
+                };
+            });
         }
 
 
-        protected override bool IsSupported => true;
-
-
-        IObservable<string> QuickPhrase()
+        public override IObservable<string> ContinuousDictation()
         {
             return Observable.Create<string>(async ob =>
             {
@@ -35,10 +53,10 @@ namespace Acr.SpeechRecognition
                 this.ListenSubject.OnNext(true);
                 var result = await speech.RecognizeAsync();
                 var words = result.Text.Split(' ');
+
                 foreach (var word in words)
                     ob.OnNext(word);
 
-                ob.OnCompleted();
                 return () =>
                 {
                     this.ListenSubject.OnNext(false);
@@ -46,41 +64,13 @@ namespace Acr.SpeechRecognition
                 };
             });
         }
-
-
-        IObservable<string> ContinuousListen()
-        {
-            return Observable.Create<string>(async ob =>
-            {
-                var speech = new WinSpeechRecognizer();
-                await speech.CompileConstraintsAsync();
-
-                //if (showUI)
-                //{
-                //    var grammar = new SpeechRecognitionTopicConstraint(SpeechRecognitionScenario.Dictation, "webSearch");
-                //    speech.UIOptions.AudiblePrompt = "Say what you want to search for...";
-                //    speech.UIOptions.ExampleText = @"Ex. &#39;weather for London&#39;";
-                //    speech.Constraints.Add(webSearchGrammar);
-                //}
-                var handler = new TypedEventHandler<SpeechContinuousRecognitionSession, SpeechContinuousRecognitionResultGeneratedEventArgs>((sender, args) =>
-                {
-                    var splits = args.Result.Text.Split(' ');
-                    foreach (var split in splits)
-                        ob.OnNext(split);
-                });
-                speech.ContinuousRecognitionSession.ResultGenerated += handler;
-                //speech.ContinuousRecognitionSession.AutoStopSilenceTimeout = TimeSpan.FromDays(1)
-                await speech.ContinuousRecognitionSession.StartAsync(SpeechContinuousRecognitionMode.Default);
-                this.ListenSubject.OnNext(true);
-
-                return async () =>
-                {
-                    await speech.ContinuousRecognitionSession.StopAsync();
-                    speech.ContinuousRecognitionSession.ResultGenerated -= handler;
-                    speech.Dispose();
-                    this.ListenSubject.OnNext(false);
-                };
-            });
-        }
+        //        //if (showUI)
+        //        //{
+        //        //    var grammar = new SpeechRecognitionTopicConstraint(SpeechRecognitionScenario.Dictation, "webSearch");
+        //        //    speech.UIOptions.AudiblePrompt = "Say what you want to search for...";
+        //        //    speech.UIOptions.ExampleText = @"Ex. &#39;weather for London&#39;";
+        //        //    speech.Constraints.Add(webSearchGrammar);
+        //        //}
+        //        //speech.ContinuousRecognitionSession.AutoStopSilenceTimeout = TimeSpan.FromDays(1)
     }
 }

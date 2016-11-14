@@ -37,7 +37,7 @@ namespace Samples.ViewModels
                 if (token == null)
                 {
                     token = speech
-                        .Listen()
+                        .ContinuousDictation()
                         //.Catch<string, Exception>(ex => Observable.Return(ex.ToString()))
                         .Subscribe(x => this.Text += " " + x);
                 }

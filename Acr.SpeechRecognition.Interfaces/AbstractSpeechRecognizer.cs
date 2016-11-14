@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using Plugin.Permissions;
@@ -20,7 +22,25 @@ namespace Acr.SpeechRecognition
 
         protected Subject<bool> ListenSubject { get; } = new Subject<bool>();
         protected abstract bool IsSupported { get; }
-        public abstract IObservable<string> Listen(bool completeOnEndOfSpeech = false);
+
+        public abstract IObservable<string> ListenUntilPause();
+        public abstract IObservable<string> ContinuousDictation();
+
+        public virtual IObservable<string> ListenForFirstKeyword(params string[] keywords)
+        {
+            return Observable.Create<string>(ob =>
+                this.ContinuousDictation()
+                    .Subscribe(word =>
+                    {
+                        if (keywords.Any(x => x.Equals(word, StringComparison.CurrentCultureIgnoreCase)))
+                        {
+                            ob.OnNext(word);
+                            ob.OnCompleted();
+                        }
+                    })
+            );
+        }
+
 
         public virtual async Task<bool> RequestPermission()
         {

@@ -17,6 +17,11 @@
         </NavigationPage>
         <NavigationPage Title="Dialogs">
             <x:Arguments>
+                <local:ConversationPage />
+            </x:Arguments>
+        </NavigationPage>
+        <NavigationPage Title="Dialogs">
+            <x:Arguments>
                 <local:DialogsPage />
             </x:Arguments>
         </NavigationPage>
