@@ -11,8 +11,8 @@
     <AssemblyName>Samples.UWP</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
-    <TargetPlatformVersion>10.0.14393.0</TargetPlatformVersion>
-    <TargetPlatformMinVersion>10.0.14393.0</TargetPlatformMinVersion>
+    <TargetPlatformVersion>10.0.15063.0</TargetPlatformVersion>
+    <TargetPlatformMinVersion>10.0.10586.0</TargetPlatformMinVersion>
     <MinimumVisualStudioVersion>14</MinimumVisualStudioVersion>
     <EnableDotNetNativeCompatibleProfile>true</EnableDotNetNativeCompatibleProfile>
     <FileAlignment>512</FileAlignment>
@@ -105,7 +105,6 @@
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
-    <None Include="Windows_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Properties\Default.rd.xml" />
@@ -128,24 +127,24 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Acr.SpeechRecognition.Interfaces\Acr.SpeechRecognition.Interfaces.csproj">
-      <Project>{89fa7495-508b-450a-ae56-094c410222d4}</Project>
-      <Name>Acr.SpeechRecognition.Interfaces</Name>
+    <ProjectReference Include="..\..\Plugin.SpeechRecognition.Abstractions\Plugin.SpeechRecognition.Abstractions.csproj">
+      <Project>{2ce7418b-b8fd-4271-ab90-3045532d7089}</Project>
+      <Name>Plugin.SpeechRecognition.Abstractions</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Acr.SpeechRecognition.Uwp\Acr.SpeechRecognition.Uwp.csproj">
-      <Project>{41cfe29a-e1ba-40c0-8a52-a5ccd063d2a2}</Project>
-      <Name>Acr.SpeechRecognition.Uwp</Name>
+    <ProjectReference Include="..\..\Plugin.SpeechRecognition.Uwp\Plugin.SpeechRecognition.Uwp.csproj">
+      <Project>{80f032b3-c668-41d4-b5d7-c130a91202d2}</Project>
+      <Name>Plugin.SpeechRecognition.Uwp</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Samples\Samples.csproj">
-      <Project>{F4A21F15-3DFB-4CB3-B406-88A95EAA8141}</Project>
-      <Name>Samples</Name>
+    <ProjectReference Include="..\..\Samples.Core\Samples.Core.csproj">
+      <Project>{590b9d16-853a-47ce-8864-d4afd558817e}</Project>
+      <Name>Samples.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>
