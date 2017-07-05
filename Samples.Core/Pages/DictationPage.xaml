@@ -3,8 +3,15 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Samples.Pages.DictationPage"
              Title="Dictation">
-    <StackLayout>
-        <Button Text="{Binding ListenText}" Command="{Binding ToggleListen}" />
-        <Label Text="{Binding Text}" IsEnabled="false" />
-    </StackLayout>
+
+    <ContentPage.BindingContext>
+        <viewModels:DictationViewModel />
+    </ContentPage.BindingContext>
+
+    <ContentPage.Content>
+        <StackLayout>
+            <Button Text="{Binding ListenText}" Command="{Binding ToggleListen}" />
+            <Label Text="{Binding Text}" IsEnabled="false" />
+        </StackLayout>
+    </ContentPage.Content>
 </ContentPage>

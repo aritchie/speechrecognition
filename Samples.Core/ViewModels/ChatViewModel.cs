@@ -1,25 +1,22 @@
 ﻿using System;
 using System.Reactive.Linq;
 using System.Windows.Input;
-using System.Threading.Tasks;
-using Acr.SpeechDialogs;
-using Acr.SpeechRecognition;
-using Plugin.TextToSpeech.Abstractions;
-using PropertyChanged;
+using Plugin.SpeechDialogs;
+using Plugin.SpeechRecognition;
+using Plugin.TextToSpeech;
 using Xamarin.Forms;
 
 
 namespace Samples.ViewModels
 {
-    [ImplementPropertyChanged]
     public class ChatViewModel
     {
-        readonly ITextToSpeech tts;
-
-
-        public ChatViewModel(ITextToSpeech tts, ISpeechRecognizer speech, ISpeechDialogs dialogs)
+        public ChatViewModel()
         {
-            this.tts = tts;
+            var tts = CrossTextToSpeech.Current;
+            var speech = CrossSpeechRecognition.Current;
+            var dialogs = new SpeechDialogs();
+
             speech.WhenListeningStatusChanged().Subscribe(x => this.IsListening = x);
 
             this.Start = new Command(async () =>
@@ -36,7 +33,7 @@ namespace Samples.ViewModels
                     await tts.Speak("Hey Dummy!  Ya you!  You didn't enable permissions for the microphone");
                     return;
                 }
-                var answer = await dialogs.Prompt("Hello, please tell me your name?");
+                var answer = await dialogs.Question("Hello, please tell me your name?");
                 await tts.Speak($"Hello {answer}");
             });
         }

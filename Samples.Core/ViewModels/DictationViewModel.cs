@@ -1,17 +1,18 @@
 ﻿using System;
+using System.Reactive.Linq;
 using System.Windows.Input;
-using Acr.SpeechRecognition;
-using PropertyChanged;
+using Plugin.SpeechRecognition;
 using Xamarin.Forms;
 
 
 namespace Samples.ViewModels
 {
-    [ImplementPropertyChanged]
     public class DictationViewModel
     {
-        public DictationViewModel(ISpeechRecognizer speech)
+        public DictationViewModel()
         {
+            var speech = CrossSpeechRecognition.Current;
+
             IDisposable token = null;
             speech
                 .WhenListeningStatusChanged()

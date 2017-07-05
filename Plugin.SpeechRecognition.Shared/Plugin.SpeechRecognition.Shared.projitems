@@ -6,7 +6,7 @@
     <SharedGUID>0f81ba4f-9c52-47eb-b35a-031492a355c3</SharedGUID>
   </PropertyGroup>
   <PropertyGroup Label="Configuration">
-    <Import_RootNamespace>Plugin.SpeechRecognition.Shared</Import_RootNamespace>
+    <Import_RootNamespace>Plugin.SpeechRecognition</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)CommonAssemblyInfo.cs" />

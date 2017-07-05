@@ -9,12 +9,10 @@ namespace Plugin.SpeechRecognition
 {
     public class SpeechRecognizerImpl : AbstractSpeechRecognizer
     {
-        public SpeechRecognizerImpl(IPermissions permissions = null) : base(permissions)
-        {
-        }
-
-
         protected override bool IsSupported => true;
+        public override SpeechRecognizerStatus Status { get; } = SpeechRecognizerStatus.Available;
+
+
         public override IObservable<string> ListenUntilPause()
         {
             return Observable.Create<string>(async ob =>
@@ -63,6 +61,14 @@ namespace Plugin.SpeechRecognition
                 };
             });
         }
+
+
+        public override IObservable<bool> RequestPermission()
+        {
+            throw new NotImplementedException();
+        }
+
+
         //        //if (showUI)
         //        //{
         //        //    var grammar = new SpeechRecognitionTopicConstraint(SpeechRecognitionScenario.Dictation, "webSearch");

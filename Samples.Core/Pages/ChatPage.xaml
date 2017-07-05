@@ -3,9 +3,16 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Samples.Pages.ChatPage"
              Title="Say Hello">
-    <StackLayout>
-        <Button Text="Listen" Command="{Binding Start}" IsEnabled="{Binding IsAnswerVisible}" />
-        <Label Text="{Binding Text}" />
-        <Label Text="LISTENING...." IsVisible="{Binding IsListening}" />
-    </StackLayout>
+
+    <ContentPage.BindingContext>
+        <viewModels:ChatViewModel />
+    </ContentPage.BindingContext>
+
+    <ContentPage.Content>
+        <StackLayout>
+            <Button Text="Listen" Command="{Binding Start}" IsEnabled="{Binding IsAnswerVisible}" />
+            <Label Text="{Binding Text}" />
+            <Label Text="LISTENING...." IsVisible="{Binding IsListening}" />
+        </StackLayout>
+    </ContentPage.Content>
 </ContentPage>

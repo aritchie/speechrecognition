@@ -3,18 +3,25 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Samples.Pages.DialogsPage"
              Title="Dialogs">
-    <StackLayout>
-        <StackLayout Orientation="Horizontal">
-            <Switch IsToggled="{Binding ShowDialogs}" />
-            <Label Text="Show Dialogs" />
-        </StackLayout>
 
-        <ListView ItemsSource="{Binding List}">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <TextCell Text="{Binding Text}" Command="{Binding Command}" />
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
-    </StackLayout>
+    <ContentPage.BindingContext>
+        <viewModels:DialogsViewModel />
+    </ContentPage.BindingContext>
+
+    <ContentPage.Content>
+        <StackLayout>
+            <StackLayout Orientation="Horizontal">
+                <Switch IsToggled="{Binding ShowDialogs}" />
+                <Label Text="Show Dialogs" />
+            </StackLayout>
+
+            <ListView ItemsSource="{Binding List}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <TextCell Text="{Binding Text}" Command="{Binding Command}" />
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </StackLayout>
+    </ContentPage.Content>
 </ContentPage>

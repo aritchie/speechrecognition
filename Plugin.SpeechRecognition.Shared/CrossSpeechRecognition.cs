@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace Plugin.SpeechRecognition.Shared
+
+namespace Plugin.SpeechRecognition
 {
     public static class CrossSpeechRecognition
     {
@@ -15,10 +14,8 @@ namespace Plugin.SpeechRecognition.Shared
 #if BAIT
                 if (current == null)
                     throw new ArgumentException("[Plugin.SpeechRecognition] No platform plugin found.  Did you install the nuget package in your app project as well?");
-
 #else
-                current = current ?? new SpeechRecognitionImpl();
-
+                current = current ?? new SpeechRecognizerImpl();
 #endif
                 return current;
             }

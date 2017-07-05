@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+    <metadata>
+        <id>Plugin.SpeechDialogs</id>
+        <version>1.0.0-beta1</version>
+        <title>ACR Speech Dialogs</title>
+        <summary>Speech Recognition Plugin for iOS, Android, and Windows</summary>
+        <description>
+Speech Recognition that allows for continuous dictation, phrases, or quick confirmations.
+
+Supported Platforms
+- iOS 10+
+- Android
+- UWP
+- .NET Standard
+        </description>
+        <authors>Allan Ritchie</authors>
+        <owners>Allan Ritchie</owners>
+        <iconUrl>https://github.com/aritchie/speechrecognition/icon.png</iconUrl>
+        <licenseUrl>https://github.com/aritchie/speechrecognition/LICENSE.md</licenseUrl>
+        <projectUrl>https://github.com/aritchie/speechrecognition</projectUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <tags>windows xamarin xam.pcl speech recognition</tags>
+        <releaseNotes>
+1.0.0
+Initial Release
+        </releaseNotes>
+        <dependencies>
+        	<dependency id="Plugin.SpeechRecognition" version="[1, 2)" />
+        	<dependency id="Xam.Plugins.TextToSpeech" version="[3.0.1, 4)" />
+        </dependencies>
+    </metadata>
+    <files>
+        <!-- PCL -->
+        <file src="..\Plugin.SpeechDialogs\bin\Release\netstandard1.0\Plugin.SpeechDialogs.*" target="lib\netstandard1.0" />
+    </files>
+</package>

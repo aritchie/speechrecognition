@@ -5,22 +5,14 @@
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     </PropertyGroup>
 
-    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-        <DefineConstants>TRACE;BAIT</DefineConstants>
-    </PropertyGroup>
-
-    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-        <DefineConstants>TRACE;DEBUG;BAIT</DefineConstants>
-    </PropertyGroup>
-
     <ItemGroup>
         <PackageReference Include="System.Reactive" Version="3.1.1" />
+        <PackageReference Include="Xam.Plugins.TextToSpeech" Version="3.0.1" />
     </ItemGroup>
 
     <ItemGroup>
         <ProjectReference Include="..\Plugin.SpeechRecognition.Abstractions\Plugin.SpeechRecognition.Abstractions.csproj" />
+        <ProjectReference Include="..\Plugin.SpeechRecognition\Plugin.SpeechRecognition.csproj" />
     </ItemGroup>
-
-    <Import Project="..\Plugin.SpeechRecognition.Shared\Plugin.SpeechRecognition.Shared.projitems" Label="Shared" />
 
 </Project>

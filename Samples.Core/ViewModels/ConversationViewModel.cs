@@ -4,28 +4,27 @@ using System.Reactive.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Acr.SpeechRecognition;
+using Plugin.SpeechRecognition;
+using Plugin.TextToSpeech;
 using Plugin.TextToSpeech.Abstractions;
-using PropertyChanged;
 using Xamarin.Forms;
 
 
 namespace Samples.ViewModels
 {
-    [ImplementPropertyChanged]
     public class ConversationViewModel
     {
         readonly ISpeechRecognizer speech;
         readonly ITextToSpeech tts;
 
 
-        public ConversationViewModel(ISpeechRecognizer speech, ITextToSpeech tts)
+        public ConversationViewModel()
         {
-            this.speech = speech;
-            this.tts = tts;
+            this.speech = CrossSpeechRecognition.Current;
+            this.tts = CrossTextToSpeech.Current;
             this.Start = new Command(() => this.DoConversation());
 
-            speech.WhenListeningStatusChanged().Subscribe(x => this.IsListening = x);
+            this.speech.WhenListeningStatusChanged().Subscribe(x => this.IsListening = x);
         }
 
 
@@ -71,13 +70,10 @@ namespace Samples.ViewModels
         }
 
 
-        void Add(string value)
+        void Add(string value) => this.Items.Add(new ConversationItemViewModel
         {
-            this.Items.Add(new ConversationItemViewModel
-            {
-                Text = value,
-                FromComputer = false
-            });
-        }
+            Text = value,
+            FromComputer = false
+        });
     }
 }

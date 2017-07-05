@@ -1,16 +1,15 @@
 using System;
-using System.Reactive.Linq;
 using Android.App;
 using Android.Content;
 using Android.Speech;
 using Plugin.Permissions.Abstractions;
 
 
-namespace Acr.SpeechRecognition
+namespace Plugin.SpeechRecognition
 {
     public class SpeechRecognizerImpl : AbstractSpeechRecognizer
     {
-        public SpeechRecognizerImpl(IPermissions permissions = null) : base(permissions)
+        public SpeechRecognizerImpl(IPermissions permissions = null)
         {
         }
 
@@ -55,6 +54,9 @@ namespace Acr.SpeechRecognition
 
 
         protected override bool IsSupported => Android.Speech.SpeechRecognizer.IsRecognitionAvailable(Application.Context);
+        public override SpeechRecognizerStatus Status { get; }
+
+
         public override IObservable<string> ListenUntilPause()
         {
             throw new NotImplementedException();
@@ -64,6 +66,13 @@ namespace Acr.SpeechRecognition
         {
             throw new NotImplementedException();
         }
+
+
+        public override IObservable<bool> RequestPermission()
+        {
+            throw new NotImplementedException();
+        }
+
 
         public override IObservable<string> ListenForFirstKeyword(params string[] keywords)
         {

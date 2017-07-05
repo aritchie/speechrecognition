@@ -7,24 +7,17 @@ using Speech;
 using UIKit;
 
 
-namespace Acr.SpeechRecognition
+namespace Plugin.SpeechRecognition
 {
     public class SpeechRecognizerImpl : AbstractSpeechRecognizer
     {
-        public SpeechRecognizerImpl(IPermissions permissions = null) : base(permissions)
+        public SpeechRecognizerImpl(IPermissions permissions = null)
         {
         }
 
 
         protected override bool IsSupported => UIDevice.CurrentDevice.CheckSystemVersion(10, 0);
-
-
-        public override IObservable<string> ListenForFirstKeyword(params string[] keywords)
-        {
-            throw new NotImplementedException();
-        }
-
-
+        public override SpeechRecognizerStatus Status { get; }
         public override IObservable<string> ListenUntilPause()
         {
             throw new NotImplementedException();
@@ -32,6 +25,12 @@ namespace Acr.SpeechRecognition
 
 
         public override IObservable<string> ContinuousDictation()
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public override IObservable<bool> RequestPermission()
         {
             throw new NotImplementedException();
         }

@@ -1,15 +1,15 @@
 ﻿using System.Resources;
 using System.Reflection;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 
+[assembly: AssemblyTitle("Plugin.SpeechDialogs")]
+[assembly: AssemblyDescription("")]
 #if DEBUG
 [assembly: AssemblyConfiguration("DEBUG")]
 #else
 [assembly: AssemblyConfiguration("")]
 #endif
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Plugin.SpeechRecognition")]
+[assembly: AssemblyProduct("Plugin.SpeechDialogs")]
 [assembly: AssemblyCopyright("Copyright ©  2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

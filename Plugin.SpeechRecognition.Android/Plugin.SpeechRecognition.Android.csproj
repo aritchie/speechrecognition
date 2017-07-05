@@ -46,7 +46,7 @@
   <ItemGroup>
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SpeechRecognitionImpl.cs" />
+    <Compile Include="SpeechRecognizerImpl.cs" />
     <Compile Include="SpeechRecognitionListener.cs" />
   </ItemGroup>
   <ItemGroup>

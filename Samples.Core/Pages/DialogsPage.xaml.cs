@@ -1,5 +1,6 @@
 ﻿using System;
-using Acr.SpeechDialogs;
+using Plugin.SpeechDialogs;
+using Plugin.SpeechRecognition;
 using Plugin.TextToSpeech;
 using Samples.ViewModels;
 using Xamarin.Forms;
@@ -12,7 +13,7 @@ namespace Samples.Pages
         public DialogsPage()
         {
             this.InitializeComponent();
-            this.BindingContext = new DialogsViewModel(SpeechDialogs.Instance, CrossTextToSpeech.Current);
+            this.BindingContext = new DialogsViewModel(CrossSpeechRecognition.Current, CrossTextToSpeech.Current);
         }
     }
 }
