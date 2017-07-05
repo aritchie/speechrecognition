@@ -23,18 +23,6 @@ namespace Samples.ViewModels
 
             this.ToggleListen = new Command(async () =>
             {
-                if (speech.Status != SpeechRecognizerStatus.Available)
-                {
-                    this.ListenText = "Problem with speech recognition engine - " + speech.Status;
-                    return;
-                }
-
-                var granted = await speech.RequestPermission();
-                if (!granted)
-                {
-                    this.ListenText = "Invalid Permissions";
-                    return;
-                }
                 if (token == null)
                 {
                     token = speech

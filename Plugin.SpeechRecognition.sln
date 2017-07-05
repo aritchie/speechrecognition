@@ -10,7 +10,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		nuspec\nuget.exe = nuspec\nuget.exe
 		nuspec\pack.cmd = nuspec\pack.cmd
 		nuspec\Plugin.SpeechDialogs.nuspec = nuspec\Plugin.SpeechDialogs.nuspec
-		nuspec\Plugin.SpeechRecogntion.nuspec = nuspec\Plugin.SpeechRecogntion.nuspec
+		nuspec\Plugin.SpeechRecognition.nuspec = nuspec\Plugin.SpeechRecognition.nuspec
 		nuspec\push.cmd = nuspec\push.cmd
 		readme.md = readme.md
 	EndProjectSection
@@ -39,10 +39,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Samples.Core", "Samples.Cor
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Plugin.SpeechDialogs", "Plugin.SpeechDialogs\Plugin.SpeechDialogs.csproj", "{BC042610-FD46-4B2F-A5DC-7E9660428029}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plugin.SpeechRecognition.macOS", "Plugin.SpeechRecognition.macOS\Plugin.SpeechRecognition.macOS.csproj", "{8A0FC475-221D-4FE0-8308-3F703DC08F52}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Plugin.SpeechRecognition.Shared\Plugin.SpeechRecognition.Shared.projitems*{0f81ba4f-9c52-47eb-b35a-031492a355c3}*SharedItemsImports = 13
 		Plugin.SpeechRecognition.Shared\Plugin.SpeechRecognition.Shared.projitems*{4e1dfa5b-2147-40c3-bc37-cc5e879bed9a}*SharedItemsImports = 4
+		Plugin.SpeechRecognition.Shared\Plugin.SpeechRecognition.Shared.projitems*{8a0fc475-221d-4fe0-8308-3f703dc08f52}*SharedItemsImports = 4
 		Plugin.SpeechRecognition.Shared\Plugin.SpeechRecognition.Shared.projitems*{bb799db7-d14d-4f23-bd8d-aad604382a08}*SharedItemsImports = 4
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -575,6 +578,54 @@ Global
 		{BC042610-FD46-4B2F-A5DC-7E9660428029}.Release|x64.Build.0 = Release|Any CPU
 		{BC042610-FD46-4B2F-A5DC-7E9660428029}.Release|x86.ActiveCfg = Release|Any CPU
 		{BC042610-FD46-4B2F-A5DC-7E9660428029}.Release|x86.Build.0 = Release|Any CPU
+		{8A0FC475-221D-4FE0-8308-3F703DC08F52}.Ad-Hoc|Any CPU.ActiveCfg = Release|Any CPU
+		{8A0FC475-221D-4FE0-8308-3F703DC08F52}.Ad-Hoc|Any CPU.Build.0 = Release|Any CPU
+		{8A0FC475-221D-4FE0-8308-3F703DC08F52}.Ad-Hoc|ARM.ActiveCfg = Release|Any CPU
+		{8A0FC475-221D-4FE0-8308-3F703DC08F52}.Ad-Hoc|ARM.Build.0 = Release|Any CPU
+		{8A0FC475-221D-4FE0-8308-3F703DC08F52}.Ad-Hoc|iPhone.ActiveCfg = Release|Any CPU
+		{8A0FC475-221D-4FE0-8308-3F703DC08F52}.Ad-Hoc|iPhone.Build.0 = Release|Any CPU
+		{8A0FC475-221D-4FE0-8308-3F703DC08F52}.Ad-Hoc|iPhoneSimulator.ActiveCfg = Release|Any CPU
+		{8A0FC475-221D-4FE0-8308-3F703DC08F52}.Ad-Hoc|iPhoneSimulator.Build.0 = Release|Any CPU
+		{8A0FC475-221D-4FE0-8308-3F703DC08F52}.Ad-Hoc|x64.ActiveCfg = Release|Any CPU
+		{8A0FC475-221D-4FE0-8308-3F703DC08F52}.Ad-Hoc|x64.Build.0 = Release|Any CPU
+		{8A0FC475-221D-4FE0-8308-3F703DC08F52}.Ad-Hoc|x86.ActiveCfg = Release|Any CPU
+		{8A0FC475-221D-4FE0-8308-3F703DC08F52}.Ad-Hoc|x86.Build.0 = Release|Any CPU
+		{8A0FC475-221D-4FE0-8308-3F703DC08F52}.AppStore|Any CPU.ActiveCfg = Release|Any CPU
+		{8A0FC475-221D-4FE0-8308-3F703DC08F52}.AppStore|Any CPU.Build.0 = Release|Any CPU
+		{8A0FC475-221D-4FE0-8308-3F703DC08F52}.AppStore|ARM.ActiveCfg = Release|Any CPU
+		{8A0FC475-221D-4FE0-8308-3F703DC08F52}.AppStore|ARM.Build.0 = Release|Any CPU
+		{8A0FC475-221D-4FE0-8308-3F703DC08F52}.AppStore|iPhone.ActiveCfg = Release|Any CPU
+		{8A0FC475-221D-4FE0-8308-3F703DC08F52}.AppStore|iPhone.Build.0 = Release|Any CPU
+		{8A0FC475-221D-4FE0-8308-3F703DC08F52}.AppStore|iPhoneSimulator.ActiveCfg = Release|Any CPU
+		{8A0FC475-221D-4FE0-8308-3F703DC08F52}.AppStore|iPhoneSimulator.Build.0 = Release|Any CPU
+		{8A0FC475-221D-4FE0-8308-3F703DC08F52}.AppStore|x64.ActiveCfg = Release|Any CPU
+		{8A0FC475-221D-4FE0-8308-3F703DC08F52}.AppStore|x64.Build.0 = Release|Any CPU
+		{8A0FC475-221D-4FE0-8308-3F703DC08F52}.AppStore|x86.ActiveCfg = Release|Any CPU
+		{8A0FC475-221D-4FE0-8308-3F703DC08F52}.AppStore|x86.Build.0 = Release|Any CPU
+		{8A0FC475-221D-4FE0-8308-3F703DC08F52}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8A0FC475-221D-4FE0-8308-3F703DC08F52}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8A0FC475-221D-4FE0-8308-3F703DC08F52}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{8A0FC475-221D-4FE0-8308-3F703DC08F52}.Debug|ARM.Build.0 = Debug|Any CPU
+		{8A0FC475-221D-4FE0-8308-3F703DC08F52}.Debug|iPhone.ActiveCfg = Debug|Any CPU
+		{8A0FC475-221D-4FE0-8308-3F703DC08F52}.Debug|iPhone.Build.0 = Debug|Any CPU
+		{8A0FC475-221D-4FE0-8308-3F703DC08F52}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+		{8A0FC475-221D-4FE0-8308-3F703DC08F52}.Debug|iPhoneSimulator.Build.0 = Debug|Any CPU
+		{8A0FC475-221D-4FE0-8308-3F703DC08F52}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{8A0FC475-221D-4FE0-8308-3F703DC08F52}.Debug|x64.Build.0 = Debug|Any CPU
+		{8A0FC475-221D-4FE0-8308-3F703DC08F52}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{8A0FC475-221D-4FE0-8308-3F703DC08F52}.Debug|x86.Build.0 = Debug|Any CPU
+		{8A0FC475-221D-4FE0-8308-3F703DC08F52}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8A0FC475-221D-4FE0-8308-3F703DC08F52}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8A0FC475-221D-4FE0-8308-3F703DC08F52}.Release|ARM.ActiveCfg = Release|Any CPU
+		{8A0FC475-221D-4FE0-8308-3F703DC08F52}.Release|ARM.Build.0 = Release|Any CPU
+		{8A0FC475-221D-4FE0-8308-3F703DC08F52}.Release|iPhone.ActiveCfg = Release|Any CPU
+		{8A0FC475-221D-4FE0-8308-3F703DC08F52}.Release|iPhone.Build.0 = Release|Any CPU
+		{8A0FC475-221D-4FE0-8308-3F703DC08F52}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
+		{8A0FC475-221D-4FE0-8308-3F703DC08F52}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
+		{8A0FC475-221D-4FE0-8308-3F703DC08F52}.Release|x64.ActiveCfg = Release|Any CPU
+		{8A0FC475-221D-4FE0-8308-3F703DC08F52}.Release|x64.Build.0 = Release|Any CPU
+		{8A0FC475-221D-4FE0-8308-3F703DC08F52}.Release|x86.ActiveCfg = Release|Any CPU
+		{8A0FC475-221D-4FE0-8308-3F703DC08F52}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -587,5 +638,6 @@ Global
 		{4E1DFA5B-2147-40C3-BC37-CC5E879BED9A} = {AE5515C4-8262-49BE-9AC1-9AE669480548}
 		{0F81BA4F-9C52-47EB-B35A-031492A355C3} = {AE5515C4-8262-49BE-9AC1-9AE669480548}
 		{BC042610-FD46-4B2F-A5DC-7E9660428029} = {AE5515C4-8262-49BE-9AC1-9AE669480548}
+		{8A0FC475-221D-4FE0-8308-3F703DC08F52} = {AE5515C4-8262-49BE-9AC1-9AE669480548}
 	EndGlobalSection
 EndGlobal

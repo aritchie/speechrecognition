@@ -5,7 +5,7 @@ using Android.Speech;
 using Debug = System.Diagnostics.Debug;
 
 
-namespace Acr.SpeechRecognition
+namespace Plugin.SpeechRecognition
 {
     public class SpeechRecognitionListener : Java.Lang.Object, IRecognitionListener
     {

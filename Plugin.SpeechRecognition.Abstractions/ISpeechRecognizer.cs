@@ -1,13 +1,21 @@
 ﻿using System;
-using System.Threading.Tasks;
 
 
 namespace Plugin.SpeechRecognition
 {
     public interface ISpeechRecognizer
     {
-        SpeechRecognizerStatus Status { get; }
-        IObservable<bool> RequestPermission();
+        /// <summary>
+        ///
+        /// </summary>
+        bool IsSupported { get; }
+
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <returns></returns>
+        IObservable<SpeechRecognizerStatus> RequestPermission();
 
 
         /// <summary>

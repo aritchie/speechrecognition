@@ -21,18 +21,13 @@ namespace Samples.ViewModels
 
             this.Start = new Command(async () =>
             {
-                if (speech.Status != SpeechRecognizerStatus.Available)
-                {
-                    await tts.Speak("Problem with speech recognition engine - " + speech.Status);
-                    return;
-                }
+                //var status = await speech.RequestPermission();
+                //if (status != SpeechRecognizerStatus.Available)
+                //{
+                //    await tts.Speak("Problem with speech recognition engine - " + speech.Status);
+                //    return;
+                //}
 
-                var granted = await speech.RequestPermission();
-                if (!granted)
-                {
-                    await tts.Speak("Hey Dummy!  Ya you!  You didn't enable permissions for the microphone");
-                    return;
-                }
                 var answer = await dialogs.Question("Hello, please tell me your name?");
                 await tts.Speak($"Hello {answer}");
             });

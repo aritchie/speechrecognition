@@ -9,64 +9,44 @@ namespace Plugin.SpeechRecognition
 {
     public class SpeechRecognizerImpl : AbstractSpeechRecognizer
     {
-        protected override bool IsSupported => true;
-        public override SpeechRecognizerStatus Status { get; } = SpeechRecognizerStatus.Available;
+        public override bool IsSupported => true;
 
 
-        public override IObservable<string> ListenUntilPause()
+        public override IObservable<string> ListenUntilPause() => Observable.FromAsync(async ct =>
         {
-            return Observable.Create<string>(async ob =>
+            var speech = new WinSpeechRecognizer();
+            await speech.CompileConstraintsAsync();
+            this.ListenSubject.OnNext(true);
+            var result = await speech.RecognizeAsync();
+
+            return result.Text;
+        })
+        .Finally(() => this.ListenSubject.OnNext(false));
+
+
+        public override IObservable<string> ContinuousDictation() => Observable.Create<string>(async ob =>
+        {
+            var speech = new WinSpeechRecognizer();
+            await speech.CompileConstraintsAsync();
+            this.ListenSubject.OnNext(true);
+
+            var handler = new TypedEventHandler<SpeechContinuousRecognitionSession, SpeechContinuousRecognitionResultGeneratedEventArgs>((sender, args) =>
+                ob.OnNext(args.Result.Text)
+            );
+            speech.ContinuousRecognitionSession.ResultGenerated += handler;
+            await speech.ContinuousRecognitionSession.StartAsync();
+
+            return () =>
             {
-                var speech = new WinSpeechRecognizer();
-                await speech.CompileConstraintsAsync();
-                this.ListenSubject.OnNext(true);
-
-                var handler = new TypedEventHandler<SpeechContinuousRecognitionSession, SpeechContinuousRecognitionResultGeneratedEventArgs>((sender, args) =>
-                {
-                    var words = args.Result.Text.Split(' ');
-                    foreach (var word in words)
-                        ob.OnNext(word);
-                });
-                speech.ContinuousRecognitionSession.ResultGenerated += handler;
-                await speech.ContinuousRecognitionSession.StartAsync();
-
-                return () =>
-                {
-                    speech.ContinuousRecognitionSession.StopAsync();
-                    speech.ContinuousRecognitionSession.ResultGenerated -= handler;
-                    this.ListenSubject.OnNext(false);
-                    speech.Dispose();
-                };
-            });
-        }
+                speech.ContinuousRecognitionSession.StopAsync();
+                speech.ContinuousRecognitionSession.ResultGenerated -= handler;
+                this.ListenSubject.OnNext(false);
+                speech.Dispose();
+            };
+        });
 
 
-        public override IObservable<string> ContinuousDictation()
-        {
-            return Observable.Create<string>(async ob =>
-            {
-                var speech = new WinSpeechRecognizer();
-                await speech.CompileConstraintsAsync();
-                this.ListenSubject.OnNext(true);
-                var result = await speech.RecognizeAsync();
-                var words = result.Text.Split(' ');
-
-                foreach (var word in words)
-                    ob.OnNext(word);
-
-                return () =>
-                {
-                    this.ListenSubject.OnNext(false);
-                    speech.Dispose();
-                };
-            });
-        }
-
-
-        public override IObservable<bool> RequestPermission()
-        {
-            throw new NotImplementedException();
-        }
+        public override IObservable<SpeechRecognizerStatus> RequestPermission() => Observable.Return(SpeechRecognizerStatus.Available);
 
 
         //        //if (showUI)

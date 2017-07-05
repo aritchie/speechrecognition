@@ -5,7 +5,6 @@ namespace Plugin.SpeechRecognition
 {
     public static class CrossSpeechRecognition
     {
-
         static ISpeechRecognizer current;
         public static ISpeechRecognizer Current
         {
