@@ -25,6 +25,7 @@
 
   <ItemGroup>
     <PackageReference Include="Plugin.Permissions" Version="2.0.1" />
+    <PackageReference Include="reactiveui" Version="7.5.0-alpha0029" />
     <PackageReference Include="Xam.Plugins.TextToSpeech" Version="3.0.1" />
     <PackageReference Include="Xamarin.Forms" Version="2.3.5.256-pre6" />
   </ItemGroup>

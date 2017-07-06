@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using System.Xml;
 
 
 namespace Plugin.SpeechRecognition
@@ -14,9 +12,24 @@ namespace Plugin.SpeechRecognition
 
         public IObservable<bool> WhenListeningStatusChanged() => this.ListenSubject;
         public virtual bool IsSupported { get; protected set; }
-        public virtual IObservable<string> ListenForFirstKeyword(params string[] keywords) => this.ContinuousDictation()
-            .Where(x => keywords.Any(y => y.Equals(x, StringComparison.OrdinalIgnoreCase)))
-            .Take(1);
+
+
+        public virtual IObservable<string> ListenForFirstKeyword(params string[] keywords)
+            => Observable.Create<string>(ob => this.ContinuousDictation().Subscribe(x =>
+            {
+                var values = x.Split(' ');
+                foreach (var value in values)
+                {
+                    foreach (var keyword in keywords)
+                    {
+                        if (value.Equals(keyword, StringComparison.OrdinalIgnoreCase))
+                        {
+                            ob.OnNext(value);
+                            ob.OnCompleted();
+                        }
+                    }
+                }
+            }));
 
         public abstract IObservable<string> ListenUntilPause();
         public abstract IObservable<string> ContinuousDictation();

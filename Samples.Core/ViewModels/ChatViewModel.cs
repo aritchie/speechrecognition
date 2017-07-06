@@ -4,12 +4,13 @@ using System.Windows.Input;
 using Plugin.SpeechDialogs;
 using Plugin.SpeechRecognition;
 using Plugin.TextToSpeech;
+using ReactiveUI;
 using Xamarin.Forms;
 
 
 namespace Samples.ViewModels
 {
-    public class ChatViewModel
+    public class ChatViewModel : ReactiveObject
     {
         public ChatViewModel()
         {
@@ -35,7 +36,21 @@ namespace Samples.ViewModels
 
 
         public ICommand Start { get; }
-        public string Text { get; set; }
-        public bool IsListening { get; set; }
+
+
+        string text;
+        public string Text
+        {
+            get => this.text;
+            set => this.RaiseAndSetIfChanged(ref this.text, value);
+        }
+
+
+        bool listening;
+        public bool IsListening
+        {
+            get => this.listening;
+            set => this.RaiseAndSetIfChanged(ref this.listening, value);
+        }
     }
 }

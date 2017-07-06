@@ -17,7 +17,7 @@ namespace Plugin.SpeechRecognition
         public SpeechRecognizerImpl(IPermissions permissions = null) => this.permissions = permissions ?? CrossPermissions.Current;
 
 
-        public override bool IsSupported => Android.Speech.SpeechRecognizer.IsRecognitionAvailable(Application.Context);
+        public override bool IsSupported => SpeechRecognizer.IsRecognitionAvailable(Application.Context);
         public override IObservable<string> ListenUntilPause() => this.Listen(true);
         public override IObservable<string> ContinuousDictation() => this.Listen(false);
 
@@ -48,7 +48,7 @@ namespace Plugin.SpeechRecognition
 
         protected virtual IObservable<string> Listen(bool completeOnEndOfSpeech) => Observable.Create<string>(ob =>
         {
-            var speechRecognizer = Android.Speech.SpeechRecognizer.CreateSpeechRecognizer(Application.Context);
+            var speechRecognizer = SpeechRecognizer.CreateSpeechRecognizer(Application.Context);
             var listener = new SpeechRecognitionListener
             {
                 ReadyForSpeech = () => this.ListenSubject.OnNext(true),
@@ -64,7 +64,6 @@ namespace Plugin.SpeechRecognition
                 },
                 Error = ex =>
                 {
-                    ob.OnError(new ArgumentException(ex.ToString()));
                     speechRecognizer.StopListening();
                     speechRecognizer.StartListening(this.CreateSpeechIntent());
                 }

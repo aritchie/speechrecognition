@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Reactive.Linq;
 using Plugin.SpeechDialogs;
 using Plugin.TextToSpeech;
+using ReactiveUI;
 using Xamarin.Forms;
 
 
 namespace Samples.ViewModels
 {
-    public class DialogsViewModel
+    public class DialogsViewModel : ReactiveObject
     {
         public DialogsViewModel()
         {

@@ -7,12 +7,13 @@ using System.Windows.Input;
 using Plugin.SpeechRecognition;
 using Plugin.TextToSpeech;
 using Plugin.TextToSpeech.Abstractions;
+using ReactiveUI;
 using Xamarin.Forms;
 
 
 namespace Samples.ViewModels
 {
-    public class ConversationViewModel
+    public class ConversationViewModel : ReactiveObject
     {
         readonly ISpeechRecognizer speech;
         readonly ITextToSpeech tts;
@@ -29,8 +30,15 @@ namespace Samples.ViewModels
 
 
         public ICommand Start { get; }
-        public bool IsListening { get; set; }
         public ObservableCollection<ConversationItemViewModel> Items { get; } = new ObservableCollection<ConversationItemViewModel>();
+
+
+        bool listening;
+        public bool IsListening
+        {
+            get => this.listening;
+            set => this.RaiseAndSetIfChanged(ref this.listening, value);
+        }
 
 
         async Task DoConversation()

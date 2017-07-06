@@ -17,11 +17,10 @@
                         <ViewCell>
                             <ViewCell.View>
                                 <StackLayout>
-                                    <Label
-                                    Text="{Binding Text}"
-                                    IsVisible="{Binding FromComputer}"
-                                    HorizontalTextAlignment="Start"
-                                />
+                                    <Label Text="{Binding Text}"
+                                           IsVisible="{Binding FromComputer}"
+                                           HorizontalTextAlignment="Start" />
+
                                     <Label Text="{Binding Text}" HorizontalTextAlignment="End">
                                         <Label.Triggers>
                                             <DataTrigger TargetType="Label" Binding="{Binding FromComputer}" Value="true">

@@ -15,7 +15,7 @@
                 <local:ChatPage />
             </x:Arguments>
         </NavigationPage>
-        <NavigationPage Title="Dialogs">
+        <NavigationPage Title="Conversations">
             <x:Arguments>
                 <local:ConversationPage />
             </x:Arguments>

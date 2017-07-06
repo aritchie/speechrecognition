@@ -108,7 +108,7 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SpeechRecognizerImpl.cs" />
-    <EmbeddedResource Include="Properties\Plugin.SpeechRecognition.Uwp.rd.xml" />
+    <EmbeddedResource Include="Properties\Plugin.SpeechRecognition.rd.xml" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
@@ -121,6 +121,7 @@
       <Name>Plugin.SpeechRecognition.Abstractions</Name>
     </ProjectReference>
   </ItemGroup>
+  <Import Project="..\Plugin.SpeechRecognition.Shared\Plugin.SpeechRecognition.Shared.projitems" Label="Shared" />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

@@ -1,13 +1,13 @@
 ﻿using System;
-using System.Reactive.Linq;
 using System.Windows.Input;
 using Plugin.SpeechRecognition;
+using ReactiveUI;
 using Xamarin.Forms;
 
 
 namespace Samples.ViewModels
 {
-    public class DictationViewModel
+    public class DictationViewModel : ReactiveObject
     {
         public DictationViewModel()
         {
@@ -21,7 +21,7 @@ namespace Samples.ViewModels
                     : "Start Dictation"
                 );
 
-            this.ToggleListen = new Command(async () =>
+            this.ToggleListen = new Command(() =>
             {
                 if (token == null)
                 {
@@ -40,7 +40,21 @@ namespace Samples.ViewModels
 
 
         public ICommand ToggleListen { get; }
-        public string ListenText { get; set; } = "Start Dictation";
-        public string Text { get; set; }
+
+
+        string listenText = "Start Dictation";
+        public string ListenText
+        {
+            get => this.listenText;
+            set => this.RaiseAndSetIfChanged(ref this.listenText, value);
+        }
+
+
+        string text;
+        public string Text
+        {
+            get => this.text;
+            set => this.RaiseAndSetIfChanged(ref this.text, value);
+        }
     }
 }

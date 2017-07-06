@@ -45,6 +45,7 @@ Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Plugin.SpeechRecognition.Shared\Plugin.SpeechRecognition.Shared.projitems*{0f81ba4f-9c52-47eb-b35a-031492a355c3}*SharedItemsImports = 13
 		Plugin.SpeechRecognition.Shared\Plugin.SpeechRecognition.Shared.projitems*{4e1dfa5b-2147-40c3-bc37-cc5e879bed9a}*SharedItemsImports = 4
+		Plugin.SpeechRecognition.Shared\Plugin.SpeechRecognition.Shared.projitems*{80f032b3-c668-41d4-b5d7-c130a91202d2}*SharedItemsImports = 4
 		Plugin.SpeechRecognition.Shared\Plugin.SpeechRecognition.Shared.projitems*{8a0fc475-221d-4fe0-8308-3f703dc08f52}*SharedItemsImports = 4
 		Plugin.SpeechRecognition.Shared\Plugin.SpeechRecognition.Shared.projitems*{bb799db7-d14d-4f23-bd8d-aad604382a08}*SharedItemsImports = 4
 	EndGlobalSection
