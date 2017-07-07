@@ -4,6 +4,7 @@
              xmlns:viewModels="clr-namespace:Samples.ViewModels;assembly=Samples.Core"
              x:Class="Samples.Pages.ConversationPage"
              Title="Conversation">
+
     <ContentPage.BindingContext>
         <viewModels:ConversationViewModel />
     </ContentPage.BindingContext>
@@ -17,17 +18,8 @@
                         <ViewCell>
                             <ViewCell.View>
                                 <StackLayout>
-                                    <Label Text="{Binding Text}"
-                                           IsVisible="{Binding FromComputer}"
-                                           HorizontalTextAlignment="Start" />
-
-                                    <Label Text="{Binding Text}" HorizontalTextAlignment="End">
-                                        <Label.Triggers>
-                                            <DataTrigger TargetType="Label" Binding="{Binding FromComputer}" Value="true">
-                                                <Setter Property="IsVisible" Value="true" />
-                                            </DataTrigger>
-                                        </Label.Triggers>
-                                    </Label>
+                                    <Label Text="{Binding From}"  />
+                                    <Label Text="{Binding Text}" />
                                 </StackLayout>
                             </ViewCell.View>
                         </ViewCell>

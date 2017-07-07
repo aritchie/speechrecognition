@@ -5,7 +5,6 @@ using Plugin.SpeechDialogs;
 using Plugin.SpeechRecognition;
 using Plugin.TextToSpeech;
 using ReactiveUI;
-using Xamarin.Forms;
 
 
 namespace Samples.ViewModels
@@ -20,15 +19,8 @@ namespace Samples.ViewModels
 
             speech.WhenListeningStatusChanged().Subscribe(x => this.IsListening = x);
 
-            this.Start = new Command(async () =>
+            this.Start = ReactiveCommand.CreateFromTask(async () =>
             {
-                //var status = await speech.RequestPermission();
-                //if (status != SpeechRecognizerStatus.Available)
-                //{
-                //    await tts.Speak("Problem with speech recognition engine - " + speech.Status);
-                //    return;
-                //}
-
                 var answer = await dialogs.Question("Hello, please tell me your name?");
                 await tts.Speak($"Hello {answer}");
             });

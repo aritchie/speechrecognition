@@ -1,57 +1,71 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>netstandard1.4</TargetFramework>
-    <RootNamespace>Samples</RootNamespace>
-  </PropertyGroup>
+    <PropertyGroup>
+        <TargetFramework>netstandard1.4</TargetFramework>
+        <RootNamespace>Samples</RootNamespace>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <EmbeddedResource Include="Pages\ChatPage.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Pages\ConversationPage.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Pages\DialogsPage.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Pages\DictationPage.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Pages\MainPage.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-  </ItemGroup>
+    <ItemGroup>
+        <EmbeddedResource Include="Pages\BotPage.xaml">
+          <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+        </EmbeddedResource>
+        <EmbeddedResource Include="Pages\ChatPage.xaml">
+            <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+        </EmbeddedResource>
+        <EmbeddedResource Include="Pages\ConversationPage.xaml">
+            <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+        </EmbeddedResource>
+        <EmbeddedResource Include="Pages\DialogsPage.xaml">
+            <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+        </EmbeddedResource>
+        <EmbeddedResource Include="Pages\DictationPage.xaml">
+            <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+        </EmbeddedResource>
+        <EmbeddedResource Include="Pages\MainPage.xaml">
+            <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+        </EmbeddedResource>
+        <EmbeddedResource Include="Pages\StartPage.xaml">
+            <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+        </EmbeddedResource>
+    </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Plugin.Permissions" Version="2.0.1" />
-    <PackageReference Include="reactiveui" Version="7.5.0-alpha0029" />
-    <PackageReference Include="Xam.Plugins.TextToSpeech" Version="3.0.1" />
-    <PackageReference Include="Xamarin.Forms" Version="2.3.5.256-pre6" />
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Microsoft.Bot.Connector.DirectLine" Version="3.0.2" />
+        <PackageReference Include="Microsoft.Rest.ClientRuntime" Version="2.3.8" />
+        <PackageReference Include="Plugin.Permissions" Version="2.0.1" />
+        <PackageReference Include="reactiveui" Version="7.5.0-alpha0029" />
+        <PackageReference Include="Xam.Plugins.TextToSpeech" Version="3.0.1" />
+        <PackageReference Include="Xamarin.Forms" Version="2.3.5.256-pre6" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Plugin.SpeechDialogs\Plugin.SpeechDialogs.csproj" />
-    <ProjectReference Include="..\Plugin.SpeechRecognition.Abstractions\Plugin.SpeechRecognition.Abstractions.csproj" />
-    <ProjectReference Include="..\Plugin.SpeechRecognition\Plugin.SpeechRecognition.csproj" />
-  </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\Plugin.SpeechDialogs\Plugin.SpeechDialogs.csproj" />
+        <ProjectReference Include="..\Plugin.SpeechRecognition.Abstractions\Plugin.SpeechRecognition.Abstractions.csproj" />
+        <ProjectReference Include="..\Plugin.SpeechRecognition\Plugin.SpeechRecognition.csproj" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <Compile Update="Pages\ChatPage.xaml.cs">
-      <DependentUpon>ChatPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Pages\ConversationPage.xaml.cs">
-      <DependentUpon>ConversationPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Pages\DialogsPage.xaml.cs">
-      <DependentUpon>DialogsPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Pages\DictationPage.xaml.cs">
-      <DependentUpon>DictationPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Pages\MainPage.xaml.cs">
-      <DependentUpon>MainPage.xaml</DependentUpon>
-    </Compile>
-  </ItemGroup>
+    <ItemGroup>
+        <Compile Update="Pages\BotPage.xaml.cs">
+            <DependentUpon>BotPage.xaml</DependentUpon>
+        </Compile>
+        <Compile Update="Pages\ChatPage.xaml.cs">
+            <DependentUpon>ChatPage.xaml</DependentUpon>
+        </Compile>
+        <Compile Update="Pages\ConversationPage.xaml.cs">
+            <DependentUpon>ConversationPage.xaml</DependentUpon>
+        </Compile>
+        <Compile Update="Pages\DialogsPage.xaml.cs">
+            <DependentUpon>DialogsPage.xaml</DependentUpon>
+        </Compile>
+        <Compile Update="Pages\DictationPage.xaml.cs">
+            <DependentUpon>DictationPage.xaml</DependentUpon>
+        </Compile>
+        <Compile Update="Pages\MainPage.xaml.cs">
+            <DependentUpon>MainPage.xaml</DependentUpon>
+        </Compile>
+        <Compile Update="Pages\StartPage.xaml.cs">
+            <DependentUpon>StartPage.xaml</DependentUpon>
+        </Compile>
+    </ItemGroup>
 
 </Project>

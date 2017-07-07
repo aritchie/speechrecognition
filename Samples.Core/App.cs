@@ -9,7 +9,10 @@ namespace Samples
     {
         public App()
         {
-            this.MainPage = new MainPage();
+            this.MainPage = new NavigationPage(new StartPage());
         }
+
+
+        public static string MicrosoftBotSecretKey { get; set; }
     }
 }

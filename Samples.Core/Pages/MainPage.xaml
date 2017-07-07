@@ -5,25 +5,10 @@
              x:Class="Samples.Pages.MainPage"
             Title="Voice Recognition">
     <TabbedPage.Children>
-        <NavigationPage Title="Dictation">
-            <x:Arguments>
-                <local:DictationPage />
-            </x:Arguments>
-        </NavigationPage>
-        <NavigationPage Title="Say Hi">
-            <x:Arguments>
-                <local:ChatPage />
-            </x:Arguments>
-        </NavigationPage>
-        <NavigationPage Title="Conversations">
-            <x:Arguments>
-                <local:ConversationPage />
-            </x:Arguments>
-        </NavigationPage>
-        <NavigationPage Title="Dialogs">
-            <x:Arguments>
-                <local:DialogsPage />
-            </x:Arguments>
-        </NavigationPage>
+        <local:DictationPage Title="Dictation" />
+        <local:ChatPage Title="Say Hi" />
+        <local:ConversationPage Title="Conversations" />
+        <local:DialogsPage Title="Dialogs" />
+        <!--<local:BotPage Title="Bot" />-->
     </TabbedPage.Children>
 </TabbedPage>

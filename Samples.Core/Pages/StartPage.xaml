@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewModels="clr-namespace:Samples.ViewModels;assembly=Samples.Core"
+             x:Class="Samples.Pages.StartPage">
+
+    <ContentPage.BindingContext>
+        <viewModels:StartViewModel />
+    </ContentPage.BindingContext>
+
+    <ContentPage.Content>
+        <StackLayout>
+            <Label Text="{Binding PermissionStatus, StringFormat='Permission Status: {0}'}" />
+            <Button Text="Request Permission" Command="{Binding RequestPermission}" />
+
+            <!--<Label Text="Microsoft Bot Secret Key" />
+            <Entry Text="{Binding SecretKey}" />-->
+
+            <Button Text="Go to Samples" Command="{Binding GotoSamples}" />
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
