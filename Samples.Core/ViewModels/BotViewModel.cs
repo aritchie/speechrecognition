@@ -16,6 +16,7 @@ namespace Samples.ViewModels
     {
         readonly ISpeechRecognizer speech = CrossSpeechRecognition.Current;
         readonly IUserDialogs dialogs = UserDialogs.Instance;
+        string watermark;
         DirectLineClient client;
         Conversation conversation;
         IDisposable listener;
@@ -86,20 +87,39 @@ namespace Samples.ViewModels
             {
                 while (!ct.IsCancellationRequested)
                 {
-                    var statement = await this.speech
-                        .ListenUntilPause()
-                        .Where(x => !String.IsNullOrWhiteSpace(x))
-                        .ToTask(ct);
-
-                    var activity = new Activity
+                    var statement = "";
+                    using (this.dialogs.Toast("Listening for message", TimeSpan.MaxValue))
                     {
-                        Text = statement,
-                        Type = ActivityTypes.Message
-                    };
-                    var response = await this.client.Conversations.PostActivityAsync(this.conversation.ConversationId, activity, ct);
+                        statement = await this.speech
+                            .ListenUntilPause()
+                            .Where(x => !String.IsNullOrWhiteSpace(x))
+                            .ToTask(ct);
 
-                    this.PostMessage(true, statement);
-                    this.PostMessage(false, "");
+                        this.PostMessage(true, statement);
+                    }
+
+                    using (this.dialogs.Toast("Sending message to Bot", TimeSpan.MaxValue))
+                    {
+                        var newActivity = new Activity
+                        {
+                            Text = statement,
+                            Type = ActivityTypes.Message
+                        };
+                        await this.client.Conversations.PostActivityAsync(this.conversation.ConversationId, newActivity, ct);
+
+                        // TODO: implement loop until message received - should use websocket client in all honesty
+                        var response = await this.client.Conversations.GetActivitiesAsync(this.conversation.ConversationId, this.watermark, ct);
+                        this.watermark = response.Watermark;
+
+                        foreach (var activity in response.Activities)
+                        {
+                            if (activity.Text != null)
+                                this.PostMessage(false, activity.Text);
+
+                            if (activity.InputHint != null)
+                                this.PostMessage(false, activity.InputHint);
+                        }
+                    }
                 }
             }).Subscribe();
         }
