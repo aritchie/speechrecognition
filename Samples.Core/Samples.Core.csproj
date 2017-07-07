@@ -6,9 +6,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <EmbeddedResource Include="Pages\BotPage.xaml">
-          <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-        </EmbeddedResource>
         <EmbeddedResource Include="Pages\ChatPage.xaml">
             <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
         </EmbeddedResource>
@@ -30,8 +27,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.Bot.Connector.DirectLine" Version="3.0.2" />
-        <PackageReference Include="Microsoft.Rest.ClientRuntime" Version="2.3.8" />
+        <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
         <PackageReference Include="Plugin.Permissions" Version="2.0.1" />
         <PackageReference Include="reactiveui" Version="7.5.0-alpha0029" />
         <PackageReference Include="Xam.Plugins.TextToSpeech" Version="3.0.1" />
@@ -45,9 +41,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Compile Update="Pages\BotPage.xaml.cs">
-            <DependentUpon>BotPage.xaml</DependentUpon>
-        </Compile>
         <Compile Update="Pages\ChatPage.xaml.cs">
             <DependentUpon>ChatPage.xaml</DependentUpon>
         </Compile>

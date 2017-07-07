@@ -17,8 +17,6 @@ namespace Samples.ViewModels
             if (!this.speech.IsSupported)
                 this.PermissionStatus = "SPEECH RECOGNITION NOT SUPPORTED";
 
-            this.WhenAnyValue(x => x.BotSecretKey).Subscribe(x => App.MicrosoftBotSecretKey = x);
-
             this.GotoSamples = ReactiveCommand.CreateFromTask(async () =>
                 await App.Current.MainPage.Navigation.PushAsync(new MainPage()),
                 this.WhenAny(
@@ -47,14 +45,6 @@ namespace Samples.ViewModels
         {
             get => this.permissionStatus;
             private set => this.RaiseAndSetIfChanged(ref this.permissionStatus, value);
-        }
-
-
-        string secretKey;
-        public string BotSecretKey
-        {
-            get => this.secretKey;
-            set => this.RaiseAndSetIfChanged(ref this.secretKey, value);
         }
     }
 }

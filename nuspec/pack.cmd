@@ -1,5 +1,6 @@
 @echo off
 del *.nupkg
-nuget pack Acr.SpeechRecognition.nuspec
-nuget pack Acr.SpeechDialogs.nuspec
+rem nuget pack Acr.SpeechRecognition.nuspec
+nuget pack Plugin.SpeechRecognition.nuspec
+rem nuget pack Plugin.SpeechDialogs.nuspec
 pause

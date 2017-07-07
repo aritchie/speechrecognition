@@ -9,6 +9,5 @@
         <local:ChatPage Title="Say Hi" />
         <local:ConversationPage Title="Conversations" />
         <local:DialogsPage Title="Dialogs" />
-        <!--<local:BotPage Title="Bot" />-->
     </TabbedPage.Children>
 </TabbedPage>

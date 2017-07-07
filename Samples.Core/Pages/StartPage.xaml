@@ -13,9 +13,6 @@
             <Label Text="{Binding PermissionStatus, StringFormat='Permission Status: {0}'}" />
             <Button Text="Request Permission" Command="{Binding RequestPermission}" />
 
-            <!--<Label Text="Microsoft Bot Secret Key" />
-            <Entry Text="{Binding SecretKey}" />-->
-
             <Button Text="Go to Samples" Command="{Binding GotoSamples}" />
         </StackLayout>
     </ContentPage.Content>

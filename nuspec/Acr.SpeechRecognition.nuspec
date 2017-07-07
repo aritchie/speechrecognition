@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
     <metadata>
         <id>Acr.SpeechRecognition</id>
-        <version>1.0.0-beta1</version>
+        <version>1.0.0-beta2</version>
         <title>ACR Speech Recognition Plugin for Xamarin and Windows</title>
         <summary>Speech Recognition Plugin for iOS, Android, and Windows</summary>
         <description>
@@ -12,7 +12,7 @@ Supported Platforms
 - iOS 10+
 - Android
 - Universal Windows Platform (Win10/UWP)
-- Portable Class Libraries (Profile 259)
+- NET Standard
         </description>
         <authors>Allan Ritchie</authors>
         <owners>Allan Ritchie</owners>
@@ -26,21 +26,7 @@ Supported Platforms
 Initial Release
         </releaseNotes>
         <dependencies>
-        	<dependency id="rx-main" version="[2.2.5, 3)" />
-        	<dependency id="Plugin.Permissions" version="[1.2, 2)" />
+        	<dependency id="Plugin.SpeechRecognition" version="[1, 3)" />
         </dependencies>
     </metadata>
-    <files>
-        <!-- PCL -->
-        <file src="..\Acr.SpeechRecognition\bin\Release\Acr.SpeechRecognition.*" target="lib\portable-win+net45+wp8+win8+wpa81" />
-
-        <!-- android -->
-        <file src="..\Acr.SpeechRecognition.Android\bin\Release\Acr.SpeechRecognition.*" target="lib\MonoAndroid10" />
-
-        <!-- ios -->
-        <file src="..\Acr.SpeechRecognition.iOS\bin\Release\Acr.SpeechRecognition.*" target="lib\Xamarin.iOS10" />
-
-        <!-- uwp -->
-        <file src="..\Acr.SpeechRecognition.Uwp\bin\Release\Acr.SpeechRecognition.*" target="lib\uap10.0" />
-    </files>
 </package>

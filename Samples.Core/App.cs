@@ -11,8 +11,5 @@ namespace Samples
         {
             this.MainPage = new NavigationPage(new StartPage());
         }
-
-
-        public static string MicrosoftBotSecretKey { get; set; }
     }
 }
