@@ -2,8 +2,7 @@
 
 _Easy to use cross platform speech recognition (speech to text) plugin for Xamarin & UWP_
 
-[![NuGet](https://img.shields.io/nuget/v/Acr.CrossSpeechRecognition.svg?maxAge=2592000)](https://www.nuget.org/packages/Acr.CrossSpeechRecognition/)
-[![NuGet](https://img.shields.io/nuget/v/Acr.SpeechDialogs.svg?maxAge=2592000)](https://www.nuget.org/packages/Acr.SpeechDialogs/)
+[![NuGet](https://img.shields.io/nuget/v/Plugin.SpeechRecognition.svg?maxAge=2592000)](https://www.nuget.org/packages/Plugin.SpeechRecognition/)
 
 
 ## PLATFORMS
@@ -11,6 +10,7 @@ _Easy to use cross platform speech recognition (speech to text) plugin for Xamar
 * iOS 10+
 * Android
 * Windows UWP
+* .NET Standard
 
 ## SETUP
 
