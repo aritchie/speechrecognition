@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
     <metadata>
         <id>Plugin.SpeechRecognition</id>
-        <version>1.0.0-beta1</version>
+        <version>1.0.0-beta2</version>
         <title>ACR Speech Recognition Plugin for Xamarin and Windows</title>
         <summary>Speech Recognition Plugin for iOS, Android, and Windows</summary>
         <description>
