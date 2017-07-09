@@ -1,12 +1,13 @@
 ﻿using System;
+using Acr.UserDialogs;
 
 
 namespace Plugin.SpeechDialogs
 {
     public interface ISpeechDialogs
     {
-        IObservable<bool> Confirm(string question, string yes = "yes", string no = "no");
-        IObservable<string> Choices(string question, bool speakChoices = true, params string[] choices);
-        IObservable<string> Question(string question);
+        IObservable<bool> Confirm(ConfirmConfig config);
+        IObservable<string> Choices(string question, string[] choices, bool speakChoices = false);
+        IObservable<string> Question(PromptConfig config);
     }
 }

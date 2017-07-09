@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reactive.Linq;
 using System.Windows.Input;
+using Acr.UserDialogs;
 using Plugin.SpeechDialogs;
 using Plugin.SpeechRecognition;
 using Plugin.TextToSpeech;
@@ -21,7 +22,9 @@ namespace Samples.ViewModels
 
             this.Start = ReactiveCommand.CreateFromTask(async () =>
             {
-                var answer = await dialogs.Question("Hello, please tell me your name?");
+                var answer = await dialogs.Question(new PromptConfig {
+                    Message = "Hello, please tell me your name?"
+                });
                 await tts.Speak($"Hello {answer}");
             });
         }

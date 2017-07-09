@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reactive.Linq;
+using Acr.UserDialogs;
 using Plugin.SpeechDialogs;
 using Plugin.TextToSpeech;
 using ReactiveUI;
@@ -25,12 +26,16 @@ namespace Samples.ViewModels
                     {
                         var result = await dialogs.Choices(
                             "Choose your destiny",
-                            this.ShowDialogs,
-                            "Fatality", //, () => tts.Speak("Flawless Victory"))
-                            "Friendship", // tts.Speak("Friendship"))
-                            "Bability" //, () => tts.Speak("Cute"))
+                            new []
+                            {
+                                "Fatality",
+                                "Friendship",
+                                "Bability"
+                            },
+                            // TODO: await actionsheet selection
+                            this.ShowDialogs
                         );
-
+                        await tts.Speak(result);
                     })
                 },
                 new ListItemViewModel
@@ -38,7 +43,12 @@ namespace Samples.ViewModels
                     Text = "Confirm",
                     Command = new Command(async () =>
                     {
-                        var result = await dialogs.Confirm("Shutdown your phone?", "Yes", "No");
+                        var result = await dialogs.Confirm(new ConfirmConfig
+                        {
+                            Message = "Shutdown your phone?",
+                            OkText = "Yes",
+                            CancelText = "No"
+                        });
                         await tts.Speak(result ? "Your phone will now self destruct" : "Too Bad");
                     })
                 },
@@ -47,8 +57,11 @@ namespace Samples.ViewModels
                     Text = "Prompt",
                     Command = new Command(async () =>
                     {
-                        var result = await dialogs.Question("Tell me your life story.... quickly!");
-                        tts.Speak(result + " - BORING");
+                        var result = await dialogs.Question(new PromptConfig
+                        {
+                            Message = "Tell me your life story.... quickly!"
+                        });
+                        await tts.Speak(result + " - BORING");
                     })
                 }
             };
