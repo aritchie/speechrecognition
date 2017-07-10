@@ -12,6 +12,12 @@ namespace Plugin.SpeechRecognition
         public override bool IsSupported => true;
 
 
+        public override IObservable<string> ListenForFirstKeyword(params string[] keywords)
+        {
+            return base.ListenForFirstKeyword(keywords);
+        }
+
+
         public override IObservable<string> ListenUntilPause() => Observable.FromAsync(async ct =>
         {
             var speech = new WinSpeechRecognizer();
@@ -28,17 +34,17 @@ namespace Plugin.SpeechRecognition
         {
             var speech = new WinSpeechRecognizer();
             await speech.CompileConstraintsAsync();
-            this.ListenSubject.OnNext(true);
 
             var handler = new TypedEventHandler<SpeechContinuousRecognitionSession, SpeechContinuousRecognitionResultGeneratedEventArgs>((sender, args) =>
                 ob.OnNext(args.Result.Text)
             );
             speech.ContinuousRecognitionSession.ResultGenerated += handler;
             await speech.ContinuousRecognitionSession.StartAsync();
+            this.ListenSubject.OnNext(true);
 
             return () =>
             {
-                speech.ContinuousRecognitionSession.StopAsync();
+                //speech.ContinuousRecognitionSession.StopAsync();
                 speech.ContinuousRecognitionSession.ResultGenerated -= handler;
                 this.ListenSubject.OnNext(false);
                 speech.Dispose();

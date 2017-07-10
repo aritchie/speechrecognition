@@ -26,12 +26,13 @@ Supported Platforms
 Initial Release
         </releaseNotes>
         <dependencies>
+            <dependency id="Acr.UserDialogs" version="[6.5.1, 7)" />
         	<dependency id="Plugin.SpeechRecognition" version="[1, 2)" />
         	<dependency id="Xam.Plugins.TextToSpeech" version="[3.0.1, 4)" />
         </dependencies>
     </metadata>
     <files>
         <!-- PCL -->
-        <file src="..\Plugin.SpeechDialogs\bin\Release\netstandard1.0\Plugin.SpeechDialogs.*" target="lib\netstandard1.0" />
+        <file src="..\Plugin.SpeechDialogs\bin\Release\netstandard1.1\Plugin.SpeechDialogs.*" target="lib\netstandard1.1" />
     </files>
 </package>

@@ -32,8 +32,7 @@ namespace Samples.ViewModels
                                 "Friendship",
                                 "Bability"
                             },
-                            // TODO: await actionsheet selection
-                            this.ShowDialogs
+                            this.IsActionsSpoken
                         );
                         await tts.Speak(result);
                     })
@@ -69,6 +68,6 @@ namespace Samples.ViewModels
 
 
         public IList<ListItemViewModel> List { get; set; }
-        public bool ShowDialogs { get; set; } = true;
+        public bool IsActionsSpoken { get; set; } = true;
     }
 }

@@ -37,10 +37,11 @@ namespace Plugin.SpeechDialogs
                     }
                 }, ct);
             }
+
+            var finishTask = await Task.WhenAny(dialogTask, speechTask);
             if (ct.IsCancellationRequested)
                 return null;
 
-            var finishTask = await Task.WhenAny(dialogTask, speechTask);
             if (finishTask == dialogTask)
                 return dialogTask.Result;
 

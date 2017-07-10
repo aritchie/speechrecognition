@@ -26,6 +26,7 @@ namespace Plugin.SpeechRecognition
                         {
                             ob.OnNext(value);
                             ob.OnCompleted();
+                            break;
                         }
                     }
                 }

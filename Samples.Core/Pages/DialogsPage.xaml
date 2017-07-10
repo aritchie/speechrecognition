@@ -12,8 +12,8 @@
     <ContentPage.Content>
         <StackLayout>
             <StackLayout Orientation="Horizontal">
-                <Switch IsToggled="{Binding ShowDialogs}" />
-                <Label Text="Show Dialogs" />
+                <Switch IsToggled="{Binding IsActionsSpoken}" />
+                <Label Text="Speak Actions" />
             </StackLayout>
 
             <ListView ItemsSource="{Binding List}">
