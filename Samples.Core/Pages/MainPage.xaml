@@ -6,8 +6,8 @@
             Title="Voice Recognition">
     <TabbedPage.Children>
         <local:DictationPage Title="Dictation" />
-        <local:ChatPage Title="Say Hi" />
-        <local:ConversationPage Title="Conversations" />
+        <local:ChatPage Title="Chat" />
+        <local:ConversationPage Title="Questions" />
         <local:DialogsPage Title="Dialogs" />
     </TabbedPage.Children>
 </TabbedPage>
