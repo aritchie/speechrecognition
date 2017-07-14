@@ -49,24 +49,31 @@ namespace Plugin.SpeechRecognition
 
         protected virtual IObservable<string> Listen(bool completeOnEndOfSpeech) => Observable.Create<string>(ob =>
         {
+            var currentSentence = String.Empty;
             var speechRecognizer = SpeechRecognizer.CreateSpeechRecognizer(Application.Context);
             var listener = new SpeechRecognitionListener
             {
                 ReadyForSpeech = () => this.ListenSubject.OnNext(true),
                 SpeechDetected = sentence =>
                 {
-                    if (!String.IsNullOrWhiteSpace(sentence))
-                        ob.OnNext(sentence);
+                    lock (this.syncLock)
+                    {
+                        currentSentence = sentence;
+                    }
                 },
                 EndOfSpeech = () =>
                 {
-                    if (completeOnEndOfSpeech)
+                    lock (this.syncLock)
                     {
-                        ob.OnCompleted();
-                    }
-                    else
-                    {
-                        lock (this.syncLock)
+                        if (!String.IsNullOrWhiteSpace(currentSentence))
+                        {
+                            ob.OnNext(currentSentence);
+                        }
+                        if (completeOnEndOfSpeech)
+                        {
+                            ob.OnCompleted();
+                        }
+                        else
                         {
                             speechRecognizer.StopListening();
                             speechRecognizer.StartListening(this.CreateSpeechIntent());
@@ -75,15 +82,25 @@ namespace Plugin.SpeechRecognition
                 },
                 Error = ex =>
                 {
-                    if (ex == SpeechRecognizerError.RecognizerBusy)
-                        return;
-
                     lock (this.syncLock)
                     {
-                        //speechRecognizer.Destroy();
-                        //speechRecognizer = SpeechRecognizer.CreateSpeechRecognizer(Application.Context);
-                        speechRecognizer.StopListening();
-                        speechRecognizer.StartListening(this.CreateSpeechIntent());
+                        switch (ex)
+                        {
+                            case SpeechRecognizerError.SpeechTimeout:
+                            case SpeechRecognizerError.RecognizerBusy:
+                                lock (this.syncLock)
+                                {
+                                    //speechRecognizer.Destroy();
+                                    //speechRecognizer = SpeechRecognizer.CreateSpeechRecognizer(Application.Context);
+                                    speechRecognizer.StopListening();
+                                    speechRecognizer.StartListening(this.CreateSpeechIntent());
+                                }
+                                break;
+
+                            default:
+                                ob.OnError(new Exception($"Could not start speech recognizer - ERROR: {ex}"));
+                                break;
+                        }
                     }
                 }
             };

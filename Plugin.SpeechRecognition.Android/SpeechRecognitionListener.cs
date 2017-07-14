@@ -42,13 +42,7 @@ namespace Plugin.SpeechRecognition
 
 
         public void OnEvent(int eventType, Bundle @params) => Debug.WriteLine("OnEvent: " + eventType);
-
-
-        public void OnPartialResults(Bundle partialResults)
-        {
-            Debug.WriteLine("OnPartialResults");
-            //this.SendResults(partialResults);
-        }
+        public void OnPartialResults(Bundle partialResults) => Debug.WriteLine("OnPartialResults");
 
 
         public void OnReadyForSpeech(Bundle @params)
@@ -72,26 +66,30 @@ namespace Plugin.SpeechRecognition
         }
 
 
-
         void SendResults(Bundle bundle)
         {
             var matches = bundle.GetStringArrayList(SpeechRecognizer.ResultsRecognition);
-            float[] scores = null;
-            // TODO: take highest score
-
-            if (Build.VERSION.SdkInt >= BuildVersionCodes.IceCreamSandwich)
-                scores = bundle.GetFloatArray(SpeechRecognizer.ConfidenceScores);
-
             if (matches == null || matches.Count == 0)
             {
                 Debug.WriteLine("Matches value is null in bundle");
+                return;
+            }
+
+            if (Build.VERSION.SdkInt >= BuildVersionCodes.IceCreamSandwich && matches.Count > 1)
+            {
+                var scores = bundle.GetFloatArray(SpeechRecognizer.ConfidenceScores);
+                var best = 0;
+                for (var i = 0; i < scores.Length; i++)
+                {
+                    if (scores[best] < scores[i])
+                        best = i;
+                }
+                var winner = matches[best];
+                this.SpeechDetected?.Invoke(winner);
             }
             else
             {
-                Debug.WriteLine("Matches found: " + matches.Count);
                 this.SpeechDetected?.Invoke(matches.First());
-
-                //this.SpeechDetected?.Invoke(matches);
             }
         }
     }

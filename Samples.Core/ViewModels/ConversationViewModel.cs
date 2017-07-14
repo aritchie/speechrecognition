@@ -58,7 +58,7 @@ namespace Samples.ViewModels
                 var sex = await this.speech.ListenForFirstKeyword("male", "female");
                 this.Add(sex);
 
-                var next = sex.Equals("male", StringComparison.CurrentCultureIgnoreCase) ? "Yo dude" : "";
+                var next = sex.Equals("male", StringComparison.CurrentCultureIgnoreCase) ? "Yo dude" : "Sup";
                 await this.Computer(next);
 
                 await this.Computer("Tell me something interesting about yourself");
