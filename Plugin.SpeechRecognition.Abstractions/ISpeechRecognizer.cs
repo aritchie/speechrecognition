@@ -6,7 +6,7 @@ namespace Plugin.SpeechRecognition
     public interface ISpeechRecognizer
     {
         /// <summary>
-        ///
+        /// Returns true if platform is supported
         /// </summary>
         bool IsSupported { get; }
 
@@ -23,7 +23,6 @@ namespace Plugin.SpeechRecognition
         /// </summary>
         /// <param name="keywords"></param>
         /// <returns></returns>
-        /// TODO: unrecognized words?
         IObservable<string> ListenForFirstKeyword(params string[] keywords);
 
 

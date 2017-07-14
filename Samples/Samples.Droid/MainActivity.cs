@@ -1,4 +1,5 @@
 ﻿using System;
+using Acr.UserDialogs;
 using Android.App;
 using Android.Content.PM;
 using Android.OS;
@@ -18,17 +19,15 @@ namespace Samples.Droid
     {
         protected override void OnCreate(Bundle bundle)
         {
+            UserDialogs.Init(() => (Activity)Forms.Context);
             base.OnCreate(bundle);
             Forms.Init(this, bundle);
-            //Acr.SpeechRecognition.SpeechRecognizerImpl.GetTopActivity = () => (Activity) Forms.Context;
             this.LoadApplication(new App());
         }
 
 
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, Permission[] grantResults)
-        {
-            Plugin.Permissions.PermissionsImplementation.Current.OnRequestPermissionsResult(requestCode, permissions, grantResults);
-        }
+            => Plugin.Permissions.PermissionsImplementation.Current.OnRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 }
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reactive.Linq;
 using System.Windows.Input;
+using Acr.UserDialogs;
 using Plugin.SpeechRecognition;
 using ReactiveUI;
 using Samples.Pages;
@@ -11,6 +12,7 @@ namespace Samples.ViewModels
     public class StartViewModel : ReactiveObject
     {
         readonly ISpeechRecognizer speech = CrossSpeechRecognition.Current;
+        readonly IUserDialogs dialogs = UserDialogs.Instance;
 
         public StartViewModel()
         {
@@ -18,12 +20,20 @@ namespace Samples.ViewModels
                 this.PermissionStatus = "SPEECH RECOGNITION NOT SUPPORTED";
 
             this.GotoSamples = ReactiveCommand.CreateFromTask(async () =>
-                await App.Current.MainPage.Navigation.PushAsync(new MainPage()),
-                this.WhenAny(
-                    x => x.PermissionStatus,
-                    x => x.Value == SpeechRecognizerStatus.Available.ToString()
-                )
-            );
+            {
+                try
+                {
+                    await App.Current.MainPage.Navigation.PushAsync(new MainPage());
+                }
+                catch (Exception ex)
+                {
+                    this.dialogs.Alert(ex.ToString());
+                }
+            },
+            this.WhenAny(
+                x => x.PermissionStatus,
+                x => x.Value == SpeechRecognizerStatus.Available.ToString()
+            ));
 
             this.RequestPermission = ReactiveCommand.CreateFromTask(async () =>
             {

@@ -1,5 +1,5 @@
 using System;
-using System.Collections.Generic;
+using System.Linq;
 using Android.OS;
 using Android.Speech;
 using Debug = System.Diagnostics.Debug;
@@ -13,7 +13,7 @@ namespace Plugin.SpeechRecognition
         public Action EndOfSpeech { get; set; }
         public Action ReadyForSpeech { get; set; }
         public Action<SpeechRecognizerError> Error { get; set; }
-        public Action<IList<string>> SpeechDetected { get; set; }
+        public Action<string> SpeechDetected { get; set; }
         public Action<float> RmsChanged { get; set; }
 
 
@@ -24,10 +24,7 @@ namespace Plugin.SpeechRecognition
         }
 
 
-        public void OnBufferReceived(byte[] buffer)
-        {
-            Debug.WriteLine("Buffer Received");
-        }
+        public void OnBufferReceived(byte[] buffer) => Debug.WriteLine("Buffer Received");
 
 
         public void OnEndOfSpeech()
@@ -44,16 +41,13 @@ namespace Plugin.SpeechRecognition
         }
 
 
-        public void OnEvent(int eventType, Bundle @params)
-        {
-            Debug.WriteLine("OnEvent: " + eventType);
-        }
+        public void OnEvent(int eventType, Bundle @params) => Debug.WriteLine("OnEvent: " + eventType);
 
 
         public void OnPartialResults(Bundle partialResults)
         {
             Debug.WriteLine("OnPartialResults");
-            this.SendResults(partialResults);
+            //this.SendResults(partialResults);
         }
 
 
@@ -78,17 +72,26 @@ namespace Plugin.SpeechRecognition
         }
 
 
+
         void SendResults(Bundle bundle)
         {
-            var matches = bundle.GetStringArrayList(Android.Speech.SpeechRecognizer.ResultsRecognition);
-            if (matches == null)
+            var matches = bundle.GetStringArrayList(SpeechRecognizer.ResultsRecognition);
+            float[] scores = null;
+            // TODO: take highest score
+
+            if (Build.VERSION.SdkInt >= BuildVersionCodes.IceCreamSandwich)
+                scores = bundle.GetFloatArray(SpeechRecognizer.ConfidenceScores);
+
+            if (matches == null || matches.Count == 0)
             {
                 Debug.WriteLine("Matches value is null in bundle");
             }
             else
             {
                 Debug.WriteLine("Matches found: " + matches.Count);
-                this.SpeechDetected?.Invoke(matches);
+                this.SpeechDetected?.Invoke(matches.First());
+
+                //this.SpeechDetected?.Invoke(matches);
             }
         }
     }

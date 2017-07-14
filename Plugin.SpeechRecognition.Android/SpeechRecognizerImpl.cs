@@ -12,6 +12,7 @@ namespace Plugin.SpeechRecognition
     public class SpeechRecognizerImpl : AbstractSpeechRecognizer
     {
         readonly IPermissions permissions;
+        readonly object syncLock = new object();
 
 
         public SpeechRecognizerImpl(IPermissions permissions = null) => this.permissions = permissions ?? CrossPermissions.Current;
@@ -52,20 +53,38 @@ namespace Plugin.SpeechRecognition
             var listener = new SpeechRecognitionListener
             {
                 ReadyForSpeech = () => this.ListenSubject.OnNext(true),
-                SpeechDetected = words =>
+                SpeechDetected = sentence =>
                 {
-                    foreach (var word in words)
-                        ob.OnNext(word);
+                    if (!String.IsNullOrWhiteSpace(sentence))
+                        ob.OnNext(sentence);
                 },
                 EndOfSpeech = () =>
                 {
                     if (completeOnEndOfSpeech)
+                    {
                         ob.OnCompleted();
+                    }
+                    else
+                    {
+                        lock (this.syncLock)
+                        {
+                            speechRecognizer.StopListening();
+                            speechRecognizer.StartListening(this.CreateSpeechIntent());
+                        }
+                    }
                 },
                 Error = ex =>
                 {
-                    speechRecognizer.StopListening();
-                    speechRecognizer.StartListening(this.CreateSpeechIntent());
+                    if (ex == SpeechRecognizerError.RecognizerBusy)
+                        return;
+
+                    lock (this.syncLock)
+                    {
+                        //speechRecognizer.Destroy();
+                        //speechRecognizer = SpeechRecognizer.CreateSpeechRecognizer(Application.Context);
+                        speechRecognizer.StopListening();
+                        speechRecognizer.StartListening(this.CreateSpeechIntent());
+                    }
                 }
             };
             speechRecognizer.SetRecognitionListener(listener);
