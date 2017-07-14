@@ -12,7 +12,6 @@ namespace Plugin.SpeechRecognition
     public class SpeechRecognizerImpl : AbstractSpeechRecognizer
     {
         readonly IPermissions permissions;
-        readonly object syncLock = new object();
 
 
         public SpeechRecognizerImpl(IPermissions permissions = null) => this.permissions = permissions ?? CrossPermissions.Current;
@@ -49,70 +48,69 @@ namespace Plugin.SpeechRecognition
 
         protected virtual IObservable<string> Listen(bool completeOnEndOfSpeech) => Observable.Create<string>(ob =>
         {
-            var currentSentence = String.Empty;
+            var stop = false;
+            var syncLock = new object();
             var speechRecognizer = SpeechRecognizer.CreateSpeechRecognizer(Application.Context);
-            var listener = new SpeechRecognitionListener
-            {
-                ReadyForSpeech = () => this.ListenSubject.OnNext(true),
-                SpeechDetected = sentence =>
-                {
-                    lock (this.syncLock)
-                    {
-                        currentSentence = sentence;
-                    }
-                },
-                EndOfSpeech = () =>
-                {
-                    lock (this.syncLock)
-                    {
-                        if (!String.IsNullOrWhiteSpace(currentSentence))
-                        {
-                            ob.OnNext(currentSentence);
-                        }
-                        if (completeOnEndOfSpeech)
-                        {
-                            ob.OnCompleted();
-                        }
-                        else
-                        {
-                            speechRecognizer.StopListening();
-                            speechRecognizer.StartListening(this.CreateSpeechIntent());
-                        }
-                    }
-                },
-                Error = ex =>
-                {
-                    lock (this.syncLock)
-                    {
-                        switch (ex)
-                        {
-                            case SpeechRecognizerError.SpeechTimeout:
-                            case SpeechRecognizerError.RecognizerBusy:
-                                lock (this.syncLock)
-                                {
-                                    //speechRecognizer.Destroy();
-                                    //speechRecognizer = SpeechRecognizer.CreateSpeechRecognizer(Application.Context);
-                                    speechRecognizer.StopListening();
-                                    speechRecognizer.StartListening(this.CreateSpeechIntent());
-                                }
-                                break;
+            var listener = new SpeechRecognitionListener();
 
-                            default:
-                                ob.OnError(new Exception($"Could not start speech recognizer - ERROR: {ex}"));
-                                break;
-                        }
-                    }
+            listener.ReadyForSpeech = () => this.ListenSubject.OnNext(true);
+            listener.SpeechDetected = sentence =>
+            {
+                lock (syncLock)
+                    ob.OnNext(sentence);
+            };
+            //listener.EndOfSpeech = () =>
+            //{
+            //    lock (syncLock)
+            //    {
+            //        if (completeOnEndOfSpeech)
+            //        {
+            //            stop = true;
+            //            ob.OnCompleted();
+            //        }
+            //        else
+            //        {
+            //            speechRecognizer.Destroy();
+            //            speechRecognizer = null;
+
+            //            speechRecognizer = SpeechRecognizer.CreateSpeechRecognizer(Application.Context);
+            //            speechRecognizer.SetRecognitionListener(listener);
+            //            speechRecognizer.StartListening(this.CreateSpeechIntent());
+            //        }
+            //    }
+            //};
+            listener.Error = ex =>
+            {
+                switch (ex)
+                {
+                    case SpeechRecognizerError.Client:
+                    case SpeechRecognizerError.RecognizerBusy:
+                    case SpeechRecognizerError.SpeechTimeout:
+                        if (stop)
+                            return;
+
+                        speechRecognizer.Destroy();
+                        speechRecognizer = null;
+
+                        speechRecognizer = SpeechRecognizer.CreateSpeechRecognizer(Application.Context);
+                        speechRecognizer.SetRecognitionListener(listener);
+                        speechRecognizer.StartListening(this.CreateSpeechIntent());
+                        break;
+
+                        //        default:
+                        //            ob.OnError(new Exception($"Could not start speech recognizer - ERROR: {ex}"));
+                        //            break;
                 }
             };
+
             speechRecognizer.SetRecognitionListener(listener);
             speechRecognizer.StartListening(this.CreateSpeechIntent());
 
             return () =>
             {
-                listener.Error = null;
-                speechRecognizer.StopListening();
-                speechRecognizer.Dispose();
                 this.ListenSubject.OnNext(false);
+                listener.Error = null;
+                speechRecognizer?.Destroy();
             };
         });
 
