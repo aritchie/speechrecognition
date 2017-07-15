@@ -21,14 +21,23 @@ namespace Samples.ViewModels
                     : "Start Dictation"
                 );
 
-            this.ToggleListen = new Command(() =>
+            this.ToggleListen = ReactiveCommand.Create(()  =>
             {
                 if (token == null)
                 {
-                    token = speech
-                        .ContinuousDictation()
-                        //.Catch<string, Exception>(ex => Observable.Return(ex.ToString()))
-                        .Subscribe(x => this.Text += " " + x);
+                    if (this.useContinuous)
+                    {
+                        token = speech
+                            .ContinuousDictation()
+                            //.Catch<string, Exception>(ex => Observable.Return(ex.ToString()))
+                            .Subscribe(x => this.Text += " " + x);
+                    }
+                    else
+                    {
+                        token = speech
+                            .ListenUntilPause()
+                            .Subscribe(x => this.Text += " " + x);
+                    }
                 }
                 else
                 {
@@ -40,6 +49,14 @@ namespace Samples.ViewModels
 
 
         public ICommand ToggleListen { get; }
+
+
+        bool useContinuous = true;
+        public bool UseContinuous
+        {
+            get => this.useContinuous;
+            set => this.RaiseAndSetIfChanged(ref this.useContinuous, value);
+        }
 
 
         string listenText = "Start Dictation";

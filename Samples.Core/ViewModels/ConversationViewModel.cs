@@ -52,7 +52,7 @@ namespace Samples.ViewModels
                     .ContinuousDictation()
                     .Take(1)
                     .RunAsync(cancelSrc.Token);
-                this.Add(name, false);
+                this.Add(name);
 
                 await this.Computer($"Hello {name}.  Are you male or female?");
                 var sex = await this.speech.ListenForFirstKeyword("male", "female");
