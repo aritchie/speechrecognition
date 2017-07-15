@@ -5,7 +5,6 @@ VisualStudioVersion = 15.0.26430.15
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{4673FCF3-05A1-4424-AEC3-B9B823342CC9}"
 	ProjectSection(SolutionItems) = preProject
-		nuspec\Acr.SpeechRecognition.nuspec = nuspec\Acr.SpeechRecognition.nuspec
 		LICENSE.md = LICENSE.md
 		nuspec\nuget.exe = nuspec\nuget.exe
 		nuspec\pack.cmd = nuspec\pack.cmd

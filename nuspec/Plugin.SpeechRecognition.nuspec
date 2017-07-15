@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
     <metadata>
         <id>Plugin.SpeechRecognition</id>
-        <version>1.0.0-beta2</version>
+        <version>1.0.0-beta3</version>
         <title>ACR Speech Recognition Plugin for Xamarin and Windows</title>
         <summary>Speech Recognition Plugin for iOS, Android, and Windows</summary>
         <description>
@@ -17,14 +17,11 @@ Supported Platforms
         <authors>Allan Ritchie</authors>
         <owners>Allan Ritchie</owners>
         <iconUrl>https://github.com/aritchie/speechrecognition/icon.png</iconUrl>
-        <licenseUrl>https://github.com/aritchie/speechrecognition/LICENSE.md</licenseUrl>
+        <licenseUrl>https://github.com/aritchie/speechrecognition/blob/master/LICENSE.md</licenseUrl>
         <projectUrl>https://github.com/aritchie/speechrecognition</projectUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <tags>windows xamarin xam.pcl speech recognition</tags>
-        <releaseNotes>
-1.0.0
-Initial Release
-        </releaseNotes>
+        <releaseNotes>https://github.com/aritchie/speechrecognition/blob/master/CHANGELOG.md</releaseNotes>
         <dependencies>
             <group>
         	    <dependency id="System.Reactive" version="[3.1.1, 4)" />
