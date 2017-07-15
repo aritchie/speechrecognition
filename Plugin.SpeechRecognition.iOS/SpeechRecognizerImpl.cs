@@ -52,7 +52,7 @@ namespace Plugin.SpeechRecognition
             var speechRecognizer = new SFSpeechRecognizer();
             if (!speechRecognizer.Available)
                 throw new ArgumentException("Speech recognizer is not available");
-            
+
             var speechRequest = new SFSpeechAudioBufferRecognitionRequest();
             var audioEngine = new AVAudioEngine();
             var format = audioEngine.InputNode.GetBusOutputFormat(0);
@@ -61,8 +61,8 @@ namespace Plugin.SpeechRecognition
                 speechRequest.TaskHint = SFSpeechRecognitionTaskHint.Dictation;
 
             audioEngine.InputNode.InstallTapOnBus(
-                0, 
-                1024, 
+                0,
+                1024,
                 format,
                 (buffer, when) => speechRequest.Append(buffer)
             );
@@ -95,9 +95,9 @@ namespace Plugin.SpeechRecognition
                     }
                     else
                     {
-                        for (var i = currentIndex; i < result.BestTranscription.Segments.Length; i++) 
+                        for (var i = currentIndex; i < result.BestTranscription.Segments.Length; i++)
                         {
-                            var s = result.BestTranscription.Segments[i].Substring; 
+                            var s = result.BestTranscription.Segments[i].Substring;
                             currentIndex++;
                             ob.OnNext(s);
                         }
