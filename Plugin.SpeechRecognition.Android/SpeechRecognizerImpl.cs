@@ -11,6 +11,7 @@ namespace Plugin.SpeechRecognition
 {
     public class SpeechRecognizerImpl : AbstractSpeechRecognizer
     {
+        readonly object syncLock = new object();
         readonly IPermissions permissions;
 
 
@@ -18,10 +19,6 @@ namespace Plugin.SpeechRecognition
 
 
         public override bool IsSupported => SpeechRecognizer.IsRecognitionAvailable(Application.Context);
-        public override IObservable<string> ListenUntilPause() => this.Listen(true);
-        public override IObservable<string> ContinuousDictation() => this.Listen(false);
-
-
         public override IObservable<SpeechRecognizerStatus> RequestPermission() => Observable.FromAsync(async ct =>
         {
             if (!this.IsSupported)
@@ -46,39 +43,66 @@ namespace Plugin.SpeechRecognition
         });
 
 
-        protected virtual IObservable<string> Listen(bool completeOnEndOfSpeech) => Observable.Create<string>(ob =>
+        public override IObservable<string> ListenUntilPause() => Observable.Create<string>(ob =>
+        {
+            var listener = new SpeechRecognitionListener
+            {
+                ReadyForSpeech = () => this.ListenSubject.OnNext(true),
+                FinalResults = sentence =>
+                {
+                    lock (this.syncLock)
+                        ob.OnNext(sentence);
+                },
+                EndOfSpeech = () =>
+                {
+                    lock (this.syncLock)
+                        ob.OnCompleted();
+                }
+            };
+            var speechRecognizer = SpeechRecognizer.CreateSpeechRecognizer(Application.Context);
+            speechRecognizer.SetRecognitionListener(listener);
+            speechRecognizer.StartListening(this.CreateSpeechIntent(false));
+
+            return () =>
+            {
+                this.ListenSubject.OnNext(false);
+                speechRecognizer.StopListening();
+                speechRecognizer.Destroy();
+            };
+        });
+
+
+        public override IObservable<string> ContinuousDictation() => Observable.Create<string>(ob =>
         {
             var stop = false;
-            var syncLock = new object();
+            var currentIndex = 0;
             var speechRecognizer = SpeechRecognizer.CreateSpeechRecognizer(Application.Context);
             var listener = new SpeechRecognitionListener();
 
             listener.ReadyForSpeech = () => this.ListenSubject.OnNext(true);
-            listener.SpeechDetected = sentence =>
+            listener.PartialResults = sentence =>
             {
-                lock (syncLock)
-                    ob.OnNext(sentence);
+                lock (this.syncLock)
+                {
+                    var newPart = sentence.Substring(currentIndex).Trim();
+                    currentIndex = sentence.Trim().Length;
+                    ob.OnNext(newPart);
+                }
             };
-            //listener.EndOfSpeech = () =>
-            //{
-            //    lock (syncLock)
-            //    {
-            //        if (completeOnEndOfSpeech)
-            //        {
-            //            stop = true;
-            //            ob.OnCompleted();
-            //        }
-            //        else
-            //        {
-            //            speechRecognizer.Destroy();
-            //            speechRecognizer = null;
 
-            //            speechRecognizer = SpeechRecognizer.CreateSpeechRecognizer(Application.Context);
-            //            speechRecognizer.SetRecognitionListener(listener);
-            //            speechRecognizer.StartListening(this.CreateSpeechIntent());
-            //        }
-            //    }
-            //};
+            listener.EndOfSpeech = () =>
+            {
+                lock (this.syncLock)
+                {
+                    currentIndex = 0;
+                    speechRecognizer.Destroy();
+                    speechRecognizer = null;
+
+                    speechRecognizer = SpeechRecognizer.CreateSpeechRecognizer(Application.Context);
+                    speechRecognizer.SetRecognitionListener(listener);
+                    speechRecognizer.StartListening(this.CreateSpeechIntent(true));
+                }
+            };
             listener.Error = ex =>
             {
                 switch (ex)
@@ -86,45 +110,55 @@ namespace Plugin.SpeechRecognition
                     case SpeechRecognizerError.Client:
                     case SpeechRecognizerError.RecognizerBusy:
                     case SpeechRecognizerError.SpeechTimeout:
-                        if (stop)
-                            return;
+                        lock (this.syncLock)
+                        {
+                            if (stop)
+                                return;
 
-                        speechRecognizer.Destroy();
-                        speechRecognizer = null;
+                            speechRecognizer.Destroy();
+                            speechRecognizer = null;
 
-                        speechRecognizer = SpeechRecognizer.CreateSpeechRecognizer(Application.Context);
-                        speechRecognizer.SetRecognitionListener(listener);
-                        speechRecognizer.StartListening(this.CreateSpeechIntent());
+                            speechRecognizer = SpeechRecognizer.CreateSpeechRecognizer(Application.Context);
+                            speechRecognizer.SetRecognitionListener(listener);
+                            speechRecognizer.StartListening(this.CreateSpeechIntent(true));
+                        }
                         break;
 
-                        //        default:
-                        //            ob.OnError(new Exception($"Could not start speech recognizer - ERROR: {ex}"));
-                        //            break;
+                    //        default:
+                    //            ob.OnError(new Exception($"Could not start speech recognizer - ERROR: {ex}"));
+                    //            break;
                 }
             };
-
             speechRecognizer.SetRecognitionListener(listener);
-            speechRecognizer.StartListening(this.CreateSpeechIntent());
+            speechRecognizer.StartListening(this.CreateSpeechIntent(true));
+
 
             return () =>
             {
+                stop = true;
                 this.ListenSubject.OnNext(false);
-                listener.Error = null;
+                speechRecognizer?.StopListening();
                 speechRecognizer?.Destroy();
             };
         });
 
 
-        protected virtual Intent CreateSpeechIntent()
+        protected virtual Intent CreateSpeechIntent(bool partialResults)
         {
             var intent = new Intent(RecognizerIntent.ActionRecognizeSpeech);
             intent.PutExtra(RecognizerIntent.ExtraLanguagePreference, Java.Util.Locale.Default);
             intent.PutExtra(RecognizerIntent.ExtraLanguage, Java.Util.Locale.Default);
             intent.PutExtra(RecognizerIntent.ExtraLanguageModel, RecognizerIntent.LanguageModelFreeForm);
             intent.PutExtra(RecognizerIntent.ExtraCallingPackage, Application.Context.PackageName);
-            intent.PutExtra(RecognizerIntent.ExtraPartialResults, true);
+            //intent.PutExtra(RecognizerIntent.ExtraMaxResults, 1);
+            //intent.PutExtra(RecognizerIntent.ExtraSpeechInputCompleteSilenceLengthMillis, 1500);
+            //intent.PutExtra(RecognizerIntent.ExtraSpeechInputPossiblyCompleteSilenceLengthMillis, 1500);
+            //intent.PutExtra(RecognizerIntent.ExtraSpeechInputMinimumLengthMillis, 15000);
+            intent.PutExtra(RecognizerIntent.ExtraPartialResults, partialResults);
 
             return intent;
         }
     }
 }
+
+

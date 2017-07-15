@@ -13,7 +13,8 @@ namespace Plugin.SpeechRecognition
         public Action EndOfSpeech { get; set; }
         public Action ReadyForSpeech { get; set; }
         public Action<SpeechRecognizerError> Error { get; set; }
-        public Action<string> SpeechDetected { get; set; }
+        public Action<string> FinalResults { get; set; }
+        public Action<string> PartialResults { get; set; }
         public Action<float> RmsChanged { get; set; }
 
 
@@ -42,7 +43,6 @@ namespace Plugin.SpeechRecognition
 
 
         public void OnEvent(int eventType, Bundle @params) => Debug.WriteLine("OnEvent: " + eventType);
-        public void OnPartialResults(Bundle partialResults) => Debug.WriteLine("OnPartialResults");
 
 
         public void OnReadyForSpeech(Bundle @params)
@@ -52,10 +52,17 @@ namespace Plugin.SpeechRecognition
         }
 
 
-        public void OnResults(Bundle results)
+        public void OnPartialResults(Bundle bundle)
+        {
+            Debug.WriteLine("OnPartialResults");
+            this.SendResults(bundle, this.PartialResults);
+        }
+
+
+        public void OnResults(Bundle bundle)
         {
             Debug.WriteLine("Speech Results");
-            this.SendResults(results);
+            this.SendResults(bundle, this.FinalResults);
         }
 
 
@@ -66,7 +73,7 @@ namespace Plugin.SpeechRecognition
         }
 
 
-        void SendResults(Bundle bundle)
+        void SendResults(Bundle bundle, Action<string> action)
         {
             var matches = bundle.GetStringArrayList(SpeechRecognizer.ResultsRecognition);
             if (matches == null || matches.Count == 0)
@@ -85,11 +92,11 @@ namespace Plugin.SpeechRecognition
                         best = i;
                 }
                 var winner = matches[best];
-                this.SpeechDetected?.Invoke(winner);
+                action?.Invoke(winner);
             }
             else
             {
-                this.SpeechDetected?.Invoke(matches.First());
+                action?.Invoke(matches.First());
             }
         }
     }
