@@ -49,52 +49,69 @@ namespace Plugin.SpeechRecognition
 
         protected virtual IObservable<string> Listen(bool completeOnEndOfSpeech) => Observable.Create<string>(ob =>
         {
-            SFSpeechRecognitionTask task = null;
-            NSError error = null;
-
-            var audioEngine = new AVAudioEngine();
             var speechRecognizer = new SFSpeechRecognizer();
-            var speechRequest = new SFSpeechAudioBufferRecognitionRequest
-            {
-                ShouldReportPartialResults = true,
-                TaskHint = completeOnEndOfSpeech
-                    ? SFSpeechRecognitionTaskHint.Search
-                    : SFSpeechRecognitionTaskHint.Dictation
-            };
+            if (!speechRecognizer.Available)
+                throw new ArgumentException("Speech recognizer is not available");
+            
+            var speechRequest = new SFSpeechAudioBufferRecognitionRequest();
+            var audioEngine = new AVAudioEngine();
+            var format = audioEngine.InputNode.GetBusOutputFormat(0);
+
+            if (!completeOnEndOfSpeech)
+                speechRequest.TaskHint = SFSpeechRecognitionTaskHint.Dictation;
 
             audioEngine.InputNode.InstallTapOnBus(
-                bus: 0,
-                bufferSize: 1024,
-                format: audioEngine.InputNode.GetBusOutputFormat(0),
-                tapBlock: (buffer, when) => speechRequest.Append(buffer)
+                0, 
+                1024, 
+                format,
+                (buffer, when) => speechRequest.Append(buffer)
             );
-            audioEngine.StartAndReturnError(out error);
+            audioEngine.Prepare();
+            audioEngine.StartAndReturnError(out var error);
+
             if (error != null)
+                throw new ArgumentException("Error starting audio engine - " + error.LocalizedDescription);
+
+            this.ListenSubject.OnNext(true);
+
+            var currentIndex = 0;
+            var cancel = false;
+            var task = speechRecognizer.GetRecognitionTask(speechRequest, (result, err) =>
             {
-                ob.OnError(new Exception(error.LocalizedDescription));
-            }
-            else
-            {
-                this.ListenSubject.OnNext(true);
-                task = speechRecognizer.GetRecognitionTask(speechRequest, (result, err) =>
+                if (cancel)
+                    return;
+
+                if (err != null)
                 {
-                    if (err != null)
+                    ob.OnError(new Exception(err.LocalizedDescription));
+                }
+                else
+                {
+                    if (result.Final && completeOnEndOfSpeech)
                     {
-                        ob.OnError(new Exception(err.LocalizedDescription));
-                    }
-                    else if (result.Final)
-                    {
+                        currentIndex = 0;
                         ob.OnNext(result.BestTranscription.FormattedString);
-                        if (completeOnEndOfSpeech)
-                            ob.OnCompleted();
+                        ob.OnCompleted();
                     }
-                });
-            }
+                    else
+                    {
+                        for (var i = currentIndex; i < result.BestTranscription.Segments.Length; i++) 
+                        {
+                            var s = result.BestTranscription.Segments[i].Substring; 
+                            currentIndex++;
+                            ob.OnNext(s);
+                        }
+                    }
+                }
+            });
+
             return () =>
             {
+                cancel = true;
                 task?.Cancel();
                 task?.Dispose();
                 audioEngine.Stop();
+                audioEngine.InputNode?.RemoveTapOnBus(0);
                 audioEngine.Dispose();
                 speechRequest.EndAudio();
                 speechRequest.Dispose();
@@ -104,3 +121,34 @@ namespace Plugin.SpeechRecognition
         });
     }
 }
+
+//      protected virtual IObservable<string> Listen(bool completeOnEndOfSpeech) => Observable.Create<string>(ob =>
+//      {
+//    var speechRecognizer = new SFSpeechRecognizer();
+//          var path = NSBundle.MainBundle.GetUrlForResource("plugin", "m4a");
+//          var speechRequest = new SFSpeechUrlRecognitionRequest(path);
+
+//  this.ListenSubject.OnNext(true);
+//          var task = speechRecognizer.GetRecognitionTask(speechRequest, (result, err) =>
+//          {
+//           if (err != null)
+//           {
+//               ob.OnError(new Exception(err.LocalizedDescription));
+//           }
+//           else if (result.Final)
+//           {
+//               ob.OnNext(result.BestTranscription.FormattedString);
+//               if (completeOnEndOfSpeech)
+//                   ob.OnCompleted();
+//           }
+//  });
+
+//          return () =>
+//          {
+//        task?.Cancel();
+//        task?.Dispose();
+//        speechRequest.Dispose();
+//        speechRecognizer.Dispose();
+//        this.ListenSubject.OnNext(false);
+//  };
+//});
