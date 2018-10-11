@@ -1,18 +1,45 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>netstandard1.1</TargetFramework>
-        <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+        <TargetFramework>netstandard2.0</TargetFramework>
+        <Authors>aritchie</Authors>
+        <Company />
+        <AssemblyName>Plugin.SpeechDialogs</AssemblyName>
+        <RootNamespace>Plugin.SpeechDialogs</RootNamespace>
+        <Description>Speech Recognition that allows for continuous dictation, phrases, or quick confirmations.</Description>
+        <Product>Plugin.SpeechDialogs</Product>
+        <PackageVersion>1.0.0</PackageVersion>
+        <RepositoryUrl>https://github.com/aritchie/speechrecognition</RepositoryUrl>
+        <PackageProjectUrl>https://github.com/aritchie/speechrecognition</PackageProjectUrl>
+        <PackageLicenseUrl>https://github.com/aritchie/speechrecognition/blob/master/LICENSE.md</PackageLicenseUrl>
+        <PackageIconUrl>https://github.com/aritchie/speechrecognition/raw/master/icon.png</PackageIconUrl>
+        <PackageReleaseNotes>https://github.com/aritchie/speechrecognition/blob/master/docs/changelog.md</PackageReleaseNotes>
+        <PackageTags>ios android uwp windows tvos mac macos xamarin rx reactive ble bluetooth bluetoothle gattserver advertising</PackageTags>
+
+        <RepositoryType>git</RepositoryType>
+        <IncludeSymbols>True</IncludeSymbols>
+        <IncludeSource>True</IncludeSource>
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <EmbedUntrackedSources>true</EmbedUntrackedSources>
+        <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+        <DebugType>full</DebugType>
+        <DebugSymbols>true</DebugSymbols>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+        <DebugType>pdbonly</DebugType>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Acr.UserDialogs" Version="6.5.1" />
-        <PackageReference Include="System.Reactive" Version="3.1.1" />
-        <PackageReference Include="Xam.Plugins.TextToSpeech" Version="3.0.1" />
+        <PackageReference Include="Acr.UserDialogs" Version="7.0.1" />
+        <PackageReference Include="Xam.Plugins.TextToSpeech" Version="4.0.0.7" />
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Plugin.SpeechRecognition.Abstractions\Plugin.SpeechRecognition.Abstractions.csproj" />
         <ProjectReference Include="..\Plugin.SpeechRecognition\Plugin.SpeechRecognition.csproj" />
     </ItemGroup>
 

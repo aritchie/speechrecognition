@@ -1,58 +1,21 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>netstandard1.4</TargetFramework>
+        <TargetFramework>netstandard2.0</TargetFramework>
         <RootNamespace>Samples</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
-        <EmbeddedResource Include="Pages\ConversationPage.xaml">
-            <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-        </EmbeddedResource>
-        <EmbeddedResource Include="Pages\DialogsPage.xaml">
-            <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-        </EmbeddedResource>
-        <EmbeddedResource Include="Pages\DictationPage.xaml">
-            <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-        </EmbeddedResource>
-        <EmbeddedResource Include="Pages\MainPage.xaml">
-            <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-        </EmbeddedResource>
-        <EmbeddedResource Include="Pages\StartPage.xaml">
-            <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-        </EmbeddedResource>
+        <PackageReference Include="Acr.UserDialogs" Version="7.0.1" />
+        <PackageReference Include="ReactiveUI" Version="9.0.1" />
+        <PackageReference Include="ReactiveUI.Fody" Version="9.0.1" />
+        <PackageReference Include="Xamarin.Forms" Version="3.2.0.839982" />
+        <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
-        <PackageReference Include="Plugin.Permissions" Version="2.0.1" />
-        <PackageReference Include="reactiveui" Version="7.5.0-alpha0029" />
-        <PackageReference Include="Xam.Plugins.TextToSpeech" Version="3.0.1" />
-        <PackageReference Include="Xamarin.Forms" Version="2.3.5.256-pre6" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <ProjectReference Include="..\Plugin.SpeechDialogs\Plugin.SpeechDialogs.csproj" />
-        <ProjectReference Include="..\Plugin.SpeechRecognition.Abstractions\Plugin.SpeechRecognition.Abstractions.csproj" />
-        <ProjectReference Include="..\Plugin.SpeechRecognition\Plugin.SpeechRecognition.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <Compile Update="Pages\ConversationPage.xaml.cs">
-            <DependentUpon>ConversationPage.xaml</DependentUpon>
-        </Compile>
-        <Compile Update="Pages\DialogsPage.xaml.cs">
-            <DependentUpon>DialogsPage.xaml</DependentUpon>
-        </Compile>
-        <Compile Update="Pages\DictationPage.xaml.cs">
-            <DependentUpon>DictationPage.xaml</DependentUpon>
-        </Compile>
-        <Compile Update="Pages\MainPage.xaml.cs">
-            <DependentUpon>MainPage.xaml</DependentUpon>
-        </Compile>
-        <Compile Update="Pages\StartPage.xaml.cs">
-            <DependentUpon>StartPage.xaml</DependentUpon>
-        </Compile>
+      <ProjectReference Include="..\Plugin.SpeechDialogs\Plugin.SpeechDialogs.csproj" />
+      <ProjectReference Include="..\Plugin.SpeechRecognition\Plugin.SpeechRecognition.csproj" />
     </ItemGroup>
 
 </Project>

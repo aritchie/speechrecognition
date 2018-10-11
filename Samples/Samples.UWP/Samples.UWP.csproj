@@ -11,13 +11,14 @@
     <AssemblyName>Samples.UWP</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
-    <TargetPlatformVersion>10.0.15063.0</TargetPlatformVersion>
-    <TargetPlatformMinVersion>10.0.10586.0</TargetPlatformMinVersion>
+    <TargetPlatformVersion>10.0.16299.0</TargetPlatformVersion>
+    <TargetPlatformMinVersion>10.0.16299.0</TargetPlatformMinVersion>
     <MinimumVisualStudioVersion>14</MinimumVisualStudioVersion>
     <EnableDotNetNativeCompatibleProfile>true</EnableDotNetNativeCompatibleProfile>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <PackageCertificateKeyFile>Windows_TemporaryKey.pfx</PackageCertificateKeyFile>
+    <RuntimeIdentifiers>win10-arm;win10-arm-aot;win10-x86;win10-x86-aot;win10-x64;win10-x64-aot</RuntimeIdentifiers>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM'">
     <DebugSymbols>true</DebugSymbols>
@@ -89,10 +90,6 @@
     <UseDotNetNativeToolchain>true</UseDotNetNativeToolchain>
   </PropertyGroup>
   <ItemGroup>
-    <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
-    <None Include="project.json" />
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
@@ -127,18 +124,23 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Plugin.SpeechRecognition.Abstractions\Plugin.SpeechRecognition.Abstractions.csproj">
-      <Project>{2ce7418b-b8fd-4271-ab90-3045532d7089}</Project>
-      <Name>Plugin.SpeechRecognition.Abstractions</Name>
+    <ProjectReference Include="..\..\Plugin.SpeechDialogs\Plugin.SpeechDialogs.csproj">
+      <Project>{bc042610-fd46-4b2f-a5dc-7e9660428029}</Project>
+      <Name>Plugin.SpeechDialogs</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Plugin.SpeechRecognition.Uwp\Plugin.SpeechRecognition.Uwp.csproj">
-      <Project>{80f032b3-c668-41d4-b5d7-c130a91202d2}</Project>
-      <Name>Plugin.SpeechRecognition.Uwp</Name>
+    <ProjectReference Include="..\..\Plugin.SpeechRecognition\Plugin.SpeechRecognition.csproj">
+      <Project>{01b5cfbc-1341-43f7-babb-c18fe39053b8}</Project>
+      <Name>Plugin.SpeechRecognition</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Samples.Core\Samples.Core.csproj">
       <Project>{590b9d16-853a-47ce-8864-d4afd558817e}</Project>
       <Name>Samples.Core</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
+      <Version>6.1.7</Version>
+    </PackageReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>

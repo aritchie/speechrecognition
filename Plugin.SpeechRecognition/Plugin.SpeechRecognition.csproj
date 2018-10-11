@@ -1,26 +1,76 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="MSBuild.Sdk.Extras/1.6.55">
 
     <PropertyGroup>
-        <TargetFramework>netstandard1.0</TargetFramework>
-        <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+        <TargetFrameworks Condition=" '$(OS)' == 'Windows_NT' ">netstandard2.0;MonoAndroid80;Xamarin.iOS10;Xamarin.Mac20;xamarin.TVOS10;uap10.0</TargetFrameworks>
+        <TargetFrameworks Condition=" '$(OS)' != 'Windows_NT' ">netstandard2.0;MonoAndroid80;Xamarin.iOS10;Xamarin.Mac20;xamarin.TVOS10</TargetFrameworks>
+        <Authors>aritchie</Authors>
+        <Company />
+        <AssemblyName>Plugin.SpeechRecogntion</AssemblyName>
+        <RootNamespace>Plugin.SpeechRecogntion</RootNamespace>
+        <Description>ACR Speech Recognition Plugin for Xamarin and Windows
+
+Supported Platforms
+* .NET Standard
+* Android 4.3+
+* iOS 7+
+* tvOS
+* macOS
+* UWP</Description>
+        <Product>$(AssemblyName) ($(TargetFramework))</Product>
+        <PackageVersion>1.0.0</PackageVersion>
+        <RepositoryUrl>https://github.com/aritchie/speechrecognition</RepositoryUrl>
+        <PackageProjectUrl>https://github.com/aritchie/speechrecognition</PackageProjectUrl>
+        <PackageLicenseUrl>https://github.com/aritchie/speechrecognition/blob/master/LICENSE.md</PackageLicenseUrl>
+        <PackageIconUrl>https://github.com/aritchie/speechrecognition/raw/master/icon.png</PackageIconUrl>
+        <PackageReleaseNotes>https://github.com/aritchie/speechrecognition/blob/master/docs/changelog.md</PackageReleaseNotes>
+        <PackageTags>ios android uwp windows tvos mac macos xamarin rx reactive ble bluetooth bluetoothle gattserver advertising</PackageTags>
+
+        <RepositoryType>git</RepositoryType>
+        <IncludeSymbols>True</IncludeSymbols>
+        <IncludeSource>True</IncludeSource>
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <EmbedUntrackedSources>true</EmbedUntrackedSources>
+        <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
     </PropertyGroup>
 
-    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-        <DefineConstants>TRACE;BAIT</DefineConstants>
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+        <DebugType>full</DebugType>
+        <DebugSymbols>true</DebugSymbols>
     </PropertyGroup>
 
-    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-        <DefineConstants>TRACE;DEBUG;BAIT</DefineConstants>
+    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+        <DebugType>pdbonly</DebugType>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" $(TargetFramework.StartsWith('uap')) ">
+        <TargetPlatformVersion>10.0.16299.0</TargetPlatformVersion>
+        <TargetPlatformMinVersion>10.0.16299.0</TargetPlatformMinVersion>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="System.Reactive" Version="3.1.1" />
+        <Compile Remove="Platforms\**\*.cs" />
+        <None Include="Platforms\**\*.cs" />
+        <PackageReference Include="System.Reactive" Version="4.0.0" />
+        <PackageReference Include="Plugin.Permissions" Version="3.0.0.12" />
+        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta-63127-02" PrivateAssets="All" />
     </ItemGroup>
 
-    <ItemGroup>
-        <ProjectReference Include="..\Plugin.SpeechRecognition.Abstractions\Plugin.SpeechRecognition.Abstractions.csproj" />
+    <ItemGroup Condition=" $(TargetFramework.StartsWith('MonoAndroid')) ">
+        <Compile Include="Platforms\Android\**\*.cs" />
     </ItemGroup>
 
-    <Import Project="..\Plugin.SpeechRecognition.Shared\Plugin.SpeechRecognition.Shared.projitems" Label="Shared" />
+    <ItemGroup Condition=" $(TargetFramework.StartsWith('Xamarin.iOS')) OR $(TargetFramework.StartsWith('Xaramin.TVOS')) ">
+        <Compile Include="Platforms\iOS\**\*.cs" />
+    </ItemGroup>
+
+    <ItemGroup Condition=" $(TargetFramework.StartsWith('Xamarin.Mac')) ">
+        <Compile Include="Platforms\macOS\**\*.cs" />
+        <PackageReference Include="System.ValueTuple" Version="4.3.0" />
+    </ItemGroup>
+
+    <ItemGroup Condition=" $(TargetFramework.StartsWith('uap')) ">
+        <Compile Include="Platforms\Uwp\**\*.cs" />
+    </ItemGroup>
 
 </Project>
