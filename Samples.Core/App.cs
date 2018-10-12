@@ -10,6 +10,7 @@ namespace Samples
         public App()
         {
             this.MainPage = new NavigationPage(new StartPage());
+            GlobalExceptionHandler.Register();
         }
     }
 }
