@@ -11,7 +11,7 @@
 
 Supported Platforms
 * .NET Standard
-* Android 4.3+
+* Android 5+
 * iOS 7+
 * tvOS
 * macOS
@@ -23,7 +23,7 @@ Supported Platforms
         <PackageLicenseUrl>https://github.com/aritchie/speechrecognition/blob/master/LICENSE.md</PackageLicenseUrl>
         <PackageIconUrl>https://github.com/aritchie/speechrecognition/raw/master/icon.png</PackageIconUrl>
         <PackageReleaseNotes>https://github.com/aritchie/speechrecognition/blob/master/docs/changelog.md</PackageReleaseNotes>
-        <PackageTags>ios android uwp windows tvos mac macos xamarin rx reactive ble bluetooth bluetoothle gattserver advertising</PackageTags>
+        <PackageTags>ios android uwp windows tvos speech recognition speechtotext</PackageTags>
 
         <RepositoryType>git</RepositoryType>
         <IncludeSymbols>True</IncludeSymbols>
