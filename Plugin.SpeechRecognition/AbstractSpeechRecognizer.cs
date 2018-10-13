@@ -30,7 +30,9 @@ namespace Plugin.SpeechRecognition
                         }
                     }
                 }
-            }));
+            },
+            ob.OnError));
+
 
         public abstract IObservable<string> ListenUntilPause();
         public abstract IObservable<string> ContinuousDictation();
