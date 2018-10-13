@@ -4,6 +4,8 @@ _Easy to use cross platform speech recognition (speech to text) plugin for Xamar
 
 [![NuGet](https://img.shields.io/nuget/v/Plugin.SpeechRecognition.svg?maxAge=2592000)](https://www.nuget.org/packages/Plugin.SpeechRecognition/)
 
+### [SUPPORT THIS PROJECT](https://github.com/aritchie/home)
+
 |Platform|Version|
 |--------|-------|
 iOS|10+
