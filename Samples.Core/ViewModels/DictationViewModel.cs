@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Reactive.Linq;
 using System.Windows.Input;
+using Acr.UserDialogs;
 using Plugin.SpeechRecognition;
 using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 using Xamarin.Forms;
 
 
@@ -12,10 +15,12 @@ namespace Samples.ViewModels
         public DictationViewModel()
         {
             var speech = CrossSpeechRecognition.Current;
+            var dialogs = UserDialogs.Instance;
 
             IDisposable token = null;
             speech
                 .WhenListeningStatusChanged()
+                .ObserveOn(RxApp.MainThreadScheduler)
                 .Subscribe(x => this.ListenText = x
                     ? "Stop Listening"
                     : "Start Dictation"
@@ -25,18 +30,25 @@ namespace Samples.ViewModels
             {
                 if (token == null)
                 {
-                    if (this.useContinuous)
+                    if (this.UseContinuous)
                     {
                         token = speech
                             .ContinuousDictation()
-                            //.Catch<string, Exception>(ex => Observable.Return(ex.ToString()))
-                            .Subscribe(x => this.Text += " " + x);
+                            .ObserveOn(RxApp.MainThreadScheduler)
+                            .Subscribe(
+                                x => this.Text += " " + x,
+                                ex => dialogs.Alert(ex.ToString())
+                            );
                     }
                     else
                     {
                         token = speech
                             .ListenUntilPause()
-                            .Subscribe(x => this.Text += " " + x);
+                            .ObserveOn(RxApp.MainThreadScheduler)
+                            .Subscribe(
+                                x => this.Text = x,
+                                ex => dialogs.Alert(ex.ToString())
+                            );
                     }
                 }
                 else
@@ -49,29 +61,8 @@ namespace Samples.ViewModels
 
 
         public ICommand ToggleListen { get; }
-
-
-        bool useContinuous = true;
-        public bool UseContinuous
-        {
-            get => this.useContinuous;
-            set => this.RaiseAndSetIfChanged(ref this.useContinuous, value);
-        }
-
-
-        string listenText = "Start Dictation";
-        public string ListenText
-        {
-            get => this.listenText;
-            set => this.RaiseAndSetIfChanged(ref this.listenText, value);
-        }
-
-
-        string text;
-        public string Text
-        {
-            get => this.text;
-            set => this.RaiseAndSetIfChanged(ref this.text, value);
-        }
+        [Reactive] public bool UseContinuous { get; set; } = true;
+        [Reactive] public string ListenText { get; private set; } = "Start Listening";
+        [Reactive] public string Text { get; private set; }
     }
 }

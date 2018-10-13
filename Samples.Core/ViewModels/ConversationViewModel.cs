@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Reactive.Linq;
+using System.Reactive.Threading.Tasks;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Plugin.SpeechRecognition;
-using Plugin.TextToSpeech;
-using Plugin.TextToSpeech.Abstractions;
 using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 
@@ -16,29 +17,23 @@ namespace Samples.ViewModels
     public class ConversationViewModel : ReactiveObject
     {
         readonly ISpeechRecognizer speech;
-        readonly ITextToSpeech tts;
 
 
         public ConversationViewModel()
         {
             this.speech = CrossSpeechRecognition.Current;
-            this.tts = CrossTextToSpeech.Current;
             this.Start = ReactiveCommand.CreateFromTask(this.DoConversation);
 
-            this.speech.WhenListeningStatusChanged().Subscribe(x => this.IsListening = x);
+            this.speech
+                .WhenListeningStatusChanged()
+                .ObserveOn(RxApp.MainThreadScheduler)
+                .Subscribe(x => this.IsListening = x);
         }
 
 
         public ICommand Start { get; }
         public ObservableCollection<ListItemViewModel> Items { get; } = new ObservableCollection<ListItemViewModel>();
-
-
-        bool listening;
-        public bool IsListening
-        {
-            get => this.listening;
-            private set => this.RaiseAndSetIfChanged(ref this.listening, value);
-        }
+        [Reactive] public bool IsListening { get; private set; }
 
 
         async Task DoConversation()
@@ -48,10 +43,7 @@ namespace Samples.ViewModels
             using (var cancelSrc = new CancellationTokenSource())
             {
                 await this.Computer("Please tell me your name");
-                var name = await this.speech
-                    .ContinuousDictation()
-                    .Take(1)
-                    .RunAsync(cancelSrc.Token);
+                var name = await this.speech.ListenUntilPause().ToTask(cancelSrc.Token);
                 this.Add(name);
 
                 await this.Computer($"Hello {name}.  Are you male or female?");
@@ -62,7 +54,7 @@ namespace Samples.ViewModels
                 await this.Computer(next);
 
                 await this.Computer("Tell me something interesting about yourself");
-                next = await this.speech.ListenUntilPause();
+                next = await this.speech.ListenUntilPause().ToTask(cancelSrc.Token);
                 this.Add(next);
 
                 await this.Computer("Interesting");
@@ -73,7 +65,7 @@ namespace Samples.ViewModels
         async Task Computer(string speak)
         {
             this.Add(speak, true);
-            await this.tts.Speak(speak);
+            await TextToSpeech.SpeakAsync(speak);
         }
 
 

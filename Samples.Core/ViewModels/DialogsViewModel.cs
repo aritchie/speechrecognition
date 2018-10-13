@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Reactive.Linq;
 using Acr.UserDialogs;
 using Plugin.SpeechDialogs;
-using Plugin.TextToSpeech;
 using ReactiveUI;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 
@@ -14,7 +14,6 @@ namespace Samples.ViewModels
     {
         public DialogsViewModel()
         {
-            var tts = CrossTextToSpeech.Current;
             var dialogs = new SpeechDialogs();
 
             this.List = new List<ListItemViewModel>
@@ -34,7 +33,7 @@ namespace Samples.ViewModels
                             },
                             this.IsActionsSpoken
                         );
-                        await tts.Speak(result);
+                        await TextToSpeech.SpeakAsync(result);
                     })
                 },
                 new ListItemViewModel
@@ -48,7 +47,7 @@ namespace Samples.ViewModels
                             OkText = "Yes",
                             CancelText = "No"
                         });
-                        await tts.Speak(result ? "Your phone will now self destruct" : "Too Bad");
+                        await TextToSpeech.SpeakAsync(result ? "Your phone will now self destruct" : "Too Bad");
                     })
                 },
                 new ListItemViewModel
@@ -60,7 +59,7 @@ namespace Samples.ViewModels
                         {
                             Message = "Tell me your life story.... quickly!"
                         });
-                        await tts.Speak(result + " - BORING");
+                        await TextToSpeech.SpeakAsync(result + " - BORING");
                     })
                 }
             };

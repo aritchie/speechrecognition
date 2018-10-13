@@ -45,23 +45,35 @@ namespace Plugin.SpeechRecognition
 
         public override IObservable<string> ListenUntilPause() => Observable.Create<string>(ob =>
         {
+            var final = "";
             var listener = new SpeechRecognitionListener
             {
                 ReadyForSpeech = () => this.ListenSubject.OnNext(true),
+                Error = ex => ob.OnError(new Exception("Failure in speech engine - " + ex)),
+                PartialResults = sentence =>
+                {
+                    lock (this.syncLock)
+                        final = sentence;
+                },
                 FinalResults = sentence =>
                 {
                     lock (this.syncLock)
-                        ob.OnNext(sentence);
+                        final = sentence;
                 },
                 EndOfSpeech = () =>
                 {
                     lock (this.syncLock)
+                    {
+                        ob.OnNext(final);
                         ob.OnCompleted();
+                        this.ListenSubject.OnNext(false);
+                    }
                 }
             };
             var speechRecognizer = SpeechRecognizer.CreateSpeechRecognizer(Application.Context);
             speechRecognizer.SetRecognitionListener(listener);
-            speechRecognizer.StartListening(this.CreateSpeechIntent(false));
+            speechRecognizer.StartListening(this.CreateSpeechIntent(true));
+            //speechRecognizer.StartListening(this.CreateSpeechIntent(false));
 
             return () =>
             {
@@ -84,8 +96,12 @@ namespace Plugin.SpeechRecognition
             {
                 lock (this.syncLock)
                 {
-                    var newPart = sentence.Substring(currentIndex).Trim();
-                    currentIndex = sentence.Trim().Length;
+                    sentence = sentence.Trim();
+                    if (currentIndex > sentence.Length)
+                        currentIndex = 0;
+
+                    var newPart = sentence.Substring(currentIndex);
+                    currentIndex = sentence.Length;
                     ob.OnNext(newPart);
                 }
             };
@@ -124,9 +140,9 @@ namespace Plugin.SpeechRecognition
                         }
                         break;
 
-                    //        default:
-                    //            ob.OnError(new Exception($"Could not start speech recognizer - ERROR: {ex}"));
-                    //            break;
+                    default:
+                        ob.OnError(new Exception($"Could not start speech recognizer - ERROR: {ex}"));
+                        break;
                 }
             };
             speechRecognizer.SetRecognitionListener(listener);
@@ -136,9 +152,9 @@ namespace Plugin.SpeechRecognition
             return () =>
             {
                 stop = true;
-                this.ListenSubject.OnNext(false);
                 speechRecognizer?.StopListening();
                 speechRecognizer?.Destroy();
+                this.ListenSubject.OnNext(false);
             };
         });
 

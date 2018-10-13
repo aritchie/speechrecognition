@@ -4,22 +4,20 @@ using System.Reactive.Threading.Tasks;
 using System.Threading.Tasks;
 using Acr.UserDialogs;
 using Plugin.SpeechRecognition;
-using Plugin.TextToSpeech;
-using Plugin.TextToSpeech.Abstractions;
+using Xamarin.Essentials;
 
 
 namespace Plugin.SpeechDialogs
 {
     public class SpeechDialogs : ISpeechDialogs
     {
-        readonly ITextToSpeech tts = CrossTextToSpeech.Current;
         readonly ISpeechRecognizer speech = CrossSpeechRecognition.Current;
         readonly IUserDialogs dialogs = UserDialogs.Instance;
 
 
         public IObservable<string> Choices(string question, string[] choices, bool speakChoices = false) => Observable.FromAsync(async ct =>
         {
-            this.tts.Speak(question, cancelToken: ct);
+            await TextToSpeech.SpeakAsync(question, ct);
             var dialogTask = this.dialogs.ActionSheetAsync(question, "Cancel", null, ct, choices);
             var speechTask = this.speech
                 .ListenForFirstKeyword(choices)
@@ -32,7 +30,7 @@ namespace Plugin.SpeechDialogs
                     var i = 0;
                     while (!ct.IsCancellationRequested && i < choices.Length)
                     {
-                        await this.tts.Speak(choices[i]);
+                        await TextToSpeech.SpeakAsync(choices[i], ct);
                         i++;
                     }
                 }, ct);
@@ -54,7 +52,7 @@ namespace Plugin.SpeechDialogs
 
         public IObservable<bool> Confirm(ConfirmConfig config) => Observable.FromAsync(async ct =>
         {
-            this.tts.Speak(config.Message, cancelToken: ct);
+            TextToSpeech.SpeakAsync(config.Message, ct);
             var confirmTask = this.dialogs.ConfirmAsync(config, ct);
             var speechTask = this.speech
                 .ListenForFirstKeyword(config.OkText, config.CancelText)
@@ -76,7 +74,7 @@ namespace Plugin.SpeechDialogs
 
         public IObservable<string> Question(PromptConfig config) => Observable.FromAsync<string>(async ct =>
         {
-            this.tts.Speak(config.Message, cancelToken: ct);
+            TextToSpeech.SpeakAsync(config.Message, ct);
 
             var promptTask = this.dialogs.PromptAsync(config, ct);
             var speechTask = this.speech
