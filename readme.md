@@ -3,6 +3,7 @@
 _Easy to use cross platform speech recognition (speech to text) plugin for Xamarin & UWP_
 
 [![NuGet](https://img.shields.io/nuget/v/Plugin.SpeechRecognition.svg?maxAge=2592000)](https://www.nuget.org/packages/Plugin.SpeechRecognition/)
+[Change Log - October 13, 2018](changelog.md)
 
 ### [SUPPORT THIS PROJECT](https://github.com/aritchie/home)
 
