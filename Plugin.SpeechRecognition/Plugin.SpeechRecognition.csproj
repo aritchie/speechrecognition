@@ -5,8 +5,8 @@
         <TargetFrameworks Condition=" '$(OS)' != 'Windows_NT' ">netstandard2.0;MonoAndroid80;Xamarin.iOS10;xamarin.TVOS10</TargetFrameworks>
         <Authors>aritchie</Authors>
         <Company />
-        <AssemblyName>Plugin.SpeechRecogntion</AssemblyName>
-        <RootNamespace>Plugin.SpeechRecogntion</RootNamespace>
+        <AssemblyName>Plugin.SpeechRecognition</AssemblyName>
+        <RootNamespace>Plugin.SpeechRecognition</RootNamespace>
         <Description>ACR Speech Recognition Plugin for Xamarin and Windows
 
 Supported Platforms
@@ -53,7 +53,7 @@ Supported Platforms
         <None Include="Platforms\**\*.cs" />
         <PackageReference Include="System.Reactive" Version="4.0.0" />
         <PackageReference Include="Plugin.Permissions" Version="3.0.0.12" />
-        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta-63127-02" PrivateAssets="All" />
+        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta-63127-02" PrivateAssets="All" Condition=" '$(OS)' == 'Windows_NT' " />
     </ItemGroup>
 
     <ItemGroup Condition=" $(TargetFramework.StartsWith('MonoAndroid')) ">
