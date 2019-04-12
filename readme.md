@@ -49,8 +49,8 @@ Add the following to your app manifest
 
 ### Request Permission
 ```csharp
-var granted = await CrossSpeechRecognition.Current.RequestPermission();
-if (granted) 
+var permission = await CrossSpeechRecognition.Current.RequestPermission();
+if (permission == SpeechRecognizerStatus.Available) 
 {
     // go!
 }
