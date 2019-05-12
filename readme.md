@@ -1,4 +1,7 @@
-# ACR Speech Recognition Plugin for Xamarin & Windows
+# UPDATE - This library has now moved to the Shiny Framework at https://github.com/shinyorg/shiny
+
+
+## ACR Speech Recognition Plugin for Xamarin & Windows
 
 _Easy to use cross platform speech recognition (speech to text) plugin for Xamarin & UWP_
 
