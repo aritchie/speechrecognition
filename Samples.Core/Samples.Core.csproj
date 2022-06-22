@@ -10,7 +10,7 @@
         <PackageReference Include="ReactiveUI" Version="9.0.1" />
         <PackageReference Include="ReactiveUI.Fody" Version="9.0.1" />
         <PackageReference Include="Xamarin.Forms" Version="3.2.0.839982" />
-        <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     </ItemGroup>
 
     <ItemGroup>
